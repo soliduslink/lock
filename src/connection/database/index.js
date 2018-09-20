@@ -93,7 +93,7 @@ function processDatabaseOptions(opts) {
       let { icon, name, options, placeholder, prefill, type, validator, value, isExtra } = x;
       let filter = true;
 
-      const reservedNames = ['email', 'username', 'password'];
+      const reservedNames = ['email', 'username', 'password', 'extraFields'];
       if (
         typeof name != 'string' ||
         !name.match(/^[a-zA-Z0-9_]+$/) ||
