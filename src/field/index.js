@@ -137,6 +137,10 @@ export function getFieldLabel(m, field, notFound = '') {
   return getField(m, field).get('label', notFound);
 }
 
+export function getFieldPlaceholderHint(m, field, notFound = '') {
+  return getField(m, field).get('placeholderHint', notFound);
+}
+
 // phone number
 
 export function phoneNumber(lock) {

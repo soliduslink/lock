@@ -1,6 +1,6 @@
 import React from 'react';
 import { changeField, startOptionSelection } from './actions';
-import { getFieldInvalidHint, getFieldLabel, getFieldValue, isFieldVisiblyInvalid } from './index';
+import { getFieldInvalidHint, getFieldLabel, getFieldValue, getFieldPlaceholderHint, isFieldVisiblyInvalid } from './index';
 import TextInput from '../ui/input/text_input';
 import TextInfo from '../ui/input/text_info';
 import SelectInput from '../ui/input/select_input';
@@ -54,7 +54,7 @@ const CustomInput = ({
       return <input type="hidden" value={value} name={name} />;
     default:
       if (null != placeholderFromFieldName) {
-        props['placeholder'] = getFieldLabel(model, placeholderFromFieldName) + ' ' + placeholder;
+        props['placeholder'] = getFieldPlaceholderHint(model, placeholderFromFieldName);
       }
       return (
         <TextInput
