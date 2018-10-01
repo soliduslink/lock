@@ -90,9 +90,6 @@ function processDatabaseOptions(opts) {
     additionalSignUpFields = undefined;
   } else if (additionalSignUpFields) {
     additionalSignUpFields = additionalSignUpFields.reduce((r, x) => {
-<<<<<<< HEAD
-      let { icon, name, options, placeholder, prefill, type, validator, value, isExtra } = x;
-=======
       let {
         icon,
         name,
@@ -102,9 +99,9 @@ function processDatabaseOptions(opts) {
         type,
         validator,
         value,
+        isExtra,
         placeholderFromFieldName
       } = x;
->>>>>>> Added TextInfo component that can be used in custom fields for just dispolaying text as well as
       let filter = true;
 
       const reservedNames = ['email', 'username', 'password', 'extraFields'];
@@ -204,9 +201,6 @@ function processDatabaseOptions(opts) {
       }
 
       return filter
-<<<<<<< HEAD
-        ? r.concat([{ icon, name, options, placeholder, prefill, type, validator, value, isExtra }])
-=======
         ? r.concat([
             {
               icon,
@@ -217,10 +211,10 @@ function processDatabaseOptions(opts) {
               type,
               validator,
               value,
+              isExtra,
               placeholderFromFieldName
             }
           ])
->>>>>>> Added TextInfo component that can be used in custom fields for just dispolaying text as well as
         : r;
     }, []);
 
