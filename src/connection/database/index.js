@@ -100,7 +100,7 @@ function processDatabaseOptions(opts) {
         validator,
         value,
         isExtra,
-        placeholderFromFieldName
+        placeholderFromField
       } = x;
       let filter = true;
 
@@ -212,7 +212,7 @@ function processDatabaseOptions(opts) {
               validator,
               value,
               isExtra,
-              placeholderFromFieldName
+              placeholderFromField
             }
           ])
         : r;

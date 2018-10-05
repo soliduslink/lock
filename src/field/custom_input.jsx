@@ -15,7 +15,7 @@ const CustomInput = ({
   type,
   validator,
   value,
-  placeholderFromFieldName
+  placeholderFromField
 }) => {
   const props = {
     iconUrl,
@@ -53,9 +53,9 @@ const CustomInput = ({
     case 'hidden':
       return <input type="hidden" value={value} name={name} />;
     default:
-      if (placeholderFromFieldName) {
-        props['placeholder'] = getFieldHint(model, placeholderFromFieldName.get('fieldName'),
-          placeholderFromFieldName.get('propertyName'));
+      if (placeholderFromField) {
+        props['placeholder'] = getFieldHint(model, placeholderFromField.get('fieldName'),
+          placeholderFromField.get('propertyName'));
       }
       return (
         <TextInput
