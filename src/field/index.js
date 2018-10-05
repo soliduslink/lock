@@ -137,8 +137,8 @@ export function getFieldLabel(m, field, notFound = '') {
   return getField(m, field).get('label', notFound);
 }
 
-export function getFieldHint(m, field, hint, notFound = '') {
-  return getField(m, field).get(hint, notFound);
+export function getFieldPlaceholder(m, field, property, notFound = '') {
+  return getField(m, field).get(property, notFound);
 }
 
 // phone number

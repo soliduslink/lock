@@ -147,7 +147,7 @@ function processDatabaseOptions(opts) {
         prefill = undefined;
       }
 
-      const types = ['select', 'text', 'checkbox', 'hidden', 'info'];
+      const types = ['select', 'text', 'checkbox', 'hidden', 'textinfo'];
       if (type != undefined && (typeof type != 'string' || types.indexOf(type) === -1)) {
         l.warn(
           opts,
