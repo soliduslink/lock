@@ -47,8 +47,12 @@ export function signUp(id) {
   const m = read(getEntity, 'lock', id);
   const fields = ['email', 'password'];
   if (databaseConnectionRequiresUsername(m)) fields.push('username');
-  additionalSignUpFields(m).forEach(x => fields.push(x.get('name')));
-
+  additionalSignUpFields(m).forEach(x => {
+    // don't include the textinfo field in the fields to validate and submit
+    if (x.get('type') !== 'textinfo') {
+      fields.push(x.get('name'));
+    }
+  });
   validateAndSubmit(id, fields, m => {
     const params = {
       connection: databaseConnectionName(m),
@@ -60,7 +64,6 @@ export function signUp(id) {
     if (databaseConnectionRequiresUsername(m)) {
       params.username = c.getFieldValue(m, 'username');
     }
-
     if (!additionalSignUpFields(m).isEmpty()) {
       params.user_metadata = {};
       params.user_metadata.extraFields = {};

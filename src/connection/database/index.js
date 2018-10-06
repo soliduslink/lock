@@ -90,7 +90,18 @@ function processDatabaseOptions(opts) {
     additionalSignUpFields = undefined;
   } else if (additionalSignUpFields) {
     additionalSignUpFields = additionalSignUpFields.reduce((r, x) => {
-      let { icon, name, options, placeholder, prefill, type, validator, value, isExtra } = x;
+      let {
+        icon,
+        name,
+        options,
+        placeholder,
+        prefill,
+        type,
+        validator,
+        value,
+        isExtra,
+        placeholderFromField
+      } = x;
       let filter = true;
 
       const reservedNames = ['email', 'username', 'password', 'extraFields'];
@@ -136,7 +147,7 @@ function processDatabaseOptions(opts) {
         prefill = undefined;
       }
 
-      const types = ['select', 'text', 'checkbox', 'hidden'];
+      const types = ['select', 'text', 'checkbox', 'hidden', 'textinfo'];
       if (type != undefined && (typeof type != 'string' || types.indexOf(type) === -1)) {
         l.warn(
           opts,
@@ -190,7 +201,20 @@ function processDatabaseOptions(opts) {
       }
 
       return filter
-        ? r.concat([{ icon, name, options, placeholder, prefill, type, validator, value, isExtra }])
+        ? r.concat([
+            {
+              icon,
+              name,
+              options,
+              placeholder,
+              prefill,
+              type,
+              validator,
+              value,
+              isExtra,
+              placeholderFromField
+            }
+          ])
         : r;
     }, []);
 

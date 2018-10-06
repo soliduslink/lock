@@ -48,6 +48,7 @@ export default class SignUpPane extends React.Component {
           type={x.get('type')}
           validator={x.get('validator')}
           value={x.get('value')}
+          placeholderFromField={x.get('placeholderFromField')}
         />
       ));
 
