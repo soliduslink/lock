@@ -68,10 +68,12 @@ export function signUp(id) {
       params.user_metadata = {};
       params.user_metadata.extraFields = {};
       additionalSignUpFields(m).forEach(x => {
-        if (x.get('isExtra')) {
-          params.user_metadata.extraFields[x.get('name')] = c.getFieldValue(m, x.get('name'));
-        } else {
-          params.user_metadata[x.get('name')] = c.getFieldValue(m, x.get('name'));
+        if (x.get('type') !== 'textinfo') {
+          if (x.get('isExtra')) {
+            params.user_metadata.extraFields[x.get('name')] = c.getFieldValue(m, x.get('name'));
+          } else {
+            params.user_metadata[x.get('name')] = c.getFieldValue(m, x.get('name'));
+          }
         }
       });
     }
