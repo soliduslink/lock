@@ -70,9 +70,11 @@ export function signUp(id) {
       additionalSignUpFields(m).forEach(x => {
         if (x.get('type') !== 'textinfo') {
           if (x.get('isExtra')) {
-            params.user_metadata.extraFields[x.get('name')] = c.getFieldValue(m, x.get('name'));
+            params.user_metadata.extraFields[x.get('name')] = c
+              .getFieldValue(m, x.get('name'))
+              .trim();
           } else {
-            params.user_metadata[x.get('name')] = c.getFieldValue(m, x.get('name'));
+            params.user_metadata[x.get('name')] = c.getFieldValue(m, x.get('name')).trim();
           }
         }
       });
