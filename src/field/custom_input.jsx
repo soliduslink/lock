@@ -1,6 +1,12 @@
 import React from 'react';
 import { changeField, startOptionSelection } from './actions';
-import { getFieldInvalidHint, getFieldLabel, getFieldValue, getFieldPlaceholder, isFieldVisiblyInvalid } from './index';
+import {
+  getFieldInvalidHint,
+  getFieldLabel,
+  getFieldValue,
+  getFieldPlaceholder,
+  isFieldVisiblyInvalid
+} from './index';
 import TextInput from '../ui/input/text_input';
 import TextInfo from '../ui/input/text_info';
 import SelectInput from '../ui/input/select_input';
@@ -11,6 +17,7 @@ const CustomInput = ({
   iconUrl,
   model,
   name,
+  ariaLabel,
   placeholder,
   type,
   validator,
@@ -21,6 +28,7 @@ const CustomInput = ({
     iconUrl,
     isValid: !isFieldVisiblyInvalid(model, name),
     name,
+    ariaLabel,
     placeholder
   };
 
@@ -29,6 +37,7 @@ const CustomInput = ({
       return (
         <SelectInput
           {...props}
+          lockId={l.id(model)}
           label={getFieldLabel(model, name)}
           onClick={() => startOptionSelection(l.id(model), name, iconUrl)}
         />
@@ -36,6 +45,7 @@ const CustomInput = ({
     case 'checkbox':
       return (
         <CheckboxInput
+          lockId={l.id(model)}
           onChange={e => changeField(l.id(model), name, `${e.target.checked}`, validator)}
           checked={getFieldValue(model, name)}
           {...props}
@@ -51,13 +61,18 @@ const CustomInput = ({
         />
       );
     case 'hidden':
-      return <input type="hidden" value={value} name={name} />;
+      return <input id={l.id(model)} type="hidden" value={value} name={name} />;
     default:
       if (placeholderFromField) {
-        props['placeholder'] = getFieldPlaceholder(model, placeholderFromField.get('fieldName'), placeholderFromField.get('propertyName'));
+        props['placeholder'] = getFieldPlaceholder(
+          model,
+          placeholderFromField.get('fieldName'),
+          placeholderFromField.get('propertyName')
+        );
       }
       return (
         <TextInput
+          lockId={l.id(model)}
           invalidHint={getFieldInvalidHint(model, name)}
           onChange={e => changeField(l.id(model), name, e.target.value, validator)}
           value={getFieldValue(model, name)}

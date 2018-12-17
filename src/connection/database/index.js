@@ -60,6 +60,7 @@ function processDatabaseOptions(opts) {
     forgotPasswordLink,
     loginAfterSignUp,
     mustAcceptTerms,
+    showTerms,
     signUpLink,
     usernameStyle
   } = opts;
@@ -84,6 +85,10 @@ function processDatabaseOptions(opts) {
 
   if (!assertMaybeBoolean(opts, 'mustAcceptTerms')) {
     mustAcceptTerms = undefined;
+  }
+
+  if (!assertMaybeBoolean(opts, 'showTerms')) {
+    showTerms = true;
   }
 
   if (!assertMaybeArray(opts, 'additionalSignUpFields')) {
@@ -224,7 +229,7 @@ function processDatabaseOptions(opts) {
   }
 
   // TODO: add a warning if it is not a boolean, leave it undefined,
-  // and change accesor fn.
+  // and change accessor fn.
   loginAfterSignUp = loginAfterSignUp === false ? false : true;
 
   return Map({
@@ -234,6 +239,7 @@ function processDatabaseOptions(opts) {
     initialScreen,
     loginAfterSignUp,
     mustAcceptTerms,
+    showTerms,
     screens,
     signUpLink,
     usernameStyle
@@ -419,6 +425,10 @@ export function passwordStrengthPolicy(m) {
 
 export function additionalSignUpFields(m) {
   return get(m, 'additionalSignUpFields', List());
+}
+
+export function showTerms(m) {
+  return get(m, 'showTerms', true);
 }
 
 export function mustAcceptTerms(m) {

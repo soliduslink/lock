@@ -23,7 +23,7 @@ export default class EmailInput extends React.Component {
   }
 
   render() {
-    const { invalidHint, isValid, autoComplete, ...props } = this.props;
+    const { lockId, invalidHint, isValid, autoComplete, ...props } = this.props;
     const { focused } = this.state;
 
     return (
@@ -35,6 +35,7 @@ export default class EmailInput extends React.Component {
         icon={svg}
       >
         <input
+          id={`${lockId}-email`}
           ref="input"
           type="email"
           name="email"
@@ -47,7 +48,7 @@ export default class EmailInput extends React.Component {
           onBlur={::this.handleBlur}
           aria-label="Email"
           aria-invalid={!isValid}
-          aria-describedby={`auth0-lock-error-msg-email`}
+          aria-describedby={!isValid && invalidHint ? `auth0-lock-error-msg-email` : undefined}
           {...props}
         />
       </InputWrap>

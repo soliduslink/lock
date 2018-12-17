@@ -26,7 +26,7 @@ export default class MFACodeInput extends React.Component {
   }
 
   render() {
-    const { invalidHint, isValid, onChange, value, ...props } = this.props;
+    const { lockId, invalidHint, isValid, onChange, value, ...props } = this.props;
 
     const { focused } = this.state;
 
@@ -39,6 +39,7 @@ export default class MFACodeInput extends React.Component {
         icon={icon}
       >
         <input
+          id={`${lockId}-mfa_code`}
           ref="input"
           type="text"
           name="mfa_code"
@@ -51,7 +52,7 @@ export default class MFACodeInput extends React.Component {
           value={value}
           aria-label="Multi factor authentication code"
           aria-invalid={!isValid}
-          aria-describedby={`auth0-lock-error-msg-mfa_code`}
+          aria-describedby={!isValid && invalidHint ? `auth0-lock-error-msg-mfa_code` : undefined}
           {...props}
         />
       </InputWrap>

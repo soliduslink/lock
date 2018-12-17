@@ -111,8 +111,7 @@ export default {
   showPassword: 'Vis passord',
   signUpTitle: 'Registrer deg',
   signUpLabel: 'Registrer deg',
-  signUpSubmitLabel: '',
-  signUpTerms: '',
+  signUpSubmitLabel: 'Registrer deg',
   signUpWithLabel: 'Registrer deg med %s',
   socialLoginInstructions: '',
   socialSignUpInstructions: '',
@@ -130,5 +129,6 @@ export default {
   mfaLoginTitle: '2-stegs verifisering',
   mfaLoginInstructions: 'Ver venleg og tast inn verifiseringskoden som er generert på din mobil',
   mfaSubmitLabel: 'Logg inn',
-  mfaCodeErrorHint: 'Bruk %d tall'
+  mfaCodeErrorHint: 'Bruk %d tall',
+  signUpTerms: 'Ved å registrere deg, godtar du våre vilkår for bruk og personvern.'
 };

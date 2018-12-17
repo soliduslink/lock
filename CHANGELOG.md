@@ -1,5 +1,51 @@
 # Change Log
 
+## [v11.12.1](https://github.com/auth0/lock/tree/v11.12.1) (2018-11-23)
+[Full Changelog](https://github.com/auth0/lock/compare/v11.12.0...v11.12.1)
+
+
+**Fixed**
+- Fix `lock is undefined` error in non-redirect scenarios [\#1557](https://github.com/auth0/lock/pull/1557) ([luisrudge](https://github.com/luisrudge))
+
+
+## [v11.12.0](https://github.com/auth0/lock/tree/v11.12.0) (2018-11-19)
+[Full Changelog](https://github.com/auth0/lock/compare/v11.11.0...v11.12.0)
+
+
+**Added**
+- Add ids to inputs and buttons [\#1517](https://github.com/auth0/lock/pull/1517) ([tingaloo](https://github.com/tingaloo))
+- Add `showTerms` option [\#1485](https://github.com/auth0/lock/pull/1485) ([luisrudge](https://github.com/luisrudge))
+
+**Changed**
+- Trim auth params before sending to the API (not while typing) [\#1546](https://github.com/auth0/lock/pull/1546) ([luisrudge](https://github.com/luisrudge))
+
+**Fixed**
+- Fix padding in all screens [\#1547](https://github.com/auth0/lock/pull/1547) ([luisrudge](https://github.com/luisrudge))
+- Fix IE10 script error [\#1542](https://github.com/auth0/lock/pull/1542) ([luisrudge](https://github.com/luisrudge))
+- Fix mobile styles using different heights [\#1539](https://github.com/auth0/lock/pull/1539) ([luisrudge](https://github.com/luisrudge))
+
+
+## [v11.11.0](https://github.com/auth0/lock/tree/v11.11.0) (2018-10-23)
+[Full Changelog](https://github.com/auth0/lock/compare/v11.10.0...v11.11.0)
+
+
+**Added**
+- Add prefill support to Auth0LockPasswordless [\#1505](https://github.com/auth0/lock/pull/1505) ([luisrudge](https://github.com/luisrudge))
+- Add `ariaLabel` option for custom fields [\#1492](https://github.com/auth0/lock/pull/1492) ([Splact](https://github.com/Splact))
+
+**Fixed**
+- Fix google button styles according to google's guidelines [\#1512](https://github.com/auth0/lock/pull/1512) ([luisrudge](https://github.com/luisrudge))
+- [Sustainment] Fixed Reset Password Avatar/Enterprise Issue [\#1504](https://github.com/auth0/lock/pull/1504) ([cocojoe](https://github.com/cocojoe))
+- Remove aria-describedby on missing ref [\#1497](https://github.com/auth0/lock/pull/1497) ([Splact](https://github.com/Splact))
+
+
+## [v11.10.0](https://github.com/auth0/lock/tree/v11.10.0) (2018-09-27)
+[Full Changelog](https://github.com/auth0/lock/compare/v11.9.1...v11.10.0)
+
+**Changed**
+- Upgrade Auth0.js to use cookies instead of localStorage by default: [Read more](https://github.com/auth0/auth0.js/blob/master/CHANGELOG.md#v980-2018-09-26)
+
+
 ## [v11.9.1](https://github.com/auth0/lock/tree/v11.9.1) (2018-09-10)
 [Full Changelog](https://github.com/auth0/lock/compare/v11.9.0...v11.9.1)
 

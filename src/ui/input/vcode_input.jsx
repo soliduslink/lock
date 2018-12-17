@@ -21,12 +21,13 @@ export default class VcodeInput extends React.Component {
   }
 
   render() {
-    const { isValid, ...props } = this.props;
+    const { lockId, isValid, ...props } = this.props;
     const { focused } = this.state;
 
     return (
       <InputWrap focused={focused} isValid={isValid} name="vcode" icon={svg}>
         <input
+          id={`${lockId}-vcode`}
           ref="input"
           type="tel"
           name="vcode"
@@ -37,7 +38,6 @@ export default class VcodeInput extends React.Component {
           onBlur={::this.handleBlur}
           aria-label="vcode"
           aria-invalid={!isValid}
-          aria-describedby={`auth0-lock-error-msg-vcode`}
           {...props}
         />
       </InputWrap>
