@@ -10,6 +10,7 @@ export default {
     login: {
       blocked_user: 'El usuario se encuentra bloqueado.',
       invalid_user_password: 'Credenciales inválidas.',
+      invalid_captcha: 'El texto ingresado es incorrecto. <br /> Por favor, vuelva a intentarlo.',
       'lock.fallback': 'Ocurrió un error al iniciar sesión.',
       'lock.invalid_code': 'Código inválido.',
       'lock.invalid_email_password': 'Correo y contraseña inválidos.',
@@ -28,7 +29,10 @@ export default {
       'lock.mfa_invalid_code': 'Código incorrecto. Por favor vuelva a intentarlo.',
       session_missing:
         'No es posible completar el proceso de Autenticación. Por favor, cierre todas las ventanas e intente nuevamente.',
-      'hrd.not_matching_email': 'Por favor, use sus credenciales corporativas.'
+      'hrd.not_matching_email': 'Por favor, use sus credenciales corporativas.',
+      too_many_requests:
+        'Lo sentimos. Hay demasiados peticiones en estos momentos. Por favor, recargue la página y vuelva a intentarlo. Si persiste, por favor vuelva a intentarlo más tarde.',
+      invalid_recaptcha: 'Seleccione la casilla de verificación para verificar que no es un robot.'
     },
     passwordless: {
       'bad.email': 'Correo inválido',
@@ -42,7 +46,8 @@ export default {
       password_no_user_info_error: 'La constraseña es similar a los datos del usuario.',
       password_strength_error: 'La contraseña es muy débil.',
       user_exists: 'El usuario ya existe.',
-      username_exists: 'El nombre de usuario se encuentra en uso.'
+      username_exists: 'El nombre de usuario se encuentra en uso.',
+      social_signup_needs_terms_acception: 'Acepte los Términos de Servicio para continuar.'
     }
   },
   success: {
@@ -51,13 +56,19 @@ export default {
     magicLink: 'Hemos enviado un correo para inciar sesión a<br />to %s.',
     signUp: 'Registro completado exitosamente.'
   },
-  blankErrorHint: 'Requerido',
+  blankErrorHint: '',
+  blankPasswordErrorHint: 'Requerido',
+  blankEmailErrorHint: 'Requerido',
+  blankUsernameErrorHint: 'Requerido',
+  blankCaptchaErrorHint: 'Requerido',
   codeInputPlaceholder: 'código',
   databaseEnterpriseLoginInstructions: '',
   databaseEnterpriseAlternativeLoginInstructions: 'o',
   databaseSignUpInstructions: '',
   databaseAlternativeSignUpInstructions: 'o',
   emailInputPlaceholder: 'correo@ejemplo.com',
+  captchaCodeInputPlaceholder: 'Introduzca el código de arriba',
+  captchaMathInputPlaceholder: 'Resuelva la formula de arriba',
   enterpriseLoginIntructions: 'Inicie sesión con sus credenciales corporativas.',
   enterpriseActiveLoginInstructions: 'Ingrese las credenciales corporativas de %s.',
   failedLabel: 'Error!',
@@ -66,7 +77,10 @@ export default {
   forgotPasswordInstructions:
     'Por favor ingrese su dirección de correo. Le enviaremos las instrucciones para restablecer su contraseña.',
   forgotPasswordSubmitLabel: 'Enviar email',
-  invalidErrorHint: 'Inválido',
+  invalidErrorHint: '',
+  invalidPasswordErrorHint: 'Inválido',
+  invalidEmailErrorHint: 'Inválido',
+  invalidUsernameErrorHint: 'Inválido',
   lastLoginInstructions: 'La última vez inició sesión con',
   loginAtLabel: 'Iniciar en %s',
   loginLabel: 'Iniciar sesión',
@@ -91,7 +105,7 @@ export default {
   passwordlessEmailInstructions: 'Ingrese su email para iniciar sesión<br/>o registrarse',
   passwordlessSMSAlternativeInstructions:
     'También puede ingresar su teléfono<br/>para iniciar sesión o registrarse',
-  passwordlessSMSCodeInstructions: 'Se ha enviado un SMS con el código<br/>a %s.',
+  passwordlessSMSCodeInstructions: 'Se ha enviado un SMS con el código a %s.',
   passwordlessSMSInstructions: 'Ingrese su teléfono para iniciar sesión<br/>o registrarse',
   phoneNumberInputPlaceholder: 'número de teléfono',
   resendCodeAction: '¿No recibió el código?',

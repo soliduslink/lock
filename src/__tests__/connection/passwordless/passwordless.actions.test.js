@@ -1,3 +1,4 @@
+import Immutable from 'immutable';
 import passwordless from 'connection/passwordless/actions';
 import { expectMockToMatch } from 'testUtils';
 
@@ -17,7 +18,8 @@ describe('passwordless actions', () => {
       send: () => 'send',
       setPasswordlessStarted: jest.fn(),
       setResendFailed: jest.fn(),
-      setResendSuccess: jest.fn()
+      setResendSuccess: jest.fn(),
+      toggleTermsAcceptance: jest.fn()
     }));
     jest.mock('field/phone_number', () => ({
       phoneNumberWithDiallingCode: () => 'phoneNumberWithDiallingCode'
@@ -45,7 +47,10 @@ describe('passwordless actions', () => {
             auth: 'params'
           })
         })
-      }
+      },
+      emitAuthorizationErrorEvent: jest.fn(),
+      connections: jest.fn(),
+      useCustomPasswordlessConnection: jest.fn(() => false)
     }));
     jest.mock('store/index', () => ({
       read: jest.fn(() => 'model'),
@@ -55,6 +60,8 @@ describe('passwordless actions', () => {
     }));
 
     actions = require('connection/passwordless/actions');
+
+    require('core/index').connections.mockImplementation(() => Immutable.fromJS([]));
   });
   describe('requestPasswordlessEmail()', () => {
     it('calls validateAndSubmit()', () => {
@@ -63,6 +70,24 @@ describe('passwordless actions', () => {
     });
     it('calls startPasswordless', () => {
       actions.requestPasswordlessEmail('id');
+      require('core/actions').validateAndSubmit.mock.calls[0][2]('model');
+      expectMockToMatch(require('core/web_api').startPasswordless, 1);
+    });
+    it('calls startPasswordless with a custom email connection name', () => {
+      actions.requestPasswordlessEmail('id');
+
+      require('core/index').connections.mockImplementation(() =>
+        Immutable.fromJS([
+          {
+            name: 'custom-connection',
+            strategy: 'email',
+            type: 'passwordless'
+          }
+        ])
+      );
+
+      require('core/index').useCustomPasswordlessConnection.mockReturnValue(true);
+
       require('core/actions').validateAndSubmit.mock.calls[0][2]('model');
       expectMockToMatch(require('core/web_api').startPasswordless, 1);
     });
@@ -144,6 +169,24 @@ describe('passwordless actions', () => {
       require('core/actions').validateAndSubmit.mock.calls[0][2]('model');
       expectMockToMatch(require('core/web_api').startPasswordless, 1);
     });
+    it('calls startPasswordless with a custom SMS connection', () => {
+      actions.sendSMS('id');
+
+      require('core/index').connections.mockImplementation(() =>
+        Immutable.fromJS([
+          {
+            name: 'custom-connection',
+            strategy: 'sms',
+            type: 'passwordless'
+          }
+        ])
+      );
+
+      require('core/index').useCustomPasswordlessConnection.mockReturnValue(true);
+      require('core/actions').validateAndSubmit.mock.calls[0][2]('model');
+
+      expectMockToMatch(require('core/web_api').startPasswordless, 1);
+    });
     it('calls setPasswordlessStarted() on success', () => {
       actions.sendSMS('id');
       require('core/actions').validateAndSubmit.mock.calls[0][2]('model');
@@ -184,6 +227,17 @@ describe('passwordless actions', () => {
         const { read, swap } = require('store/index');
         expectMockToMatch(swap, 1);
       });
+      it('emits the "authorization_error" event', () => {
+        actions.sendSMS('id');
+        require('core/actions').validateAndSubmit.mock.calls[0][2]('model');
+        const error = new Error('foobar');
+        error.error = 'some_error_code';
+        require('core/web_api').startPasswordless.mock.calls[0][2](error);
+
+        jest.runAllTimers();
+
+        expectMockToMatch(require('core/index').emitAuthorizationErrorEvent, 1);
+      });
     });
   });
   describe('login()', () => {
@@ -194,32 +248,60 @@ describe('passwordless actions', () => {
       expectMockToMatch(read, 1);
       expectMockToMatch(swap, 1);
     });
+
     it('calls webApi.passwordlessVerify() with sms options', () => {
       actions.logIn('id');
       expectMockToMatch(require('core/web_api').passwordlessVerify, 1);
     });
+
     it('calls webApi.passwordlessVerify() with email options', () => {
       require('connection/passwordless/index').isEmail = () => true;
       actions.logIn('id');
       expectMockToMatch(require('core/web_api').passwordlessVerify, 1);
     });
+
     describe('on webApi.passwordlessVerify() callback', () => {
-      it('formats error when there is an error ', () => {
-        actions.logIn('id');
+      describe('when there is an error', () => {
+        it('formats the error', () => {
+          actions.logIn('id');
 
-        const error = new Error('foobar');
-        error.error = 'some_error_code';
-        require('core/web_api').passwordlessVerify.mock.calls[0][2](error);
+          const error = new Error('foobar');
+          error.error = 'some_error_code';
+          require('core/web_api').passwordlessVerify.mock.calls[0][2](error);
 
-        const { swap } = require('store/index');
-        expectMockToMatch(swap, 2);
+          const { swap } = require('store/index');
+          expectMockToMatch(swap, 2);
+        });
+
+        it('emits the "authorization_error" event', () => {
+          actions.logIn('id');
+
+          const error = new Error('foobar');
+          error.error = 'some_error_code';
+          require('core/web_api').passwordlessVerify.mock.calls[0][2](error);
+
+          expectMockToMatch(require('core/index').emitAuthorizationErrorEvent, 1);
+        });
       });
+
       it('calls logInSuccess on success', () => {
         actions.logIn('id');
         require('core/web_api').passwordlessVerify.mock.calls[0][2](null, { result: true });
 
         expectMockToMatch(require('core/actions').logInSuccess, 1);
       });
+    });
+  });
+  describe('toggleTermsAcceptance()', () => {
+    it('calls internalToggleTermsAcceptance()', () => {
+      actions.toggleTermsAcceptance('id');
+
+      const { swap } = require('store/index');
+      expectMockToMatch(swap, 1);
+
+      swap.mock.calls[0][3]('model');
+
+      expectMockToMatch(require('connection/passwordless/index').toggleTermsAcceptance, 1);
     });
   });
   it('restart calls restartPasswordless', () => {

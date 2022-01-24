@@ -33,7 +33,11 @@ export default {
         'Tunnuksesi on suljettu useiden peräkkäisten kirjautumisyritysten jälkeen.',
       session_missing:
         'Kirjautumispyyntöäsi ei voitu suorittaa loppuun. Ole hyvä ja yritä uudelleen suljettuasi kaikki avoimet ikkunat',
-      'hrd.not_matching_email': 'Ole hyvä ja käytä yrityssähköpostiasi kirjautumiseen.'
+      'hrd.not_matching_email': 'Ole hyvä ja käytä yrityssähköpostiasi kirjautumiseen.',
+      too_many_requests:
+        'Olemme pahoillamme. Nyt on liian monta pyyntöä. Lataa sivu uudelleen ja yritä uudelleen. Jos tämä jatkuu, yritä myöhemmin uudelleen.',
+      invalid_captcha: 'Ratkaise haastekysymys varmistaaksesi, että et ole robotti.',
+      invalid_recaptcha: 'Valitse valintaruutu varmistaaksesi, että et ole robotti.'
     },
     passwordless: {
       'bad.email': 'Sähköposti ei kelpaa',
@@ -47,7 +51,8 @@ export default {
       password_no_user_info_error: 'Salasana perustuu käyttäjätietoihin.',
       password_strength_error: 'Salasana on liian heikko.',
       user_exists: 'Käyttäjä on jo olemassa.',
-      username_exists: 'Käyttäjätunnus on jo olemassa.'
+      username_exists: 'Käyttäjätunnus on jo olemassa.',
+      social_signup_needs_terms_acception: 'Ole hyvä ja hyväksy alla olevat käyttöehdot jatkaaksesi'
     }
   },
   success: {
@@ -56,7 +61,11 @@ export default {
     magicLink: 'Lähetimme sinulle linkin, josta pääset kirjautumaan<br />%s.',
     signUp: 'Kiitos rekisteröitymisestä.'
   },
-  blankErrorHint: 'Ei voi olla tyhjä',
+  blankErrorHint: '',
+  blankPasswordErrorHint: 'Ei voi olla tyhjä',
+  blankEmailErrorHint: 'Ei voi olla tyhjä',
+  blankUsernameErrorHint: 'Ei voi olla tyhjä',
+  blankCaptchaErrorHint: 'Ei voi olla tyhjä',
   codeInputPlaceholder: 'koodisi',
   databaseEnterpriseLoginInstructions: '',
   databaseEnterpriseAlternativeLoginInstructions: 'tai',
@@ -71,7 +80,10 @@ export default {
   forgotPasswordInstructions:
     'Ole hyvä ja anna sähköpostiosoitteesi. Lähetämme sinulle sähköpostin salasanan alustusta varten.',
   forgotPasswordSubmitLabel: 'Lähetä sähköposti',
-  invalidErrorHint: 'Epäkelpo',
+  invalidErrorHint: '',
+  invalidPasswordErrorHint: 'Epäkelpo',
+  invalidEmailErrorHint: 'Epäkelpo',
+  invalidUsernameErrorHint: 'Epäkelpo',
   lastLoginInstructions: 'Viimeksi kirjauduit',
   loginAtLabel: 'Kirjauduttu %s',
   loginLabel: 'Kirjaudu',
@@ -96,7 +108,7 @@ export default {
   passwordlessEmailInstructions: 'Syötä sähköpostisi kirjautuaksesi<br/>tai luo käyttäjätunnus',
   passwordlessSMSAlternativeInstructions:
     'Muussa tapauksessa, syötä puhelinnumerosi kirjautuaksesi<br/>tai luo käyttäjätunnus',
-  passwordlessSMSCodeInstructions: 'Koodin sisältävä tekstiviesti on lähetetty<br/>numeroon %s.',
+  passwordlessSMSCodeInstructions: 'Koodin sisältävä tekstiviesti on lähetetty numeroon %s.',
   passwordlessSMSInstructions: 'Syötä puhelinnumerosi kirjautuaksesi<br/>tai luo käyttäjätunnus',
   phoneNumberInputPlaceholder: 'puhelinnumerosi',
   resendCodeAction: 'Etkö saanut koodia?',
@@ -127,5 +139,7 @@ export default {
   mfaSubmitLabel: 'Kirjaudu',
   mfaCodeErrorHint: 'Käytä %d numeroa',
   showPassword: 'Näytä salasana',
-  signUpTerms: 'Ilmoittautumalla hyväksyt käyttöehdot ja tietosuojakäytännöt.'
+  signUpTerms: 'Ilmoittautumalla hyväksyt käyttöehdot ja tietosuojakäytännöt.',
+  captchaCodeInputPlaceholder: 'Kirjoita yllä oleva koodi',
+  captchaMathInputPlaceholder: 'Ratkaise yllä esitetty kaava'
 };

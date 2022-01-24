@@ -6,7 +6,7 @@
 @import "_transitions"
 @import "_mixins&keyframes"
 
-headerHeight = 118px
+headerHeight = 100%
 submitHeight = 70px
 iphoneBar = 68px
 tabsHeight = 40px
@@ -21,6 +21,10 @@ loadingSize = 30px
       background white
       display block!important
 
+
+
+.auto-height
+  height auto !important
 
 // Lock base style
 
@@ -83,8 +87,6 @@ loadingSize = 30px
   height 100%
   right 0
   z-index 1000000
-  +breakpoint("mobile")
-    display table
 
   a
     text-decoration none
@@ -107,10 +109,11 @@ loadingSize = 30px
     transition opacity .2s ease-in .4s
 
   .auth0-lock-center
+    box-sizing border-box
     +breakpoint("mobile")
-      vertical-align middle
-      display table-cell
-      margin auto
+      padding 40px
+      height 100%
+      display flex
 
   .auth0-lock-widget
     width 300px
@@ -119,10 +122,9 @@ loadingSize = 30px
     transform translateY(100%) scale(.8)
     -webkit-transition-timing-function cubic-bezier(.3, 0, 0, 1.4)
     transition-timing-function cubic-bezier(.3, 0, 0, 1.4)
-    margin 0 auto
+    margin auto
     border-radius 5px
-    max-height 100vh
-    
+
     +breakpoint("mobile")
       -webkit-transition -webkit-transform .4s, opacity .3s
       transition transform .4s, opacity .3s
@@ -149,16 +151,18 @@ loadingSize = 30px
   .auth0-lock-cred-pane-internal-wrapper
     display: flex
     flex-direction: column
-    height: 100%
-    min-height: 100%
-  
+    calculateHeight()
+    max-height auto
+
+    +breakpoint("mobile")
+      min-height auto
+      height auto
+
+
   // Lock header content
-
-
   .auth0-lock-header
     text-align center
     padding 11px
-    height headerHeight
     color #333
     position relative
     background #fff
@@ -166,18 +170,26 @@ loadingSize = 30px
     overflow hidden
     -webkit-box-sizing border-box
     box-sizing border-box
-    display: flex
-    flex-direction: column
-    justify-content: center
+    display flex
+    flex-direction column
+    justify-content center
+    flex-shrink 0
+    flex-grow 0
+    flex-basis auto
 
   .auth0-lock-content-wrapper
     flex-grow: 1
-    flex-shrink: 0
+    flex-shrink: 1
+    flex-basis: auto
+    -webkit-overflow-scrolling touch
+    overflow-x auto
+    +breakpoint("mobile")
+      overflow-x inherit
 
   .auth0-lock-close-button, .auth0-lock-back-button
     -webkit-box-sizing content-box !important
     -moz-box-sizing content-box !important
-    box-sizing content-box !important  
+    box-sizing content-box !important
     background white
     border-radius 100px
     height 10px
@@ -192,7 +204,7 @@ loadingSize = 30px
     border 6px solid white
     cursor pointer
     line-height 0
-    
+
     &:focus
       outline: none
       box-shadow 0 3px 3px rgba(0,0,0,.3)
@@ -281,8 +293,6 @@ loadingSize = 30px
     display inline-block
     margin 0 0 11px
     vertical-align middle
-    -webkit-transition margin-top .4s
-    transition margin-top .4s
 
     &.centered
       margin-top 20px
@@ -297,9 +307,6 @@ loadingSize = 30px
 
   .auth0-lock-name
     font-size 22px
-    text-overflow ellipsis
-    white-space nowrap
-    overflow hidden
     padding 0 10px
     line-height 30px
 
@@ -313,8 +320,6 @@ loadingSize = 30px
     box-sizing border-box
 
   .auth0-lock-form
-    -webkit-animation fadeIn .2s
-    animation fadeIn .2s
     padding 20px
 
     h2
@@ -352,6 +357,53 @@ loadingSize = 30px
 
     &:last-child
       margin-bottom 0
+
+  .auth0-lock-captcha
+    position: relative;
+    height: 72px;
+    margin-bottom: 10px;
+    background: #FFFFFF;
+    border: 1px solid #EEEEEE;
+    border-radius: 3px;
+    margin-top: 24px;
+
+    .auth0-lock-captcha-image
+      position: absolute;
+      width: 120px;
+      height: 40px;
+      left: 16px;
+      top: 16px;
+      background-size: contain;
+
+    .auth0-lock-captcha-refresh
+      position: absolute;
+      width: 40px;
+      height: 40px;
+      right: 16px;
+      top: 16px;
+      border: 1px solid #eee;
+      border-radius: 3px;
+      padding: 0;
+
+      svg, .test-titi
+        position: absolute;
+        top: 12.5px;
+        left: 12.5px;
+        width: 15px;
+        height: 15px;
+        margin: 0;
+        padding: 0;
+        background-color: transparent;
+
+        path
+          fill: #888;
+
+  .auth0-lock-input-block.auth0-lock-input-captcha
+    svg.auth0-lock-icon
+      width: 20px
+      height: 20px
+      top: 10px
+      left: 9.5px
 
   .auth0-lock-input-wrap
     border-radius 3px
@@ -479,23 +531,25 @@ loadingSize = 30px
     height 40px
     -webkit-transition background-color .2s ease-in-out
     transition background-color .2s ease-in-out
+    cursor: pointer
+    -webkit-appearance: none !important;
+    appearance: none !important;
 
     &[data-provider^=google]
+      .auth0-lock-social-button-text
+        color: #333 !important
+
       .auth0-lock-social-button-icon
-        background-color: #ffffff
-        border: 2px #4285f4 solid
-        border-radius: 3px 0px 0px 3px
         height: 36px
         width: 36px
-      &:hover, &:focus
+      &:hover:not([disabled]), &:focus:not([disabled])
         .auth0-lock-social-button-icon
-          background-color: #ffffff !important
-          border-color: #3367d6
         .auth0-lock-social-button-text
-          background-color: #3367d6 !important
+          background-color: #f0f0f0 !important
       &.auth0-lock-social-big-button
+        background-color: #ffffff
+        border: 1px solid #dee0e2
         .auth0-lock-social-button-icon
-          background-color: #ffffff
           width: 38px
 
     .auth0-lock-social-button-icon
@@ -507,10 +561,6 @@ loadingSize = 30px
       left 0
       transition background-color 0.3s, border .2s ease-in-out
       -webkit-transition background-color 0.3s, border .2s ease-in-out
-
-    &:hover, &:focus
-      .auth0-lock-social-button-icon
-        background-color rgba(0, 0, 0, .3)
 
     .auth0-lock-social-button-text
       display none
@@ -531,33 +581,30 @@ loadingSize = 30px
           background-image url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+PHN2ZyB3aWR0aD0iNTNweCIgaGVpZ2h0PSI2NXB4IiB2aWV3Qm94PSIwIDAgNTMgNjUiIHZlcnNpb249IjEuMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayI+ICAgICAgICA8dGl0bGU+U2hhcGU8L3RpdGxlPiAgICA8ZGVzYz5DcmVhdGVkIHdpdGggU2tldGNoLjwvZGVzYz4gICAgPGRlZnM+PC9kZWZzPiAgICA8ZyBpZD0iUGFnZS0xIiBzdHJva2U9Im5vbmUiIHN0cm9rZS13aWR0aD0iMSIgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj4gICAgICAgIDxnIGlkPSI2NHB4IiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgtMTE1My4wMDAwMDAsIC02MDMzLjAwMDAwMCkiIGZpbGw9IiNGRkZGRkYiPiAgICAgICAgICAgIDxwYXRoIGQ9Ik0xMTYxLjEyNSw2MDk4IEMxMTU2LjYzNzk3LDYwOTggMTE1Myw2MDk0LjM2MTg2IDExNTMsNjA4OS44NzU2MyBMMTE1Myw2MDY1LjQ5OTQ5IEMxMTUzLDYwNjEuMDEyMjUgMTE1Ni42Mzc5Nyw2MDU3LjM3MzEgMTE2MS4xMjUsNjA1Ny4zNzMxIEwxMTYxLjEyNSw2MDUxLjI4MjExIEMxMTYxLjEyNSw2MDQxLjE4NjMyIDExNjkuMzA5OTIsNjAzMyAxMTc5LjQwNjI1LDYwMzMgQzExODkuNTAyNTgsNjAzMyAxMTk3LjY4NzUsNjA0MS4xODYzMiAxMTk3LjY4NzUsNjA1MS4yODIxMSBMMTE5Ny42ODc1LDYwNTcuMzc0MTEgQzEyMDIuMTc0NTMsNjA1Ny4zNzQxMSAxMjA1LjgxMjUsNjA2MS4wMTIyNSAxMjA1LjgxMjUsNjA2NS40OTk0OSBMMTIwNS44MTI1LDYwODkuODc1NjMgQzEyMDUuODEyNSw2MDk0LjM2MTg2IDEyMDIuMTc0NTMsNjA5OCAxMTk3LjY4NzUsNjA5OCBMMTE2MS4xMjUsNjA5OCBaIE0xMTkzLjYyNjAyLDYwNTEuMjgyMTEgQzExOTMuNjI2MDIsNjA0My40Mjk5NCAxMTg3LjI1OTA2LDYwMzcuMDYyNjkgMTE3OS40MDcyNyw2MDM3LjA2MjY5IEMxMTcxLjU1NTQ3LDYwMzcuMDYyNjkgMTE2NS4xODg1Miw2MDQzLjQyOTk0IDExNjUuMTg4NTIsNjA1MS4yODIxMSBMMTE2NS4xODg1Miw2MDU3LjM3MzEgTDExOTMuNjI2MDIsNjA1Ny4zNzMxIEwxMTkzLjYyNjAyLDYwNTEuMjgyMTEgTDExOTMuNjI2MDIsNjA1MS4yODIxMSBaIE0xMjAxLjc1LDYwNjUuNDk5NDkgQzEyMDEuNzUsNjA2My4yNTQ4NiAxMTk5LjkzMTAyLDYwNjEuNDM1NzkgMTE5Ny42ODc1LDYwNjEuNDM1NzkgTDExNjEuMTI1LDYwNjEuNDM1NzkgQzExNTguODgxNDgsNjA2MS40MzU3OSAxMTU3LjA2MjUsNjA2My4yNTQ4NiAxMTU3LjA2MjUsNjA2NS40OTk0OSBMMTE1Ny4wNjI1LDYwODkuODc1NjMgQzExNTcuMDYyNSw2MDkyLjExNjIxIDExNTguODgxNDgsNjA5My45MzUyOCAxMTYxLjEyNSw2MDkzLjkzNTI4IEwxMTk3LjY4NzUsNjA5My45MzUyOCBDMTE5OS45MzEwMiw2MDkzLjkzNTI4IDEyMDEuNzUsNjA5Mi4xMTYyMSAxMjAxLjc1LDYwODkuODc1NjMgTDEyMDEuNzUsNjA2NS40OTk0OSBMMTIwMS43NSw2MDY1LjQ5OTQ5IFogTTExNzcuMzc1LDYwODMuNzgwNTggTDExNzcuMzc1LDYwNzEuNTkyNTEgQzExNzcuMzc1LDYwNzAuNDcxMjEgMTE3OC4yODM5OCw2MDY5LjU2MTE3IDExNzkuNDA2MjUsNjA2OS41NjExNyBDMTE4MC41Mjg1Miw2MDY5LjU2MTE3IDExODEuNDM3NSw2MDcwLjQ3MTIxIDExODEuNDM3NSw2MDcxLjU5MjUxIEwxMTgxLjQzNzUsNjA4My43ODA1OCBDMTE4MS40Mzc1LDYwODQuOTAwODcgMTE4MC41Mjg1Miw2MDg1LjgxMDkxIDExNzkuNDA2MjUsNjA4NS44MTA5MSBDMTE3OC4yODUsNjA4NS44MTA5MSAxMTc3LjM3NSw2MDg0LjkwMDg3IDExNzcuMzc1LDYwODMuNzgwNTggWiIgaWQ9IlNoYXBlIj48L3BhdGg+ICAgICAgICA8L2c+ICAgIDwvZz48L3N2Zz4=')
           background-size 38%
 
-      .auth0-lock-social-button-icon
-        background-color rgba(0, 0, 0, .3)
-
       .auth0-lock-social-button-text
         -webkit-box-sizing border-box
         box-sizing border-box
         display block
         overflow hidden
         width 100%
-        padding-left 54px
+        padding-left 50px
         padding-right 15px
         line-height 40px
         text-align left
-        text-transform uppercase
         text-overflow ellipsis
-        font-size 10px
-        font-weight 600
-        letter-spacing .7px
+        font-size 14px
+        font-weight 500
         color #fff
         white-space nowrap
         transition background 0.3s
         -webkit-transition background 0.3s
 
-      &:hover:not([disabled]), &:focus:not([disabled])
-        .auth0-lock-social-button-icon
-          background-color rgba(0, 0, 0, .3)
+        // Thicken up the font on HDPI devices
+        @media (-webkit-min-device-pixel-ratio: 2),
+          (min-resolution: 192dpi)
+          font-weight: 600
 
+      &:hover:not([disabled]), &:focus:not([disabled])
         .auth0-lock-social-button-text
           background-color rgba(0, 0, 0, .3)
 
@@ -591,7 +638,6 @@ loadingSize = 30px
     -webkit-box-sizing border-box
     box-sizing border-box
     width 100%
-    height submitHeight
     overflow hidden
     border-radius 0 0 5px 5px
     -webkit-transition .2s ease-in-out
@@ -601,6 +647,9 @@ loadingSize = 30px
     letter-spacing 1px
     font-size 14px
     text-transform uppercase
+    flex-shrink: 0;
+    flex-grow: 0;
+    flex-basis: auto;
 
     span
       display inline-block
@@ -646,7 +695,7 @@ loadingSize = 30px
 
   .auth0-lock-submit-container
     flex-shrink: 0
-  
+
   .auth0-loading-container
     position relative
     display none
@@ -924,7 +973,7 @@ loadingSize = 30px
   &.auth0-lock-opened
     opacity 1
     pointer-events auto
-    
+
     .auth0-lock-center
       +breakpoint("mobile")
         overflow-y auto
@@ -989,7 +1038,7 @@ loadingSize = 30px
     .auth0-lock-widget-container
       //mobile view
       @media screen and (max-width: 480px)
-        height 100%
+        calculateHeight()
 
     .auth0-lock-cred-pane
       //mobile view
@@ -1017,7 +1066,6 @@ loadingSize = 30px
     .auth0-lock-terms
       @media screen and (max-width: 480px)
         position absolute
-        bottom -42px
         width 100%
         left 0
         -webkit-box-sizing border-box
@@ -1157,6 +1205,7 @@ loadingSize = 30px
 .auth0-lock-password-strength
   width 100%
   bottom 41px
+  left 0
   // width calc(100% - 28px)
   display block
   text-align left
@@ -1243,7 +1292,7 @@ loadingSize = 30px
 
   li.auth0-lock-checked
     color #7ED321
-    span
+    & > span
       background-image url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+PHN2ZyB3aWR0aD0iMTNweCIgaGVpZ2h0PSIxMnB4IiB2aWV3Qm94PSIwIDAgMTMgMTIiIHZlcnNpb249IjEuMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayI+ICAgICAgICA8dGl0bGU+R3JvdXAgNDwvdGl0bGU+ICAgIDxkZXNjPkNyZWF0ZWQgd2l0aCBTa2V0Y2guPC9kZXNjPiAgICA8ZGVmcz48L2RlZnM+ICAgIDxnIGlkPSJQYWdlLTEiIHN0cm9rZT0ibm9uZSIgc3Ryb2tlLXdpZHRoPSIxIiBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPiAgICAgICAgPGcgaWQ9IklwaG9uZS02LS0tTmF0aXZlIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgtNDQuMDAwMDAwLCAtMjQwLjAwMDAwMCkiPiAgICAgICAgICAgIDxnIGlkPSJHcm91cC00IiB0cmFuc2Zvcm09InRyYW5zbGF0ZSg0NC4xMTQ5NzMsIDI0MC4wMDAwMDApIj4gICAgICAgICAgICAgICAgPGVsbGlwc2UgaWQ9Ik92YWwtOTAiIGZpbGw9IiM4MEQxMzUiIGN4PSI2IiBjeT0iNiIgcng9IjYiIHJ5PSI2Ij48L2VsbGlwc2U+ICAgICAgICAgICAgICAgIDxwYXRoIGQ9Ik00LjU0MjM1MzYxLDcuNzMzNzgwNzYgTDIuNjQ1ODIxNDksNS44NjgwMDg5NSBMMiw2LjQ5ODg4MTQzIEw0LjU0MjM1MzYxLDkgTDEwLDMuNjMwODcyNDggTDkuMzU4NzI2NTUsMyBMNC41NDIzNTM2MSw3LjczMzc4MDc2IFoiIGlkPSJTaGFwZSIgZmlsbD0iI0ZGRkZGRiI+PC9wYXRoPiAgICAgICAgICAgIDwvZz4gICAgICAgIDwvZz4gICAgPC9nPjwvc3ZnPg==')
 
 // input error string
@@ -1253,37 +1302,6 @@ loadingSize = 30px
   font-size 12px
   margin-top 5px
   white-space nowrap
-
-  +breakpoint("mobile")
-    color black
-    background white
-    box-shadow 0 0 5px 0 rgba(black,.6)
-    margin 0
-    border-radius 3px
-    position absolute
-    left calc(100% + 7px)
-    top 1px
-    display inline-table
-
-    .auth0-lock-error-invalid-hint
-      background white
-      padding 12px 15px
-      display block
-      position relative
-      border-radius 3px
-      z-index 1
-
-    &:after
-      content ""
-      background white
-      height 6px
-      width 6px
-      position absolute
-      pointer-events none
-      box-shadow 0 0 5px 0 rgba(black,.6)
-      right calc(100% - 3px)
-      top 50%
-      transform translateY(-50%) rotate(45deg)
 
 // loading
 
@@ -1340,17 +1358,17 @@ loadingSize = 30px
 // show password
 .auth0-lock-input-show-password
   position relative
-  
+
   .auth0-lock-show-password
     position absolute
     top 14px
     right 12px
     width 20px
     height 14px
-    
+
     input[type=checkbox]
       display none
-    
+
     input[type=checkbox] + label
       background-image url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz48c3ZnIHdpZHRoPSIyMHB4IiBoZWlnaHQ9IjE0cHgiIHZpZXdCb3g9IjAgMCAyMCAxNCIgdmVyc2lvbj0iMS4xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIj4gICAgICAgIDx0aXRsZT5zaG93X3Bhc3N3b3JkX2luYWN0aXZlPC90aXRsZT4gICAgPGRlc2M+Q3JlYXRlZCB3aXRoIFNrZXRjaC48L2Rlc2M+ICAgIDxkZWZzPjwvZGVmcz4gICAgPGcgaWQ9IlBhZ2UtMSIgc3Ryb2tlPSJub25lIiBzdHJva2Utd2lkdGg9IjEiIGZpbGw9Im5vbmUiIGZpbGwtcnVsZT0iZXZlbm9kZCI+ICAgICAgICA8ZyBpZD0ic2hvd19wYXNzd29yZF9pbmFjdGl2ZSIgZmlsbC1ydWxlPSJub256ZXJvIiBmaWxsPSIjQ0NDQ0NDIj4gICAgICAgICAgICA8cGF0aCBkPSJNMjAsNy4xNDY0NjA3MSBDMjAsNy4zMjQ1NTU5MyAxOS44OTM4NzQ5LDcuNTA0OTY0MDcgMTkuNzg5NzkwNiw3LjYyMjkyMzI5IEMxOS41Nzk1ODExLDcuOTIxMjkwNjQgMTkuMzY5MzcxNiw4LjE1OTUyMTkzIDE5LjEwNjA5OTYsOC40NTc4ODkyMSBDMTcuODQyODAyMSw5Ljg4OTU4OTkzIDE2LjQyMDMxNjksMTEuMTQzMTk1NCAxNC44NDA2ODQ3LDEyLjA5ODQzMzUgQzEzLjg0MDY1OTIsMTIuNjk1MTY4MSAxMi43ODc1NzExLDEzLjE3Mzk0MzcgMTEuNjgxNDIwNCwxMy40MTIxNzUgQzEwLjQ2OTE0NDYsMTMuNjUwNDA2MyA5LjI1ODkwOTY0LDEzLjY1MDQwNjMgOC4wNDY2MzM4NiwxMy4zNTIwMzg5IEM1LjkzODQxNjgxLDEyLjgxNTQ0MDMgNC4wNDI0NTAwNCwxMS41NjE4MzQ5IDIuMzU2NjkyNzcsMTAuMDA5ODYyMSBDMS41NjY4NzY3MSw5LjI5Mjg1NTI5IDAuODMwMTIzMjE0LDguNTE4MDI1MjkgMC4xOTc0NTQwMTYsNy42MjI5MjMyOSBDLTAuMDY1ODE4MDA1Myw3LjI2NDQxOTg2IC0wLjA2NTgxODAwNTMsNi43ODc5NTczIDAuMTk3NDU0MDE2LDYuNDI5NDUzODcgQzAuNDA3NjYzNDU5LDYuMTMxMDg2NTUgMC42MTc4NzI5MDYsNS44OTI4NTUyNiAwLjg4MTE0NDkyOSw1LjU5NDQ4NzkgQzIuMTQ0NDQyNDYsNC4xNjI3ODcyMSAzLjU2NjkyNzczLDIuOTA5MTgxNzcgNS4xNDY1NTk4NSwxLjk1Mzk0MzY4IEM2LjE0NjU4NTM2LDEuMzU3MjA4OTkgNy4xOTk2NzM0MywwLjg3ODQzMzQ3MSA4LjMwNTgyNDE0LDAuNjQwMjAyMTgxIEM5LjUxODEsMC40MDE5NzA4ODkgMTAuNzI4MzM0OSwwLjQwMTk3MDg4OSAxMS45NDA2MTA3LDAuNzAwMzM4MjM2IEMxNC4wNDY3ODY5LDEuMjM2OTM2ODggMTUuOTQyNzUzNiwyLjQ5MDU0MjMxIDE3LjYyODUxMDksNC4wNDI1MTUxMSBDMTguNDE4MzI3LDQuNzU5NTIxOTEgMTkuMTU1MDgwNSw1LjUzNDM1MTgzIDE5Ljc4Nzc0OTYsNi40Mjk0NTM4NyBDMTkuODkzODc0OSw2LjU0OTcyNjAxIDE5Ljk5Nzk1OTEsNi43Mjc4MjEyMyAxOS45OTc5NTkxLDYuOTA1OTE2NDUgQzIwLDcuMDI2MTg4NTkgMjAsNy4wMjYxODg1OSAyMCw3LjA4NjMyNDYyIEMyMCw3LjE0NjQ2MDcxIDIwLDcuMTQ2NDYwNzEgMjAsNy4xNDY0NjA3MSBaIE05Ljk5MTk0NjA3LDIuMjkyOTUyNDIgQzcuNDk4OTQzMTQsMi4yOTI5NTI0MiA1LjQ1MjAwNDM4LDQuMzM5ODkxMiA1LjQ1MjAwNDM4LDYuODMyODk0MTMgQzUuNDUyMDA0MzgsOS4zMjU4OTcgNy40OTg5NDMxNCwxMS4zNzI4MzU5IDkuOTkxOTQ2MDcsMTEuMzcyODM1OSBDMTIuNDg0OTQ5LDExLjM3MjgzNTkgMTQuNTMxODg3Nyw5LjMyNTg5NyAxNC41MzE4ODc3LDYuODMyODk0MTMgQzE0LjUzMTg4NzcsNC4zMzk4OTEyIDEyLjQ4NDk0OSwyLjI5Mjk1MjQyIDkuOTkxOTQ2MDcsMi4yOTI5NTI0MiBaIE05Ljk5MTk0NjA3LDkuMTM3NTU4NzkgQzguNzEzMjI4ODYsOS4xMzc1NTg3OSA3LjY4OTc1OTQzLDguMTE0MDg5NDMgNy42ODk3NTk0Myw2LjgzNTM3MjI0IEM3LjY4OTc1OTQzLDUuNTU2NjU1MDcgOC43MTMyMjg4Niw0LjUzMzE4NTY2IDkuOTkxOTQ2MDcsNC41MzMxODU2NiBDMTEuMjcwNjYzMyw0LjUzMzE4NTY2IDEyLjI5NDEzMjYsNS41NTY2NTUwNyAxMi4yOTQxMzI2LDYuODM1MzcyMjQgQzEyLjI5NDEzMjYsOC4xMTQwODk0MyAxMS4yNzA2NjMzLDkuMTM3NTU4NzkgOS45OTE5NDYwNyw5LjEzNzU1ODc5IFoiIGlkPSJTaGFwZSI+PC9wYXRoPiAgICAgICAgPC9nPiAgICA8L2c+PC9zdmc+')
       width 20px
@@ -1358,12 +1376,29 @@ loadingSize = 30px
       display inline-block
       cursor pointer
       vertical-align top
-    
+
     input[type=checkbox]:checked + label
       background-image url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz48c3ZnIHdpZHRoPSIyMHB4IiBoZWlnaHQ9IjE0cHgiIHZpZXdCb3g9IjAgMCAyMCAxNCIgdmVyc2lvbj0iMS4xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIj4gICAgICAgIDx0aXRsZT5zaG93X3Bhc3N3b3JkX2FjdGl2ZTwvdGl0bGU+ICAgIDxkZXNjPkNyZWF0ZWQgd2l0aCBTa2V0Y2guPC9kZXNjPiAgICA8ZGVmcz48L2RlZnM+ICAgIDxnIGlkPSJQYWdlLTEiIHN0cm9rZT0ibm9uZSIgc3Ryb2tlLXdpZHRoPSIxIiBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPiAgICAgICAgPGcgaWQ9InNob3dfcGFzc3dvcmRfYWN0aXZlIiBmaWxsLXJ1bGU9Im5vbnplcm8iIGZpbGw9IiMyMEI0RkYiPiAgICAgICAgICAgIDxwYXRoIGQ9Ik0yMCw3LjE0NjQ2MDcxIEMyMCw3LjMyNDU1NTkzIDE5Ljg5Mzg3NDksNy41MDQ5NjQwNyAxOS43ODk3OTA2LDcuNjIyOTIzMjkgQzE5LjU3OTU4MTEsNy45MjEyOTA2NCAxOS4zNjkzNzE2LDguMTU5NTIxOTMgMTkuMTA2MDk5Niw4LjQ1Nzg4OTIxIEMxNy44NDI4MDIxLDkuODg5NTg5OTMgMTYuNDIwMzE2OSwxMS4xNDMxOTU0IDE0Ljg0MDY4NDcsMTIuMDk4NDMzNSBDMTMuODQwNjU5MiwxMi42OTUxNjgxIDEyLjc4NzU3MTEsMTMuMTczOTQzNyAxMS42ODE0MjA0LDEzLjQxMjE3NSBDMTAuNDY5MTQ0NiwxMy42NTA0MDYzIDkuMjU4OTA5NjQsMTMuNjUwNDA2MyA4LjA0NjYzMzg2LDEzLjM1MjAzODkgQzUuOTM4NDE2ODEsMTIuODE1NDQwMyA0LjA0MjQ1MDA0LDExLjU2MTgzNDkgMi4zNTY2OTI3NywxMC4wMDk4NjIxIEMxLjU2Njg3NjcxLDkuMjkyODU1MjkgMC44MzAxMjMyMTQsOC41MTgwMjUyOSAwLjE5NzQ1NDAxNiw3LjYyMjkyMzI5IEMtMC4wNjU4MTgwMDUzLDcuMjY0NDE5ODYgLTAuMDY1ODE4MDA1Myw2Ljc4Nzk1NzMgMC4xOTc0NTQwMTYsNi40Mjk0NTM4NyBDMC40MDc2NjM0NTksNi4xMzEwODY1NSAwLjYxNzg3MjkwNiw1Ljg5Mjg1NTI2IDAuODgxMTQ0OTI5LDUuNTk0NDg3OSBDMi4xNDQ0NDI0Niw0LjE2Mjc4NzIxIDMuNTY2OTI3NzMsMi45MDkxODE3NyA1LjE0NjU1OTg1LDEuOTUzOTQzNjggQzYuMTQ2NTg1MzYsMS4zNTcyMDg5OSA3LjE5OTY3MzQzLDAuODc4NDMzNDcxIDguMzA1ODI0MTQsMC42NDAyMDIxODEgQzkuNTE4MSwwLjQwMTk3MDg4OSAxMC43MjgzMzQ5LDAuNDAxOTcwODg5IDExLjk0MDYxMDcsMC43MDAzMzgyMzYgQzE0LjA0Njc4NjksMS4yMzY5MzY4OCAxNS45NDI3NTM2LDIuNDkwNTQyMzEgMTcuNjI4NTEwOSw0LjA0MjUxNTExIEMxOC40MTgzMjcsNC43NTk1MjE5MSAxOS4xNTUwODA1LDUuNTM0MzUxODMgMTkuNzg3NzQ5Niw2LjQyOTQ1Mzg3IEMxOS44OTM4NzQ5LDYuNTQ5NzI2MDEgMTkuOTk3OTU5MSw2LjcyNzgyMTIzIDE5Ljk5Nzk1OTEsNi45MDU5MTY0NSBDMjAsNy4wMjYxODg1OSAyMCw3LjAyNjE4ODU5IDIwLDcuMDg2MzI0NjIgQzIwLDcuMTQ2NDYwNzEgMjAsNy4xNDY0NjA3MSAyMCw3LjE0NjQ2MDcxIFogTTkuOTkxOTQ2MDcsMi4yOTI5NTI0MiBDNy40OTg5NDMxNCwyLjI5Mjk1MjQyIDUuNDUyMDA0MzgsNC4zMzk4OTEyIDUuNDUyMDA0MzgsNi44MzI4OTQxMyBDNS40NTIwMDQzOCw5LjMyNTg5NyA3LjQ5ODk0MzE0LDExLjM3MjgzNTkgOS45OTE5NDYwNywxMS4zNzI4MzU5IEMxMi40ODQ5NDksMTEuMzcyODM1OSAxNC41MzE4ODc3LDkuMzI1ODk3IDE0LjUzMTg4NzcsNi44MzI4OTQxMyBDMTQuNTMxODg3Nyw0LjMzOTg5MTIgMTIuNDg0OTQ5LDIuMjkyOTUyNDIgOS45OTE5NDYwNywyLjI5Mjk1MjQyIFogTTkuOTkxOTQ2MDcsOS4xMzc1NTg3OSBDOC43MTMyMjg4Niw5LjEzNzU1ODc5IDcuNjg5NzU5NDMsOC4xMTQwODk0MyA3LjY4OTc1OTQzLDYuODM1MzcyMjQgQzcuNjg5NzU5NDMsNS41NTY2NTUwNyA4LjcxMzIyODg2LDQuNTMzMTg1NjYgOS45OTE5NDYwNyw0LjUzMzE4NTY2IEMxMS4yNzA2NjMzLDQuNTMzMTg1NjYgMTIuMjk0MTMyNiw1LjU1NjY1NTA3IDEyLjI5NDEzMjYsNi44MzUzNzIyNCBDMTIuMjk0MTMyNiw4LjExNDA4OTQzIDExLjI3MDY2MzMsOS4xMzc1NTg3OSA5Ljk5MTk0NjA3LDkuMTM3NTU4NzkgWiIgaWQ9IlNoYXBlIj48L3BhdGg+ICAgICAgICA8L2c+ICAgIDwvZz48L3N2Zz4=')
+
+.auth0-lock-recaptcha-block
+  border-radius: 4px;
+  height: 65px;
+
+  &.auth0-lock-recaptcha-block-error
+    border: 1px solid red;
+
+  .auth0-lock-recaptchav2
+    transform: scale(0.855);
+    transform-origin: 0px 0px;
+    position: relative;
 
 input[type="button"]
    cursor pointer
 
 .auth0-lock-hidden
   display: none
+
+// Hack to fix the height on IE11
+_:-ms-fullscreen, :root .auth0-lock.auth0-lock .auth0-lock-content-wrapper
+  flex-basis: auto !important
+  max-height: 70vh

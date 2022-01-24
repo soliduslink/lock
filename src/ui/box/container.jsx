@@ -31,7 +31,7 @@ const badgeSvg = (
 
 const BottomBadge = ({ link }) => (
   <span className="auth0-lock-badge-bottom">
-    <a href={link} target="_blank" className="auth0-lock-badge">
+    <a href={link} target="_blank" className="auth0-lock-badge" rel="noopener noreferrer">
       Protected with {badgeSvg}
     </a>
   </span>
@@ -50,15 +50,18 @@ class EscKeyDownHandler {
         f();
       }
     };
-    global.document.addEventListener('keydown', this.handler, false);
+    window.document.addEventListener('keydown', this.handler, false);
   }
 
   release() {
-    global.document.removeEventListener('keydown', this.handler);
+    window.document.removeEventListener('keydown', this.handler);
   }
 }
 
-const IPHONE = global.navigator && !!global.navigator.userAgent.match(/iPhone/i);
+const IPHONE =
+  typeof window !== 'undefined' &&
+  window.navigator &&
+  !!window.navigator.userAgent.match(/iPhone/i);
 
 export default class Container extends React.Component {
   constructor(props) {
@@ -99,6 +102,11 @@ export default class Container extends React.Component {
 
   handleSubmit(e) {
     e.preventDefault();
+    // Safari does not disable form submits when the submit button is disabled
+    // on single input (eg. passwordless) forms, so disable it manually.
+    if (this.props.isSubmitting) {
+      return;
+    }
 
     this.checkConnectionResolver(() => {
       const { submitHandler } = this.props;
@@ -157,7 +165,8 @@ export default class Container extends React.Component {
       terms,
       title,
       classNames,
-      scrollGlobalMessagesIntoView
+      scrollGlobalMessagesIntoView,
+      suppressSubmitOverlay
     } = this.props;
 
     const badge = showBadge ? <BottomBadge link={badgeLink} /> : null;
@@ -178,7 +187,7 @@ export default class Container extends React.Component {
       className += ' auth0-lock-mobile';
     }
 
-    if (isSubmitting) {
+    if (isSubmitting && !suppressSubmitOverlay) {
       className += ' auth0-lock-mode-loading';
     }
 
@@ -208,7 +217,12 @@ export default class Container extends React.Component {
       <div className={className} lang={this.props.language}>
         {overlay}
         <div className="auth0-lock-center">
-          <form className="auth0-lock-widget" method="post" onSubmit={::this.handleSubmit}>
+          <form
+            className="auth0-lock-widget"
+            method="post"
+            noValidate
+            onSubmit={::this.handleSubmit}
+          >
             {avatar && <Avatar imageUrl={avatar} />}
             {closeHandler && <CloseButton onClick={::this.handleClose} />}
             <div className="auth0-lock-widget-container">
@@ -270,14 +284,18 @@ Container.propTypes = {
   terms: PropTypes.element,
   title: PropTypes.string,
   classNames: PropTypes.string.isRequired,
-  scrollGlobalMessagesIntoView: PropTypes.bool
+  scrollGlobalMessagesIntoView: PropTypes.bool,
+  suppressSubmitOverlay: PropTypes.bool
   // escHandler
   // submitHandler,
 };
 
 // NOTE: detecting the file protocol is important for things like electron.
 const isFileProtocol =
-  global.window && global.window.location && global.window.location.protocol === 'file:';
+  typeof window !== 'undefined' &&
+  window.window &&
+  window.location &&
+  window.location.protocol === 'file:';
 
 export const defaultProps = (Container.defaultProps = {
   autofocus: false,

@@ -6,8 +6,16 @@ import CustomInput from '../../field/custom_input';
 import {
   additionalSignUpFields,
   databaseConnectionRequiresUsername,
-  passwordStrengthPolicy
+  passwordStrengthPolicy,
+  signUpFieldsStrictValidation,
+  signUpHideUsernameField
 } from '../../connection/database/index';
+import CaptchaPane from '../../field/captcha/captcha_pane';
+import * as l from '../../core/index';
+import { swapCaptcha } from '../../connection/captcha';
+import { isHRDDomain } from '../../connection/enterprise';
+import { databaseUsernameValue } from '../../connection/database/index';
+import { isSSOEnabled } from '../classic';
 
 export default class SignUpPane extends React.Component {
   render() {
@@ -24,14 +32,16 @@ export default class SignUpPane extends React.Component {
 
     const headerText = instructions || null;
     const header = headerText && <p>{headerText}</p>;
+    const sso = isSSOEnabled(model);
 
     const usernamePane =
-      !onlyEmail && databaseConnectionRequiresUsername(model) ? (
+      !onlyEmail && databaseConnectionRequiresUsername(model) && !signUpHideUsernameField(model) ? (
         <UsernamePane
           i18n={i18n}
           lock={model}
           placeholder={usernameInputPlaceholder}
           validateFormat={true}
+          strictValidation={signUpFieldsStrictValidation(model)}
         />
       ) : null;
 
@@ -46,12 +56,19 @@ export default class SignUpPane extends React.Component {
           ariaLabel={x.get('ariaLabel')}
           options={x.get('options')}
           placeholder={x.get('placeholder')}
+          placeholderHTML={x.get('placeholderHTML')}
           type={x.get('type')}
           validator={x.get('validator')}
           value={x.get('value')}
-          placeholderFromField={x.get('placeholderFromField')}
         />
       ));
+
+    const captchaPane =
+      l.captcha(model) &&
+      l.captcha(model).get('required') &&
+      (isHRDDomain(model, databaseUsernameValue(model)) || !sso) ? (
+        <CaptchaPane i18n={i18n} lock={model} onReload={() => swapCaptcha(l.id(model), false)} />
+      ) : null;
 
     const passwordPane = !onlyEmail && (
       <PasswordPane
@@ -66,9 +83,15 @@ export default class SignUpPane extends React.Component {
     return (
       <div>
         {header}
-        <EmailPane i18n={i18n} lock={model} placeholder={emailInputPlaceholder} />
+        <EmailPane
+          i18n={i18n}
+          lock={model}
+          placeholder={emailInputPlaceholder}
+          strictValidation={signUpFieldsStrictValidation(model)}
+        />
         {usernamePane}
         {passwordPane}
+        {captchaPane}
         {fields}
       </div>
     );

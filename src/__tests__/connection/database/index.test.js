@@ -1,5 +1,9 @@
 import Immutable, { List, Map } from 'immutable';
-import { databaseUsernameValue, initDatabase } from '../../../connection/database';
+import {
+  databaseUsernameValue,
+  initDatabase,
+  databaseUsernameStyle
+} from '../../../connection/database';
 
 describe('database/index.js', () => {
   describe('databaseUsernameValue', () => {
@@ -60,8 +64,56 @@ describe('database/index.js', () => {
       });
     });
   });
+
+  describe('databaseUsernameStyle', () => {
+    beforeEach(() => {
+      jest.resetAllMocks();
+    });
+
+    it('it should resolve to "username" if a connectionResolver is present', () => {
+      const model = Immutable.fromJS({
+        core: {
+          connectionResolver: () => true,
+          transient: {
+            connections: {
+              database: [
+                {
+                  requireUsername: false
+                }
+              ]
+            }
+          }
+        }
+      });
+
+      expect(databaseUsernameStyle(model)).toBe('username');
+    });
+  });
+
   describe('initDatabase', () => {
     describe('calls initNS with the correct additionalSignUpFields', () => {
+      describe('uses the `storage` attribute', () => {
+        const model = Immutable.fromJS({});
+        const modelOut = initDatabase(model, {
+          additionalSignUpFields: [
+            {
+              type: 'hidden',
+              name: 'hidden_field',
+              value: 'hidden_value',
+              storage: 'root'
+            }
+          ]
+        });
+        const modelOutJS = modelOut.toJS();
+        expect(modelOutJS.database.additionalSignUpFields).toEqual([
+          {
+            type: 'hidden',
+            name: 'hidden_field',
+            value: 'hidden_value',
+            storage: 'root'
+          }
+        ]);
+      });
       describe('with a valid hidden field', () => {
         const model = Immutable.fromJS({});
         const modelOut = initDatabase(model, {

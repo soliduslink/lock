@@ -24,12 +24,9 @@ describe('AuthButton', () => {
       />
     ).toMatchSnapshot();
   });
-  it('renders when `big` is false', () => {
-    expectComponent(<AuthButton {...defaultProps} isBig={false} />).toMatchSnapshot();
-  });
   it('should trigger onClick when clicked', () => {
     const wrapper = mount(<AuthButton {...defaultProps} />);
-    wrapper.find('button').simulate('click');
+    wrapper.find('a').simulate('click');
     expect(defaultProps.onClick.mock.calls.length).toBe(1);
   });
 });

@@ -1,6 +1,6 @@
 import { Simulate } from 'react-dom/test-utils';
+import Immutable, { Map } from 'immutable';
 import { stub } from 'sinon';
-import { Map } from 'immutable';
 import Auth0Lock from '../../src/index';
 import webApi from '../../src/core/web_api';
 import * as gravatarProvider from '../../src/avatar/gravatar_provider';
@@ -8,11 +8,18 @@ import * as ClientSettings from '../../src/core/client/settings';
 import clientSettings from './client_settings';
 import * as SSOData from '../../src/core/sso/data';
 import ssoData from './sso_data';
+import enDictionary from '../../src/i18n/en';
+import * as i18n from '../../src/i18n';
+import { dataFns } from '../../src/utils/data_utils';
+
+const { set } = dataFns(['i18n']);
 
 // stub, mock and spy
 
 export const stubWebApis = () => {
   stub(webApi, 'logIn').returns(undefined);
+  stub(webApi, 'signUp').returns(undefined);
+
   stub(gravatarProvider, 'displayName', (email, cb) => {
     cb(null, 'someone');
   });
@@ -24,6 +31,14 @@ export const stubWebApis = () => {
   });
   stub(SSOData, 'fetchSSOData', (id, adInfo, cb) => {
     cb(null, ssoData);
+  });
+  stubGetChallenge();
+  stubI18n();
+};
+
+export const stubI18n = () => {
+  stub(i18n, 'initI18n', m => {
+    return set(m, 'strings', Immutable.fromJS(enDictionary));
   });
 };
 
@@ -40,6 +55,10 @@ export const unStubWebApisForKerberos = () => {
   });
 };
 
+export const unstubI18n = () => {
+  i18n.initI18n.restore();
+};
+
 export const assertAuthorizeRedirection = cb => {
   if (webApi.logIn.restore) {
     webApi.logIn.restore();
@@ -47,18 +66,38 @@ export const assertAuthorizeRedirection = cb => {
   stub(webApi, 'logIn', cb);
 };
 
+export const assertSignUp = cb => {
+  if (webApi.signUp.restore) {
+    webApi.signUp.restore();
+  }
+  stub(webApi, 'signUp', cb);
+};
+
 export const restoreWebApis = () => {
   webApi.logIn.restore();
+  if (webApi.signUp.restore) {
+    webApi.signUp.restore();
+  }
+  webApi.getChallenge.restore();
   gravatarProvider.displayName.restore();
   gravatarProvider.url.restore();
   ClientSettings.fetchClientSettings.restore();
   SSOData.fetchSSOData.restore();
+  unstubI18n();
 };
 
 // api call checks
 
 export const wasLoginAttemptedWith = params => {
   const lastCall = webApi.logIn.lastCall;
+  if (!lastCall) return false;
+  const paramsFromLastCall = lastCall.args[1];
+
+  return Map(params).reduce((r, v, k) => r && paramsFromLastCall[k] === v, true);
+};
+
+export const wasSignUpAttemptedWith = params => {
+  const lastCall = webApi.signUp.lastCall;
   if (!lastCall) return false;
   const paramsFromLastCall = lastCall.args[1];
 
@@ -103,10 +142,10 @@ export const displayLock = (name, opts = {}, done = () => {}, show_ops = {}) => 
 
 // queries
 
-const q = (lock, query, all = false) => {
+export const q = (lock, query, all = false) => {
   query = `#auth0-lock-container-${lock.id} ${query}`;
   const method = all ? 'querySelectorAll' : 'querySelector';
-  return global.document[method](query);
+  return window.document[method](query);
 };
 
 const qView = (lock, query, all = false) => {
@@ -217,6 +256,10 @@ const clickFn = (lock, query) => click(lock, query);
 export const clickTermsCheckbox = checkFn(
   ".auth0-lock-sign-up-terms-agreement label input[type='checkbox']"
 );
+
+export const clickRefreshCaptchaButton = (lock, connection) =>
+  clickFn(lock, `.auth0-lock-captcha-refresh`);
+
 export const clickSocialConnectionButton = (lock, connection) =>
   clickFn(lock, `.auth0-lock-social-button[data-provider='${connection}']`);
 const fillInput = (lock, name, str) => {
@@ -226,6 +269,8 @@ const fillInputFn = name => (lock, str) => fillInput(lock, name, str);
 
 export const fillEmailInput = fillInputFn('email');
 export const fillPasswordInput = fillInputFn('password');
+export const fillComplexPassword = lock => fillInputFn('password')(lock, generateComplexPassword());
+export const fillCaptchaInput = fillInputFn('captcha');
 export const fillUsernameInput = fillInputFn('username');
 export const fillMFACodeInput = fillInputFn('mfa_code');
 
@@ -272,11 +317,66 @@ export const waitUntilErrorExists = (lock, cb, timeout) =>
 
 // login
 
-export const logInWithEmailAndPassword = lock => {
+export const waitForEmailAndPasswordInput = (lock, cb, timeout) => {
+  waitUntilInputExists(
+    lock,
+    'email',
+    () => {
+      waitUntilInputExists(lock, 'password', cb, timeout);
+    },
+    timeout
+  );
+};
+
+const loginWaitFn = fn => (lock, cb) => {
+  if (cb) {
+    waitForEmailAndPasswordInput(lock, () => {
+      fn(lock);
+      cb();
+    });
+  } else {
+    fn(lock);
+  }
+};
+
+export const logInWithEmailAndPassword = loginWaitFn(lock => {
   fillEmailInput(lock, 'someone@example.com');
   fillPasswordInput(lock, 'mypass');
   submit(lock);
-};
+});
+
+export const logInWithEmailPasswordAndCaptcha = loginWaitFn(lock => {
+  fillEmailInput(lock, 'someone@example.com');
+  fillPasswordInput(lock, 'mypass');
+  fillCaptchaInput(lock, 'captchaValue');
+  submit(lock);
+});
+
+/**
+ * The mocked connection has password policy "fair". So I need an strong password
+ */
+function generateComplexPassword() {
+  var result = '';
+  var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+-*/=?>~><';
+  var charactersLength = characters.length;
+  for (var i = 0; i < 50; i++) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+  }
+  return result;
+}
+
+export const signUpWithEmailAndPassword = loginWaitFn(lock => {
+  fillEmailInput(lock, 'someone@example.com');
+  fillPasswordInput(lock, generateComplexPassword());
+  submit(lock);
+});
+
+export const signUpWithEmailPasswordAndCaptcha = loginWaitFn(lock => {
+  fillEmailInput(lock, 'someone@example.com');
+  fillPasswordInput(lock, generateComplexPassword());
+  fillCaptchaInput(lock, 'captchaValue');
+  submit(lock);
+});
 
 export const logInWithUsernameAndPassword = lock => {
   fillUsernameInput(lock, 'someone');
@@ -294,4 +394,16 @@ export const testAsync = (fn, done) => {
   } catch (e) {
     done(e);
   }
+};
+
+export const stubGetChallenge = (result = { required: false }) => {
+  if (typeof webApi.getChallenge.restore === 'function') {
+    webApi.getChallenge.restore();
+  }
+  return stub(webApi, 'getChallenge', (lockID, callback) => {
+    if (Array.isArray(result)) {
+      return callback(null, result.shift());
+    }
+    callback(null, result);
+  });
 };

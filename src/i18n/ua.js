@@ -33,7 +33,11 @@ export default {
       session_missing:
         'Не вдалося виконати запит аутентифікації. Будь ласка, спробуйте ще раз попередньо закривши всі спливаючі вікна.',
       'hrd.not_matching_email':
-        'Будь ласка, використовуйте адресу вашої корпоративної пошти для входу.'
+        'Будь ласка, використовуйте адресу вашої корпоративної пошти для входу.',
+      too_many_requests:
+        "We're sorry. There are too many requests right now. Please reload the page and try again. If this persists, please try again later.",
+      invalid_captcha: 'Вирішіть складне питання, щоб переконатися, що ви не робот.',
+      invalid_recaptcha: 'Установіть прапорець, щоб переконатися, що ви не робот.'
     },
     passwordless: {
       'bad.email': 'Недійсна адреса електронної пошти',
@@ -48,7 +52,9 @@ export default {
       password_no_user_info_error: 'Пароль ґрунтується на інформації про користувача.',
       password_strength_error: 'Пароль занадто слабкий.',
       user_exists: 'Користувач вже існує.',
-      username_exists: "Ім'я користувача вже існує."
+      username_exists: "Ім'я користувача вже існує.",
+      social_signup_needs_terms_acception:
+        'Прийміть наведені нижче Умови надання послуг, щоб продовжити.'
     }
   },
   success: {
@@ -57,7 +63,11 @@ export default {
     magicLink: 'Ми відправили вам посилання для входу<br />в %s.',
     signUp: 'Дякуємо що зареєструвалися.'
   },
-  blankErrorHint: 'Поле не може бути порожнім',
+  blankErrorHint: '',
+  blankPasswordErrorHint: 'Поле не може бути порожнім',
+  blankEmailErrorHint: 'Поле не може бути порожнім',
+  blankUsernameErrorHint: 'Поле не може бути порожнім',
+  blankCaptchaErrorHint: 'Поле не може бути порожнім',
   codeInputPlaceholder: 'Ваш код',
   databaseEnterpriseLoginInstructions: '',
   databaseEnterpriseAlternativeLoginInstructions: 'або',
@@ -73,7 +83,10 @@ export default {
   forgotPasswordInstructions:
     'Будь ласка, введіть адресу вашої електронної скриньки. Ми відправимо вам повідомлення для відновлення паролю.',
   forgotPasswordSubmitLabel: 'відправити електронною поштою',
-  invalidErrorHint: 'Недійсні дані',
+  invalidErrorHint: '',
+  invalidPasswordErrorHint: 'Недійсні дані',
+  invalidEmailErrorHint: 'Недійсні дані',
+  invalidUsernameErrorHint: 'Недійсні дані',
   lastLoginInstructions: 'Останнього разу ви увійшли використовуючи',
   loginAtLabel: 'Увійдіть за посиланням %s',
   loginLabel: 'Вхід',
@@ -99,7 +112,7 @@ export default {
     'Введіть адресу електронної пошти для того щоб<br>увійти або зареєструватися',
   passwordlessSMSAlternativeInstructions:
     'Або введіть ваш номер телефону для того щоб<br>увійти або зареєструватися',
-  passwordlessSMSCodeInstructions: 'СМС з кодом було відправлено<br/>на %s.',
+  passwordlessSMSCodeInstructions: 'СМС з кодом було відправлено на %s.',
   passwordlessSMSInstructions:
     'Введіть ваш номер телефону для того щоб<br>увійти або зареєструватися',
   phoneNumberInputPlaceholder: 'Ваш номер телефону',
@@ -134,5 +147,7 @@ export default {
   mfaSubmitLabel: 'Авторизуватися',
   mfaCodeErrorHint: 'Використовуйте %d номери',
   showPassword: 'Show password',
-  signUpTerms: 'By signing up, you agree to our terms of service and privacy policy.'
+  signUpTerms: 'By signing up, you agree to our terms of service and privacy policy.',
+  captchaCodeInputPlaceholder: 'Введіть код, показаний вище',
+  captchaMathInputPlaceholder: 'Розв’яжіть формулу, показану вище'
 };

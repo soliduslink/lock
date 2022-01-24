@@ -16,6 +16,7 @@ export default class HRDPane extends React.Component {
           lock={model}
           placeholder={usernameInputPlaceholder}
           validateFormat={false}
+          strictValidation={false}
         />
         <PasswordPane i18n={i18n} lock={model} placeholder={passwordInputPlaceholder} />
       </div>
@@ -24,7 +25,7 @@ export default class HRDPane extends React.Component {
 }
 
 HRDPane.propTypes = {
-  header: PropTypes.element,
+  header: PropTypes.string,
   i18n: PropTypes.object.isRequired,
   model: PropTypes.object.isRequired,
   passwordInputPlaceholder: PropTypes.string.isRequired,

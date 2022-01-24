@@ -48,7 +48,7 @@ function assertMaybeString(opts, name) {
 }
 
 function assertMaybeArray(opts, name) {
-  const valid = opts[name] === undefined || global.Array.isArray(opts[name]);
+  const valid = opts[name] === undefined || window.Array.isArray(opts[name]);
   if (!valid) l.warn(opts, `The \`${name}\` option will be ignored, because it is not an array.`);
   return valid;
 }
@@ -62,7 +62,9 @@ function processDatabaseOptions(opts) {
     mustAcceptTerms,
     showTerms,
     signUpLink,
-    usernameStyle
+    usernameStyle,
+    signUpFieldsStrictValidation,
+    signUpHideUsernameField
   } = opts;
 
   let { initialScreen, screens } = processScreenOptions(opts);
@@ -91,6 +93,14 @@ function processDatabaseOptions(opts) {
     showTerms = true;
   }
 
+  if (!assertMaybeBoolean(opts, 'signUpFieldsStrictValidation')) {
+    signUpFieldsStrictValidation = false;
+  }
+
+  if (!assertMaybeBoolean(opts, 'signUpHideUsernameField')) {
+    signUpHideUsernameField = false;
+  }
+
   if (!assertMaybeArray(opts, 'additionalSignUpFields')) {
     additionalSignUpFields = undefined;
   } else if (additionalSignUpFields) {
@@ -100,12 +110,13 @@ function processDatabaseOptions(opts) {
         name,
         options,
         placeholder,
+        placeholderHTML,
         prefill,
         type,
         validator,
         value,
         isExtra,
-        placeholderFromField
+        storage
       } = x;
       let filter = true;
 
@@ -124,12 +135,23 @@ function processDatabaseOptions(opts) {
         filter = false;
       }
 
-      if (type !== 'hidden' && (typeof placeholder != 'string' || !placeholder)) {
+      if (
+        type !== 'hidden' &&
+        (typeof placeholder != 'string' || !placeholder) &&
+        (typeof placeholderHTML != 'string' || !placeholderHTML)
+      ) {
         l.warn(
           opts,
-          `Ignoring an element of \`additionalSignUpFields\` (${name}) because it does not contain a valid \`placeholder\` property. Every element of \`additionalSignUpFields\` must have a \`placeholder\` property that is a non-empty string.`
+          `Ignoring an element of \`additionalSignUpFields\` (${name}) because it does not contain a valid \`placeholder\` or \`placeholderHTML\` property. Every element of \`additionalSignUpFields\` must have a \`placeholder\` or \`placeholderHTML\` property that is a non-empty string.`
         );
         filter = false;
+      }
+
+      if (placeholderHTML && placeholder) {
+        l.warn(
+          opts,
+          'When provided, the `placeholderHTML` property of an element of `additionalSignUpFields` will override the `placeholder` property of that element'
+        );
       }
 
       if (icon != undefined && (typeof icon != 'string' || !icon)) {
@@ -188,7 +210,7 @@ function processDatabaseOptions(opts) {
       }
 
       if (
-        (options != undefined && !global.Array.isArray(options) && typeof options != 'function') ||
+        (options != undefined && !window.Array.isArray(options) && typeof options != 'function') ||
         (type === 'select' && options === undefined)
       ) {
         l.warn(
@@ -212,12 +234,13 @@ function processDatabaseOptions(opts) {
               name,
               options,
               placeholder,
+              placeholderHTML,
               prefill,
               type,
               validator,
               value,
               isExtra,
-              placeholderFromField
+              storage
             }
           ])
         : r;
@@ -242,7 +265,9 @@ function processDatabaseOptions(opts) {
     showTerms,
     screens,
     signUpLink,
-    usernameStyle
+    usernameStyle,
+    signUpFieldsStrictValidation,
+    signUpHideUsernameField
   })
     .filter(x => typeof x !== 'undefined')
     .toJS();
@@ -378,6 +403,10 @@ export function databaseConnectionRequiresUsername(m) {
 
 export function databaseUsernameStyle(m) {
   if (l.hasSomeConnections(m, 'database')) {
+    if (l.connectionResolver(m)) {
+      return 'username';
+    }
+
     return databaseConnectionRequiresUsername(m) ? get(m, 'usernameStyle', 'any') : 'email';
   }
 
@@ -429,6 +458,14 @@ export function additionalSignUpFields(m) {
 
 export function showTerms(m) {
   return get(m, 'showTerms', true);
+}
+
+export function signUpFieldsStrictValidation(m) {
+  return get(m, 'signUpFieldsStrictValidation', false);
+}
+
+export function signUpHideUsernameField(m) {
+  return get(m, 'signUpHideUsernameField', false);
 }
 
 export function mustAcceptTerms(m) {

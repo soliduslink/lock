@@ -9,10 +9,11 @@ import sync from '../../sync';
 
 export function initPasswordless(m, opts) {
   // TODO: validate opts
-
   const send = opts.passwordlessMethod === 'link' ? 'link' : 'code';
+  const mustAcceptTerms = !!opts.mustAcceptTerms;
+  const showTerms = opts.showTerms === undefined ? true : !!opts.showTerms;
 
-  m = initNS(m, Map({ send: send }));
+  m = initNS(m, Map({ send, mustAcceptTerms, showTerms }));
   if (opts.defaultLocation && typeof opts.defaultLocation === 'string') {
     m = initLocation(m, opts.defaultLocation.toUpperCase());
   } else {
@@ -22,7 +23,6 @@ export function initPasswordless(m, opts) {
       successFn: (m, result) => initLocation(m, result)
     });
   }
-
   return m;
 }
 
@@ -103,4 +103,20 @@ export function passwordlessConnection(m) {
 export function isEmail(m) {
   const c = passwordlessConnection(m);
   return c.isEmpty() ? undefined : c.get('strategy') === 'email';
+}
+
+export function showTerms(m) {
+  return get(m, 'showTerms', true);
+}
+
+export function mustAcceptTerms(m) {
+  return get(m, 'mustAcceptTerms', false);
+}
+
+export function termsAccepted(m) {
+  return !mustAcceptTerms(m) || tget(m, 'termsAccepted', false);
+}
+
+export function toggleTermsAcceptance(m) {
+  return tset(m, 'termsAccepted', !termsAccepted(m));
 }

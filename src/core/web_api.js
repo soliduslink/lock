@@ -12,7 +12,7 @@ class Auth0WebAPI {
 
     // for cordova and electron we should force popup without SSO so it uses
     // /ro or /oauth/token for DB connections
-    if (window && (!!window.cordova || !!window.electron)) {
+    if (!hostedLoginPage && window && (!!window.cordova || !!window.electron)) {
       opts.redirect = false;
       opts.sso = false;
     }
@@ -54,6 +54,10 @@ class Auth0WebAPI {
 
   getProfile(lockID, token, callback) {
     return this.clients[lockID].getProfile(token, callback);
+  }
+
+  getChallenge(lockID, callback) {
+    return this.clients[lockID].getChallenge(callback);
   }
 
   getSSOData(lockID, ...args) {

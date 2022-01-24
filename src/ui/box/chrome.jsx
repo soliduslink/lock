@@ -1,16 +1,75 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { sanitize } from 'dompurify';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import MultisizeSlide from './multisize_slide';
 import GlobalMessage from './global_message';
 import * as l from '../../core/index';
 import Header from './header';
+import classnames from 'classnames';
 
-const submitSvg =
-  '<svg aria-hidden="true" focusable="false" width="43px" height="42px" viewBox="0 0 43 42" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns"><g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage"><g id="Lock" sketch:type="MSArtboardGroup" transform="translate(-280.000000, -3592.000000)"><g id="SMS" sketch:type="MSLayerGroup" transform="translate(153.000000, 3207.000000)"><g id="Group" sketch:type="MSShapeGroup"><g id="Login" transform="translate(0.000000, 369.000000)"><g id="Btn"><g id="Oval-302-+-Shape" transform="translate(128.000000, 17.000000)"><circle id="Oval-302" stroke="#FFFFFF" stroke-width="2" cx="20.5" cy="20" r="20"></circle><path d="M17.8,15.4 L19.2,14 L25.2,20 L19.2,26 L17.8,24.6 L22.4,20 L17.8,15.4 Z" id="Shape" fill="#FFFFFF"></path></g></g></g></g></g></g></g></svg>';
-const submitText =
-  '<svg aria-hidden="true" focusable="false" class="icon-text" width="8px" height="12px" viewBox="0 0 8 12" version="1.1" xmlns="http://www.w3.org/2000/svg"><g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g id="Web/Submit/Active" transform="translate(-148.000000, -32.000000)" fill="#FFFFFF"><polygon id="Shape" points="148 33.4 149.4 32 155.4 38 149.4 44 148 42.6 152.6 38"></polygon></g></g></svg>';
+const SubmitSvg = () => (
+  <svg
+    aria-hidden="true"
+    focusable="false"
+    width="43px"
+    height="42px"
+    viewBox="0 0 43 42"
+    version="1.1"
+    xmlns="http://www.w3.org/2000/svg"
+    xmlnsXlink="http://www.w3.org/1999/xlink"
+  >
+    <g id="Page-1" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
+      <g id="Lock" transform="translate(-280.000000, -3592.000000)">
+        <g id="SMS" transform="translate(153.000000, 3207.000000)">
+          <g id="Group">
+            <g id="Login" transform="translate(0.000000, 369.000000)">
+              <g id="Btn">
+                <g id="Oval-302-+-Shape" transform="translate(128.000000, 17.000000)">
+                  <circle
+                    id="Oval-302"
+                    stroke="#FFFFFF"
+                    strokeWidth="2"
+                    cx="20.5"
+                    cy="20"
+                    r="20"
+                  ></circle>
+                  <path
+                    d="M17.8,15.4 L19.2,14 L25.2,20 L19.2,26 L17.8,24.6 L22.4,20 L17.8,15.4 Z"
+                    id="Shape"
+                    fill="#FFFFFF"
+                  ></path>
+                </g>
+              </g>
+            </g>
+          </g>
+        </g>
+      </g>
+    </g>
+  </svg>
+);
+const SubmitTextSvg = () => (
+  <svg
+    aria-hidden="true"
+    focusable="false"
+    className="icon-text"
+    width="8px"
+    height="12px"
+    viewBox="0 0 8 12"
+    version="1.1"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <g id="Symbols" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
+      <g id="Web/Submit/Active" transform="translate(-148.000000, -32.000000)" fill="#FFFFFF">
+        <polygon
+          id="Shape"
+          points="148 33.4 149.4 32 155.4 38 149.4 44 148 42.6 152.6 38"
+        ></polygon>
+      </g>
+    </g>
+  </svg>
+);
 
 class SubmitButton extends React.Component {
   handleSubmit() {
@@ -27,7 +86,6 @@ class SubmitButton extends React.Component {
     } else if (screenName === 'socialOrPhoneNumber') {
       l.emitEvent(model, 'socialOrPhoneNumber submit');
     } else if (screenName === 'vcode') {
-      l.emitEvent(model, 'vcode submit');
     }
 
     if (this.props.onSubmit) {
@@ -40,18 +98,21 @@ class SubmitButton extends React.Component {
   }
 
   render() {
-    const { color, disabled, label, display } = this.props;
+    const { color, disabled, label, display, contentProps } = this.props;
+    const { model } = contentProps;
+
     const content = label ? (
       <span className="auth0-label-submit">
         {label}
-        <span dangerouslySetInnerHTML={{ __html: submitText }} />
+        <SubmitTextSvg />
       </span>
     ) : (
-      <span dangerouslySetInnerHTML={{ __html: submitSvg }} />
+      <SubmitSvg />
     );
 
     return (
       <button
+        id={`${l.id(model)}-submit`}
         className="auth0-lock-submit"
         disabled={disabled}
         style={{ backgroundColor: color, display }}
@@ -72,6 +133,7 @@ class SubmitButton extends React.Component {
 SubmitButton.propTypes = {
   color: PropTypes.string.isRequired,
   disabled: PropTypes.bool,
+  display: PropTypes.string,
   label: PropTypes.string,
   screenName: PropTypes.string,
   onSubmit: PropTypes.func,
@@ -84,9 +146,10 @@ const AUXILIARY_ANIMATION_DURATION = 350;
 export default class Chrome extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { moving: false, reverse: false };
+    this.state = { moving: false, reverse: false, headerHeight: 0 };
   }
 
+  // eslint-disable-next-line react/no-deprecated
   componentWillReceiveProps(nextProps) {
     const { auxiliaryPane, showSubmitButton } = this.props;
     const { delayingShowSubmitButton } = this.state;
@@ -96,7 +159,7 @@ export default class Chrome extends React.Component {
     }
 
     if (!auxiliaryPane && nextProps.auxiliaryPane) {
-      this.auxiliaryPaneTriggerInput = global.document.activeElement;
+      this.auxiliaryPaneTriggerInput = window.document.activeElement;
       this.setState({ moving: true });
     }
 
@@ -157,6 +220,7 @@ export default class Chrome extends React.Component {
 
   onDidAppear() {
     this.setState({ moving: false });
+
     if (this.state.delayingShowSubmitButton) {
       this.setState({ delayingShowSubmitButton: false });
     }
@@ -208,6 +272,8 @@ export default class Chrome extends React.Component {
       scrollGlobalMessagesIntoView
     } = this.props;
 
+    const { model } = contentProps;
+
     const { delayingShowSubmitButton, moving, reverse } = this.state;
 
     let backgroundUrl, name;
@@ -223,7 +289,9 @@ export default class Chrome extends React.Component {
 
     function wrapGlobalMessage(message) {
       return typeof message === 'string'
-        ? React.createElement('span', { dangerouslySetInnerHTML: { __html: message } })
+        ? // dangerouslySetInnerHTML input is sanitized using dompurify
+          // eslint-disable-next-line react/no-danger
+          React.createElement('span', { dangerouslySetInnerHTML: { __html: sanitize(message) } })
         : message;
     }
 
@@ -253,64 +321,78 @@ export default class Chrome extends React.Component {
     ) : null;
 
     const Content = contentComponent;
-
-    let className = 'auth0-lock-cred-pane';
     const isQuiet = !moving && !delayingShowSubmitButton;
-    className += isQuiet ? ' auth0-lock-quiet' : ' auth0-lock-moving';
+
+    const className = classnames('auth0-lock-cred-pane', {
+      'auth0-lock-quiet': isQuiet,
+      'auth0-lock-moving': !isQuiet
+    });
+
+    const internalWrapperClass = classnames('auth0-lock-cred-pane-internal-wrapper', {
+      'auto-height': l.ui.forceAutoHeight(model)
+    });
 
     return (
       <div className={className}>
-        <div className="auth0-lock-cred-pane-internal-wrapper">
-          <Header
-            title={title}
-            name={name}
-            backHandler={backHandler && ::this.handleBack}
-            backgroundUrl={backgroundUrl}
-            backgroundColor={primaryColor}
-            logoUrl={logo}
-          />
+        <div className={internalWrapperClass}>
           <div className="auth0-lock-content-wrapper">
-            <TransitionGroup>
-              <CSSTransition classNames="global-message" timeout={MESSAGE_ANIMATION_DURATION}>
-                <div>
-                  {globalSuccess}
-                  {globalError}
-                  {globalInfo}
-                </div>
-              </CSSTransition>
-            </TransitionGroup>
-            <div style={{ position: 'relative' }} ref="screen">
-              <MultisizeSlide
-                delay={550}
-                onDidAppear={::this.onDidAppear}
-                onDidSlide={::this.onDidSlide}
-                onWillSlide={::this.onWillSlide}
-                transitionName={classNames}
-                reverse={reverse}
-              >
-                <div key={this.mainScreenName()} className="auth0-lock-view-content">
-                  <div style={{ position: 'relative' }}>
-                    <div className="auth0-lock-body-content">
-                      <div className="auth0-lock-content">
-                        <div className="auth0-lock-form">
-                          <Content focusSubmit={::this.focusSubmit} {...contentProps} />
+            <Header
+              title={title}
+              name={name}
+              backHandler={backHandler && ::this.handleBack}
+              backgroundUrl={backgroundUrl}
+              backgroundColor={primaryColor}
+              logoUrl={logo}
+            />
+
+            <div
+              className="auth0-lock-content-body-wrapper"
+              style={{ marginTop: this.state.headerHeight }}
+            >
+              <TransitionGroup>
+                <CSSTransition classNames="global-message" timeout={MESSAGE_ANIMATION_DURATION}>
+                  <div>
+                    {globalSuccess}
+                    {globalError}
+                    {globalInfo}
+                  </div>
+                </CSSTransition>
+              </TransitionGroup>
+              <div style={{ position: 'relative' }} ref="screen">
+                <MultisizeSlide
+                  delay={550}
+                  onDidAppear={::this.onDidAppear}
+                  onDidSlide={::this.onDidSlide}
+                  onWillSlide={::this.onWillSlide}
+                  transitionName={classNames}
+                  reverse={reverse}
+                >
+                  <div key={this.mainScreenName()} className="auth0-lock-view-content">
+                    <div style={{ position: 'relative' }}>
+                      <div className="auth0-lock-body-content">
+                        <div className="auth0-lock-content">
+                          <div className="auth0-lock-form">
+                            <Content focusSubmit={::this.focusSubmit} {...contentProps} />
+                          </div>
                         </div>
+                        {terms && <small className="auth0-lock-terms">{terms}</small>}
                       </div>
-                      {terms && <small className="auth0-lock-terms">{terms}</small>}
                     </div>
                   </div>
-                </div>
-              </MultisizeSlide>
+                </MultisizeSlide>
+              </div>
             </div>
           </div>
+
           {/*
             The submit button should always be included in the DOM.
             Otherwise, password managers will call `form.submit()`,
             which doesn't trigger the `onsubmit` event handler, which
-            makes impossible for react to handle the submit event, 
+            makes impossible for react to handle the submit event,
             causing the page to send a POST request to `window.location.href`
             with all the form data.
          */}
+
           <SubmitButton
             color={primaryColor}
             disabled={disableSubmitButton}

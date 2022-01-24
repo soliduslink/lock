@@ -23,7 +23,7 @@ import {
   isHRDDomain
 } from '../../connection/enterprise';
 import SingleSignOnNotice from '../../connection/enterprise/single_sign_on_notice';
-import { hasOnlyClassicConnections, isSSOEnabled, useBigSocialButtons } from '../classic';
+import { hasOnlyClassicConnections, isSSOEnabled } from '../classic';
 import * as i18n from '../../i18n';
 
 function shouldRenderTabs(m) {
@@ -33,7 +33,7 @@ function shouldRenderTabs(m) {
     return hasScreen(m, 'signUp');
 }
 
-const Component = ({ i18n, model }) => {
+const LoginComponent = ({ i18n, model }) => {
   const sso = isSSOEnabled(model);
   const onlySocial = hasOnlyClassicConnections(model, 'social');
 
@@ -49,7 +49,6 @@ const Component = ({ i18n, model }) => {
 
   const social = l.hasSomeConnections(model, 'social') && (
     <SocialButtonsPane
-      bigButtons={useBigSocialButtons(model)}
       instructions={i18n.html('socialLoginInstructions')}
       labelFn={i18n.str}
       lock={model}
@@ -154,6 +153,6 @@ export default class Login extends Screen {
   }
 
   render() {
-    return Component;
+    return LoginComponent;
   }
 }

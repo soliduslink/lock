@@ -5,21 +5,26 @@ import { closeLock, logIn as coreLogIn, logInSuccess, validateAndSubmit } from '
 import * as l from '../../core/index';
 import * as c from '../../field/index';
 import {
+  databaseConnection,
   databaseConnectionName,
   databaseConnectionRequiresUsername,
   databaseLogInWithEmail,
   hasScreen,
   setScreen,
   shouldAutoLogin,
-  toggleTermsAcceptance as switchTermsAcceptance,
-  additionalSignUpFields
+  toggleTermsAcceptance as internalToggleTermsAcceptance,
+  additionalSignUpFields,
+  signUpHideUsernameField
 } from './index';
+
 import * as i18n from '../../i18n';
+import { setCaptchaParams, showMissingCaptcha, swapCaptcha } from '../captcha';
 
 export function logIn(id, needsMFA = false) {
   const m = read(getEntity, 'lock', id);
   const usernameField = databaseLogInWithEmail(m) ? 'email' : 'username';
   const username = c.getFieldValue(m, usernameField);
+
   const params = {
     connection: databaseConnectionName(m),
     username: username,
@@ -27,8 +32,14 @@ export function logIn(id, needsMFA = false) {
   };
 
   const fields = [usernameField, 'password'];
+  const isCaptchaValid = setCaptchaParams(m, params, fields);
+
+  if (!isCaptchaValid) {
+    return showMissingCaptcha(m, id);
+  }
 
   const mfaCode = c.getFieldValue(m, 'mfa_code');
+
   if (needsMFA) {
     params['mfa_code'] = mfaCode;
     fields.push('mfa_code');
@@ -39,20 +50,39 @@ export function logIn(id, needsMFA = false) {
       return showLoginMFAActivity(id);
     }
 
-    return next();
+    if (error) {
+      const wasInvalid = error && error.code === 'invalid_captcha';
+      return swapCaptcha(id, wasInvalid, next);
+    }
+
+    next();
   });
+}
+
+function generateRandomUsername(length) {
+  let result = '';
+  const characters = 'abcdefghijklmnopqrstuvwxyz0123456789';
+  const charactersLength = characters.length;
+  for (let i = 0; i < length; i++) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+  }
+  return result;
 }
 
 export function signUp(id) {
   const m = read(getEntity, 'lock', id);
   const fields = ['email', 'password'];
-  if (databaseConnectionRequiresUsername(m)) fields.push('username');
+  // Skip the username validation if signUpHideUsernameField option is enabled.
+  // We will generate a random username to avoid name collusion before we make the signup API call.
+  if (databaseConnectionRequiresUsername(m) && !signUpHideUsernameField(m)) fields.push('username');
+
   additionalSignUpFields(m).forEach(x => {
     // don't include the textinfo field in the fields to validate and submit
     if (x.get('type') !== 'textinfo') {
       fields.push(x.get('name'));
     }
   });
+
   validateAndSubmit(id, fields, m => {
     const params = {
       connection: databaseConnectionName(m),
@@ -61,40 +91,85 @@ export function signUp(id) {
       autoLogin: shouldAutoLogin(m)
     };
 
+    const isCaptchaValid = setCaptchaParams(m, params, fields);
+    if (!isCaptchaValid) {
+      return showMissingCaptcha(m, id);
+    }
+
     if (databaseConnectionRequiresUsername(m)) {
-      params.username = c.getFieldValue(m, 'username');
+      if (signUpHideUsernameField(m)) {
+        const usernameValidation = databaseConnection(m).getIn(['validation', 'username']);
+        const range = usernameValidation ? usernameValidation.toJS() : { max: 15 };
+        params.username = generateRandomUsername(range.max);
+      } else {
+        params.username = c.getFieldValue(m, 'username');
+      }
     }
     if (!additionalSignUpFields(m).isEmpty()) {
       params.user_metadata = {};
       params.user_metadata.extraFields = {};
       additionalSignUpFields(m).forEach(x => {
-        if (x.get('type') !== 'textinfo') {
-          if (x.get('isExtra')) {
-            params.user_metadata.extraFields[x.get('name')] = c
-              .getFieldValue(m, x.get('name'))
-              .trim();
-          } else {
-            params.user_metadata[x.get('name')] = c.getFieldValue(m, x.get('name')).trim();
-          }
+        const storage = x.get('storage');
+        const fieldName = x.get('name');
+        const fieldValue = c.getFieldValue(m, x.get('name')).trim();
+        const isExtra = x.get('isExtra')
+        switch (storage) {
+          case 'root':
+            params[fieldName] = fieldValue;
+            break;
+          default:
+            if (!params.user_metadata) {
+              params.user_metadata = {};
+            }
+            if(x.get('type') !== 'textinfo') {
+              if(isExtra) {
+                params.user_metadata.extraFields[fieldName] = fieldValue;
+              } else {
+                params.user_metadata[fieldName] = fieldValue;
+              }
+            }
+            break;
         }
       });
     }
     params.user_metadata.extraFields = JSON.stringify(params.user_metadata.extraFields);
-    webApi.signUp(id, params, (error, result, popupHandler, ...args) => {
-      if (error) {
-        if (!!popupHandler) {
-          popupHandler._current_popup.kill();
-        }
-        setTimeout(() => signUpError(id, error), 250);
-      } else {
-        signUpSuccess(id, result, popupHandler, ...args);
+
+    const errorHandler = (error, popupHandler) => {
+      if (!!popupHandler) {
+        popupHandler._current_popup.kill();
       }
-    });
+
+      const wasInvalidCaptcha = error && error.code === 'invalid_captcha';
+
+      swapCaptcha(id, wasInvalidCaptcha, () => {
+        setTimeout(() => signUpError(id, error), 250);
+      });
+    };
+
+    try {
+      // For now, always pass 'null' for the context as we don't need it yet.
+      // If we need it later, it'll save a breaking change in hooks already in use.
+      const context = null;
+
+      l.runHook(m, 'signingUp', context, () => {
+        webApi.signUp(id, params, (error, result, popupHandler, ...args) => {
+          if (error) {
+            errorHandler(error, popupHandler);
+          } else {
+            signUpSuccess(id, result, popupHandler, ...args);
+          }
+        });
+      });
+    } catch (e) {
+      errorHandler(e);
+    }
   });
 }
 
 function signUpSuccess(id, result, popupHandler) {
   const lock = read(getEntity, 'lock', id);
+
+  l.emitEvent(lock, 'signup success', result);
 
   if (shouldAutoLogin(lock)) {
     swap(updateEntity, 'lock', id, m => m.set('signedUp', true));
@@ -128,7 +203,7 @@ function signUpSuccess(id, result, popupHandler) {
   }
 }
 
-function signUpError(id, error) {
+export function signUpError(id, error) {
   const m = read(getEntity, 'lock', id);
 
   const invalidPasswordKeys = {
@@ -137,14 +212,26 @@ function signUpError(id, error) {
     PasswordStrengthError: 'password_strength_error'
   };
 
+  l.emitEvent(m, 'signup error', error);
+
   const errorKey =
     (error.code === 'invalid_password' && invalidPasswordKeys[error.name]) || error.code;
 
-  const errorMessage =
+  let errorMessage =
     i18n.html(m, ['error', 'signUp', errorKey]) ||
     i18n.html(m, ['error', 'signUp', 'lock.fallback']);
 
-  l.emitEvent(m, 'signup error', error);
+  if (error.code === 'hook_error') {
+    swap(updateEntity, 'lock', id, l.setSubmitting, false, error.description || errorMessage);
+    return;
+  }
+
+  if (errorKey === 'invalid_captcha') {
+    errorMessage = i18n.html(m, ['error', 'login', errorKey]);
+    return swapCaptcha(id, true, () => {
+      swap(updateEntity, 'lock', id, l.setSubmitting, false, errorMessage);
+    });
+  }
 
   swap(updateEntity, 'lock', id, l.setSubmitting, false, errorMessage);
 }
@@ -232,7 +319,7 @@ export function cancelMFALogin(id) {
 }
 
 export function toggleTermsAcceptance(id) {
-  swap(updateEntity, 'lock', id, switchTermsAcceptance);
+  swap(updateEntity, 'lock', id, internalToggleTermsAcceptance);
 }
 
 export function showLoginMFAActivity(id, fields = ['mfa_code']) {

@@ -30,7 +30,11 @@ export default {
       too_many_attempts: 'Jūsų sąskaita buvo užblokuota, po kelių iš eilės bandymų prisijungti.',
       session_missing:
         'Nepavyko užbaigti jūsų autentifikavimo prašymo. Bandykite dar kartą uždarius visus atidarytus dialogo langus.',
-      'hrd.not_matching_email': 'Prašome naudoti jūsų įmonės el.pašto adresą prisijungimui.'
+      'hrd.not_matching_email': 'Prašome naudoti jūsų įmonės el.pašto adresą prisijungimui.',
+      too_many_requests:
+        'Mes atsiprašome. Šiuo metu yra per daug užklausų. Atnaujinkite puslapį ir bandykite dar kartą. Jei tai išlieka, bandykite dar kartą vėliau.',
+      invalid_captcha: 'Išspręskite iššūkio klausimą ir įsitikinkite, kad nesate robotas.',
+      invalid_recaptcha: 'Pažymėkite žymimąjį laukelį, kad patikrintumėte, ar nesate robotas.'
     },
     passwordless: {
       'bad.email': 'Neteisingas el.pašto adresas',
@@ -44,7 +48,9 @@ export default {
       password_no_user_info_error: 'Slaptažodis remiantis vartotojų informacija.',
       password_strength_error: 'Šis slaptažodis yra per silpnas.',
       user_exists: 'Vartotojas jau egzistuoja.',
-      username_exists: 'Vartotojo vardas jau egzistuoja.'
+      username_exists: 'Vartotojo vardas jau egzistuoja.',
+      social_signup_needs_terms_acception:
+        'Norėdami tęsti, sutikite su toliau pateiktomis paslaugų teikimo sąlygomis.'
     }
   },
   success: {
@@ -53,7 +59,11 @@ export default {
     magicLink: 'Mes išsiuntėme jums nuorodą į prisijungimą<br />į %s.',
     signUp: 'Dėkojame, kad užsiregistravote.'
   },
-  blankErrorHint: 'Laukas negali būti tuščias',
+  blankErrorHint: '',
+  blankPasswordErrorHint: 'Laukas negali būti tuščias',
+  blankEmailErrorHint: 'Laukas negali būti tuščias',
+  blankUsernameErrorHint: 'Laukas negali būti tuščias',
+  blankCaptchaErrorHint: 'Laukas negali būti tuščias',
   codeInputPlaceholder: 'jūsų kodas',
   databaseEnterpriseLoginInstructions: '',
   databaseEnterpriseAlternativeLoginInstructions: 'arba',
@@ -68,7 +78,10 @@ export default {
   forgotPasswordInstructions:
     'Įveskite jūsų el.pašto adresą. Mes atsiųsime jums laišką iš nustatyti nauja slaptažodį.',
   forgotPasswordSubmitLabel: 'Siųsti laišką',
-  invalidErrorHint: 'Negaliojantys duomenys',
+  invalidErrorHint: '',
+  invalidPasswordErrorHint: 'Negaliojantys duomenys',
+  invalidEmailErrorHint: 'Negaliojantys duomenys',
+  invalidUsernameErrorHint: 'Negaliojantys duomenys',
   lastLoginInstructions: 'Paskutinį kartą prisijungėte su',
   loginAtLabel: 'Prisijunkite naudojant šią nuorodą %s',
   loginLabel: 'Prisijungti',
@@ -93,7 +106,7 @@ export default {
   passwordlessEmailInstructions: 'Įveskite el.pašto adresą prisijungti<br/>arba susikurti paskyrą',
   passwordlessSMSAlternativeInstructions:
     'Arba įveskite telefono numerį prisijungti<br/>arba susikurti paskyrą',
-  passwordlessSMSCodeInstructions: 'SMS su kodu buvo išsiųstas<br/>į %s.',
+  passwordlessSMSCodeInstructions: 'SMS su kodu buvo išsiųstas į %s.',
   passwordlessSMSInstructions: 'Įveskite telefono numerį prisijungti<br/>arba susikurti paskyrą',
   phoneNumberInputPlaceholder: 'Jūsų telefono numeris',
   resendCodeAction: 'Negavote kodo?',
@@ -124,5 +137,7 @@ export default {
   mfaSubmitLabel: 'Prisijungti',
   mfaCodeErrorHint: 'Naudoti %d numerius',
   signUpTerms:
-    'Registruodamiesi jūs sutinkate su mūsų paslaugų teikimo sąlygomis ir privatumo politika.'
+    'Registruodamiesi jūs sutinkate su mūsų paslaugų teikimo sąlygomis ir privatumo politika.',
+  captchaCodeInputPlaceholder: 'Įveskite aukščiau parodytą kodą',
+  captchaMathInputPlaceholder: 'Išspręskite aukščiau parodytą formulę'
 };

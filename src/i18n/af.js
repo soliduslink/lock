@@ -26,7 +26,11 @@ export default {
         'Jou rekening het sekuriteitsprobleme. Vir jou veiligheid het ons die rekening geblok. Sien e-pos met instruksies om rekening weer te aktiveer.',
       too_many_attempts: 'Jou rekening is geblok nadat daar te veel keer probeer inteken is.',
       session_missing: 'Kon nie versoek bevestig nie. Maak asseblief alles toe en probeer weer',
-      'hrd.not_matching_email': 'Gebruik asseblief korporatiewe e-pos om in te teken.'
+      'hrd.not_matching_email': 'Gebruik asseblief korporatiewe e-pos om in te teken.',
+      too_many_requests:
+        'Ons is jammer. Daar is nou te veel versoeke. Herlaai asseblief die bladsy en probeer weer. As dit voortduur, probeer asseblief later weer.',
+      invalid_captcha: "Los die uitdagingsvraag om te verifieer dat u nie 'n robot is nie.",
+      invalid_recaptcha: "Kies die merkblokkie om te verifieer dat u nie 'n robot is nie."
     },
     passwordless: {
       'bad.email': 'Die e-pos is ongeldig',
@@ -40,7 +44,9 @@ export default {
       password_no_user_info_error: 'Wagwoord kan nie persoonlike inligting bevat nie.',
       password_strength_error: 'Wagwoord is swak.',
       user_exists: 'Gebruiker bestaan reeds.',
-      username_exists: 'Gebruikersnaam bestaan reeds.'
+      username_exists: 'Gebruikersnaam bestaan reeds.',
+      social_signup_needs_terms_acception:
+        'Gee toestemming tot die onderstaande diensbepalings om voort te gaan.'
     }
   },
   success: {
@@ -49,7 +55,11 @@ export default {
     magicLink: 'Ons het n skakel gestuur om in te teken in<br /> by %s.',
     signUp: 'Dankie dat u ingeteken het.'
   },
-  blankErrorHint: 'Mag nie leeg wees nie',
+  blankErrorHint: '',
+  blankPasswordErrorHint: 'Mag nie leeg wees nie',
+  blankEmailErrorHint: 'Mag nie leeg wees nie',
+  blankUsernameErrorHint: 'Mag nie leeg wees nie',
+  blankCaptchaErrorHint: 'Mag nie leeg wees nie',
   codeInputPlaceholder: 'jou kode',
   databaseEnterpriseLoginInstructions: '',
   databaseEnterpriseAlternativeLoginInstructions: 'of',
@@ -63,7 +73,10 @@ export default {
   forgotPasswordAction: 'Wagwoord vergeet?',
   forgotPasswordInstructions: 'Vul jou e-pos in en ons stuur e-pos met herstel-opsies.',
   forgotPasswordSubmitLabel: 'Stuur e-pos',
-  invalidErrorHint: 'Ongeldig',
+  invalidErrorHint: '',
+  invalidPasswordErrorHint: 'Ongeldig',
+  invalidEmailErrorHint: 'Ongeldig',
+  invalidUsernameErrorHint: 'Ongeldig',
   lastLoginInstructions: 'Vorige intekening was met',
   loginAtLabel: 'Ingeteken by%s',
   loginLabel: 'Teken in',
@@ -88,7 +101,7 @@ export default {
   passwordlessEmailInstructions: 'Vul jou e-pos in om inteken<br/>of skep n rekening',
   passwordlessSMSAlternativeInstructions:
     'Andersins vul jou telefoonnommer in om inteken<br/>of skep n rekening',
-  passwordlessSMSCodeInstructions: 'Ons stuur SMS met die kode <br/>na %s.',
+  passwordlessSMSCodeInstructions: 'Ons stuur SMS met die kode na %s.',
   passwordlessSMSInstructions:
     'Vul jou telenfoonnommer in om in te teken <br/>of skep jou rekening',
   phoneNumberInputPlaceholder: 'jou telefoonnommer',
@@ -120,5 +133,7 @@ export default {
   mfaSubmitLabel: 'Gaan voort',
   mfaCodeErrorHint: 'Gebruik %d nommers',
   showPassword: 'Wys wagwoord',
-  signUpTerms: 'Deur u in te teken, stem u in tot ons diensbepalings en privaatheidsbeleid.'
+  signUpTerms: 'Deur u in te teken, stem u in tot ons diensbepalings en privaatheidsbeleid.',
+  captchaCodeInputPlaceholder: 'Voer die kode hierbo in',
+  captchaMathInputPlaceholder: 'Los die formule hierbo getoon'
 };

@@ -32,7 +32,11 @@ export default {
         'Contul tău a fost blocat după mai multe încercări nereușite de conectare.',
       session_missing:
         'Nu am putut finaliza procesul de autentificare. Avem rugămintea să încerci după ce închizi toate ferestrele deschise.',
-      'hrd.not_matching_email': 'Te rugăm să folosești adresa de email corporate pentru conectare.'
+      'hrd.not_matching_email': 'Te rugăm să folosești adresa de email corporate pentru conectare.',
+      too_many_requests:
+        'Ne pare rău. Sunt prea multe cereri chiar acum. Reîncărcați pagina și încercați din nou. Dacă acest lucru persistă, încercați din nou mai târziu.',
+      invalid_captcha: 'Rezolvați întrebarea pentru a verifica dacă nu sunteți un robot.',
+      invalid_recaptcha: 'Selectați caseta pentru a verifica dacă nu sunteți un robot.'
     },
     passwordless: {
       'bad.email': 'Adresa de email este invalidă',
@@ -46,7 +50,9 @@ export default {
       password_no_user_info_error: 'Parola este similară cu utilizatorul.',
       password_strength_error: 'Parola este prea ușoară.',
       user_exists: 'Utilizator existent.',
-      username_exists: 'Nume utilizator existent.'
+      username_exists: 'Nume utilizator existent.',
+      social_signup_needs_terms_acception:
+        'Vă rugăm să acceptați Termenii și condițiile de mai jos pentru a continua.'
     }
   },
   success: {
@@ -55,7 +61,11 @@ export default {
     magicLink: 'Ți-am trimis un email pentru a te înregistra<br />la %s.',
     signUp: 'Îți mulțumim pentru înregistrare.'
   },
-  blankErrorHint: 'Câmpul nu poate fi gol',
+  blankErrorHint: '',
+  blankPasswordErrorHint: 'Câmpul nu poate fi gol',
+  blankEmailErrorHint: 'Câmpul nu poate fi gol',
+  blankUsernameErrorHint: 'Câmpul nu poate fi gol',
+  blankCaptchaErrorHint: 'Câmpul nu poate fi gol',
   codeInputPlaceholder: 'codul tău',
   databaseEnterpriseLoginInstructions: '',
   databaseEnterpriseAlternativeLoginInstructions: 'sau',
@@ -70,7 +80,10 @@ export default {
   forgotPasswordInstructions:
     'Avem rugămintea să introduci adresa de email. Urmează să primești un email pentru resetarea parolei.',
   forgotPasswordSubmitLabel: 'Email transmis',
-  invalidErrorHint: 'Invalid',
+  invalidErrorHint: '',
+  invalidPasswordErrorHint: 'Invalid',
+  invalidEmailErrorHint: 'Invalid',
+  invalidUsernameErrorHint: 'Invalid',
   lastLoginInstructions: 'Ultima oară când te-ai conectat',
   loginAtLabel: ' Autentifică-te cu %s',
   loginLabel: 'Autentifică-te',
@@ -95,7 +108,7 @@ export default {
   passwordlessEmailInstructions: 'Introdu adresa de email pentru conectare<br/>sau creează un cont',
   passwordlessSMSAlternativeInstructions:
     ' Dacă nu, introdu un număr de telefon pentru conectare <br/>sau creează un cont',
-  passwordlessSMSCodeInstructions: 'Un SMS cu codul de acces a fost trimis la<br/>la %s.',
+  passwordlessSMSCodeInstructions: 'Un SMS cu codul de acces a fost trimis la la %s.',
   passwordlessSMSInstructions:
     'Introdu numărul de telefon pentru conectare<br/>sau creează un cont',
   phoneNumberInputPlaceholder: 'numărul tău de telefon',
@@ -129,5 +142,7 @@ export default {
   mfaSubmitLabel: 'Conectare',
   mfaCodeErrorHint: 'Utilizează %d cifre',
   signUpTerms:
-    'Prin înscrierea dvs. sunteți de acord cu termenii și condițiile noastre de utilizare și de politică de confidențialitate.'
+    'Prin înscrierea dvs. sunteți de acord cu termenii și condițiile noastre de utilizare și de politică de confidențialitate.',
+  captchaCodeInputPlaceholder: 'Introduceți codul prezentat mai sus',
+  captchaMathInputPlaceholder: 'Rezolvați formula prezentată mai sus'
 };

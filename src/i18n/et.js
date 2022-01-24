@@ -30,7 +30,11 @@ export default {
       too_many_attempts: 'Sinu konto blokeeriti peale mitut ebaõnnestunud sisselogimiskatset.',
       session_missing:
         'Sisselogimine ebaõnnestus. Palun proovi uuesti peale kõigi akende sulgemist.',
-      'hrd.not_matching_email': 'Palun kasuta oma ettevõtte e-maili sisselogimiseks.'
+      'hrd.not_matching_email': 'Palun kasuta oma ettevõtte e-maili sisselogimiseks.',
+      too_many_requests:
+        'Vabandame. Praegu on päringuid liiga palju. Laadige leht uuesti ja proovige uuesti. Kui see jätkub, proovige hiljem uuesti.',
+      invalid_captcha: 'Lahendage väljakutseküsimus ja veenduge, et te pole robot.',
+      invalid_recaptcha: 'Valige märkeruut, et kontrollida, kas te pole robot.'
     },
     passwordless: {
       'bad.email': 'Vigane e-mail',
@@ -44,7 +48,8 @@ export default {
       password_no_user_info_error: 'Parool sisaldab kasutajainfot.',
       password_strength_error: 'Parool on liiga nõrk.',
       user_exists: 'Selline kasutaja on juba olemas.',
-      username_exists: 'Selline kasutajanimi on juba olemas.'
+      username_exists: 'Selline kasutajanimi on juba olemas.',
+      social_signup_needs_terms_acception: 'Jätkamiseks nõustuge allolevate teenusetingimustega.'
     }
   },
   success: {
@@ -53,7 +58,11 @@ export default {
     magicLink: 'Me saatsime sisselogimise lingi aadressile:<br />%s.',
     signUp: 'Täname, et registreerusid.'
   },
-  blankErrorHint: 'Ei või olla tühi',
+  blankErrorHint: '',
+  blankPasswordErrorHint: 'Ei või olla tühi',
+  blankEmailErrorHint: 'Ei või olla tühi',
+  blankUsernameErrorHint: 'Ei või olla tühi',
+  blankCaptchaErrorHint: 'Ei või olla tühi',
   codeInputPlaceholder: 'sinu kood',
   databaseEnterpriseLoginInstructions: '',
   databaseEnterpriseAlternativeLoginInstructions: 'või',
@@ -68,7 +77,10 @@ export default {
   forgotPasswordInstructions:
     'Palun sisesta oma e-maili aadress. Me saadame sulle e-maili millega saad oma salasõna taastada.',
   forgotPasswordSubmitLabel: 'Saada e-mail',
-  invalidErrorHint: 'Vigane',
+  invalidErrorHint: '',
+  invalidPasswordErrorHint: 'Vigane',
+  invalidEmailErrorHint: 'Vigane',
+  invalidUsernameErrorHint: 'Vigane',
   lastLoginInstructions: 'Viimati logisid sisse kasutades:',
   loginAtLabel: 'Logi sisse %s',
   loginLabel: 'Logi sisse',
@@ -94,7 +106,7 @@ export default {
   passwordlessEmailInstructions: 'Sisesta oma e-mail, et sisse logida<br/>või konto luua',
   passwordlessSMSAlternativeInstructions:
     'Muidu, sisesta oma telefoninumber, et sisse logida<br/>või konto luua',
-  passwordlessSMSCodeInstructions: 'SMS koodiga saadeti numbrile: <br/> %s.',
+  passwordlessSMSCodeInstructions: 'SMS koodiga saadeti numbrile: %s.',
   passwordlessSMSInstructions: 'Sisesta oma telefoninumber, et sisse logida<br/>või konto luua',
   phoneNumberInputPlaceholder: 'sinu telefoninumber',
   resendCodeAction: 'Kas said koodi kätte?',
@@ -125,5 +137,7 @@ export default {
   mfaLoginInstructions: 'Palun sisesta tuvastuskood mille genereeris su mobiilirakendus',
   mfaSubmitLabel: 'Logi sisse',
   mfaCodeErrorHint: 'Kasuta %d numbrit',
-  signUpTerms: 'Registreerudes nõustute meie teenusetingimustega ja privaatsuspoliitikaga.'
+  signUpTerms: 'Registreerudes nõustute meie teenusetingimustega ja privaatsuspoliitikaga.',
+  captchaCodeInputPlaceholder: 'Sisestage ülal näidatud kood',
+  captchaMathInputPlaceholder: 'Lahendage ülaltoodud valem'
 };

@@ -33,7 +33,11 @@ export default {
       session_missing:
         "No s'ha pogut completar la vostra petició d'autenticació. Tanqueu tots els diàlegs oberts i intenteu-ho de nou.",
       'hrd.not_matching_email':
-        'Si us plau, utilitzeu el correu electrònic corporatiu per iniciar sessió.'
+        'Si us plau, utilitzeu el correu electrònic corporatiu per iniciar sessió.',
+      too_many_requests:
+        'Ho sentim. Ara hi ha massa sol·licituds ara mateix. Torneu a carregar la pàgina i torneu-ho a provar. Si això persisteix, torneu-ho a provar més tard.',
+      invalid_captcha: 'Resoleu la pregunta de desafiament per verificar que no sou un robot.',
+      invalid_recaptcha: 'Seleccioneu la casella de verificació per verificar que no sou un robot.'
     },
     passwordless: {
       'bad.email': "L'adreça de correu no és vàlida",
@@ -47,7 +51,8 @@ export default {
       password_no_user_info_error: "La contrasenya es basa en les dades de l'usuari.",
       password_strength_error: 'La contrasenya és massa feble.',
       user_exists: 'Ja existeix aquest usuari.',
-      username_exists: "Ja existeix aquest nom d'usuari."
+      username_exists: "Ja existeix aquest nom d'usuari.",
+      social_signup_needs_terms_acception: 'Per continuar, accepteu les Condicions del servei.'
     }
   },
   success: {
@@ -56,7 +61,11 @@ export default {
     magicLink: 'Se us ha enviat un enllaç per iniciar sessió<br />a %s.',
     signUp: 'Registre completat amb èxit.'
   },
-  blankErrorHint: 'No pot ser buit',
+  blankErrorHint: '',
+  blankPasswordErrorHint: 'No pot ser buit',
+  blankEmailErrorHint: 'No pot ser buit',
+  blankUsernameErrorHint: 'No pot ser buit',
+  blankCaptchaErrorHint: 'No pot ser buit',
   codeInputPlaceholder: 'codi',
   databaseEnterpriseLoginInstructions: '',
   databaseEnterpriseAlternativeLoginInstructions: 'o',
@@ -72,7 +81,10 @@ export default {
   forgotPasswordInstructions:
     'Indiqueu el vostre email. Us enviarem les instruccions per restablir-la.',
   forgotPasswordSubmitLabel: 'Enviar email',
-  invalidErrorHint: 'Invàlid',
+  invalidErrorHint: '',
+  invalidPasswordErrorHint: 'Invàlid',
+  invalidEmailErrorHint: 'Invàlid',
+  invalidUsernameErrorHint: 'Invàlid',
   lastLoginInstructions: "L'última vegada vàreu iniciar sessió amb",
   loginAtLabel: 'Iniciar a %s',
   loginLabel: 'Inici de sessió',
@@ -97,7 +109,7 @@ export default {
   passwordlessEmailInstructions: 'Indiqueu el vostre email per iniciar sessió<br/>o registrar-vos',
   passwordlessSMSAlternativeInstructions:
     'Altrament, introduïu el vostre telèfon per iniciar sessió<br/>o registrar-vos',
-  passwordlessSMSCodeInstructions: 'Se us ha enviat un SMS amb el codi<br/>a %s.',
+  passwordlessSMSCodeInstructions: 'Se us ha enviat un SMS amb el codi a %s.',
   passwordlessSMSInstructions: 'Indiqueu el vostre telèfon per iniciar sessió<br/>o registrar-vos',
   phoneNumberInputPlaceholder: 'número de telèfon',
   resendCodeAction: 'No heu rebut el codi?',
@@ -129,5 +141,7 @@ export default {
   mfaCodeErrorHint: 'Utilitzeu %d xifres',
   showPassword: 'Ensenya la contrasenya',
   signUpTerms:
-    "En inscriure's, accepteu les nostres condicions de servei i la nostra política de privadesa."
+    "En inscriure's, accepteu les nostres condicions de servei i la nostra política de privadesa.",
+  captchaCodeInputPlaceholder: 'Introduïu el codi anterior',
+  captchaMathInputPlaceholder: 'Resoleu la fórmula mostrada anteriorment'
 };

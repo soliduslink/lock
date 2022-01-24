@@ -3,6 +3,7 @@ import { mount, shallow } from 'enzyme';
 
 import { mockComponent } from 'testUtils';
 import { extractPropsFromWrapper } from '../../testUtils';
+import InputWrap from '../../../ui/input/input_wrap';
 
 jest.mock('ui/input/input_wrap', () => mockComponent('input_wrap'));
 jest.mock('ui/input/password/password_strength', () => mockComponent('password_strength'));
@@ -10,7 +11,8 @@ jest.mock('ui/input/password/password_strength', () => mockComponent('password_s
 jest.mock('core/index', () => ({
   ui: {
     allowPasswordAutocomplete: () => false
-  }
+  },
+  id: jest.fn(() => 'lock')
 }));
 
 const getComponent = () => require('ui/input/password_input').default;
@@ -50,5 +52,10 @@ describe('PasswordInput', () => {
     const Input = getComponent();
     const wrapper = mount(<Input {...defaultProps} />);
     expect(wrapper.find('input').props().autoComplete).toBe('off');
+  });
+  test('shows invalid Hint', () => {
+    const Input = getComponent();
+    const wrapper = mount(<Input {...defaultProps} />);
+    expect(wrapper.find(InputWrap).props().invalidHint).toBe('invalidHint');
   });
 });

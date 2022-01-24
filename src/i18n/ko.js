@@ -30,7 +30,11 @@ export default {
       too_many_attempts: '본 계정은 단시간에 복수의 로그인 시도가 감지되어 차단되었습니다.',
       session_missing:
         '인증 요청이 완료되지 않았습니다. 열려있는 모든 다이얼로그 창을 닫고 다시 시도해 주시기 바랍니다.',
-      'hrd.not_matching_email': '로그인하려면 회사 이메일을 사용하십시오.'
+      'hrd.not_matching_email': '로그인하려면 회사 이메일을 사용하십시오.',
+      too_many_requests:
+        '우리가 미안해. 지금 요청이 너무 많습니다. 페이지를 새로 고침하고 다시 시도하십시오. 문제가 지속되면 나중에 다시 시도하십시오.',
+      invalid_captcha: '로봇이 아닌 사람인지 확인하기 위해 챌린지 질문을 해결하십시오.',
+      invalid_recaptcha: '로봇이 아닌지 확인하려면 확인란을 선택하십시오.'
     },
     passwordless: {
       'bad.email': '이메일 주소가 유효하지 않습니다',
@@ -44,7 +48,8 @@ export default {
       password_no_user_info_error: '비밀번호에 사용자명이 포함되어 있습니다.',
       password_strength_error: '비밀번호가 너무 약합니다.',
       user_exists: '이미 존재하는 사용자입니다.',
-      username_exists: '이미 존재하는 사용자명입니다.'
+      username_exists: '이미 존재하는 사용자명입니다.',
+      social_signup_needs_terms_acception: '계속하려면 아래 서비스 약관에 동의하십시오.'
     }
   },
   success: {
@@ -53,7 +58,11 @@ export default {
     magicLink: '%s로 로그인하기 위한 링크가 전송되었습니다.',
     signUp: '회원가입이 완료되었습니다.'
   },
-  blankErrorHint: '입력란을 공백으로 둘 수 없습니다',
+  blankErrorHint: '',
+  blankPasswordErrorHint: '입력란을 공백으로 둘 수 없습니다',
+  blankEmailErrorHint: '입력란을 공백으로 둘 수 없습니다',
+  blankUsernameErrorHint: '입력란을 공백으로 둘 수 없습니다',
+  blankCaptchaErrorHint: '입력란을 공백으로 둘 수 없습니다',
   codeInputPlaceholder: '코드 입력',
   databaseEnterpriseLoginInstructions: '',
   databaseEnterpriseAlternativeLoginInstructions: '또는',
@@ -68,7 +77,10 @@ export default {
   forgotPasswordInstructions:
     '이메일 주소를 입력해 주세요. 비밀번호 초기화를 위한 안내 메일을 보내드립니다.',
   forgotPasswordSubmitLabel: '메일 전송',
-  invalidErrorHint: '오류',
+  invalidErrorHint: '',
+  invalidPasswordErrorHint: '오류',
+  invalidEmailErrorHint: '오류',
+  invalidUsernameErrorHint: '오류',
   lastLoginInstructions: '최종 로그인',
   loginAtLabel: '%s 로그인',
   loginLabel: '로그인',
@@ -126,5 +138,7 @@ export default {
   mfaSubmitLabel: '로그인',
   mfaCodeErrorHint: '%d 숫자를 사용하여 주세요.',
   showPassword: '암호 표시',
-  signUpTerms: '가입하면 서비스 약관 및 개인 정보 취급 방침에 동의하게됩니다.'
+  signUpTerms: '가입하면 서비스 약관 및 개인 정보 취급 방침에 동의하게됩니다.',
+  captchaCodeInputPlaceholder: '위에 표시된 코드를 입력하십시오',
+  captchaMathInputPlaceholder: '위에 표시된 공식을 해결'
 };
