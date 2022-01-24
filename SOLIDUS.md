@@ -12,6 +12,20 @@ Unpacking of the extra fields can be done by a rule in Auth0.
 
 ## Build
 ```
-> grunt build
-> grunt dist
+npm install
+npm install grunt-cli
+cd src
+grunt build
+grunt dist
+cp ../build/lock.min.js <target> 
+```
+
+## Merge upstream branch (e.g. master) 
+```
+git checkout master
+git checkout -b BRANCH_NAME
+git pull https://github.com/auth0/lock.git master
+# resolve any conflicts
+git commit 
+git push origin BRANCH_NAME
 ```
