@@ -27,5 +27,7 @@ git checkout -b BRANCH_NAME
 git pull https://github.com/auth0/lock.git master
 # resolve any conflicts
 git commit 
+# check the upstream push repo is correct (https://github.com/moedinger/lock.git)
+git remote -v
 git push origin BRANCH_NAME
 ```
