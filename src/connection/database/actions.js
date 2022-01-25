@@ -115,7 +115,9 @@ export function signUp(id) {
         const isExtra = x.get('isExtra')
         switch (storage) {
           case 'root':
-            params[fieldName] = fieldValue;
+            if(x.get('type') !== 'textinfo') {
+              params[fieldName] = fieldValue;
+            }
             break;
           default:
             if (!params.user_metadata) {
