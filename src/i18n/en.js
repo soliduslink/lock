@@ -10,6 +10,8 @@ export default {
     login: {
       blocked_user: 'The user is blocked.',
       invalid_user_password: 'Wrong credentials.',
+      invalid_captcha: 'Solve the challenge question to verify you are not a robot.',
+      invalid_recaptcha: 'Select the checkbox to verify you are not a robot.',
       'lock.fallback': "We're sorry, something went wrong when attempting to log in.",
       'lock.invalid_code': 'Wrong code.',
       'lock.invalid_email_password': 'Wrong email or password.',
@@ -25,6 +27,8 @@ export default {
       password_leaked:
         'We have detected a potential security issue with this account. To protect your account, we have blocked this login. An email was sent with instruction on how to unblock your account.',
       too_many_attempts: 'Your account has been blocked after multiple consecutive login attempts.',
+      too_many_requests:
+        "We're sorry. There are too many requests right now. Please reload the page and try again. If this persists, please try again later.",
       session_missing:
         "Couldn't complete your authentication request. Please try again after closing all open dialogs",
       'hrd.not_matching_email': 'Please use your corporate email to login.'
@@ -41,7 +45,8 @@ export default {
       password_no_user_info_error: 'Password is based on user information.',
       password_strength_error: 'Password is too weak.',
       user_exists: 'The user already exists.',
-      username_exists: 'The username already exists.'
+      username_exists: 'The username already exists.',
+      social_signup_needs_terms_acception: 'Please agree to the Terms of Service below to continue.'
     }
   },
   success: {
@@ -51,13 +56,19 @@ export default {
     magicLink: 'We sent you a link to log in<br />to %s.',
     signUp: 'Thanks for signing up.'
   },
-  blankErrorHint: "Can't be blank",
+  blankErrorHint: '',
+  blankPasswordErrorHint: "Password can't be blank",
+  blankEmailErrorHint: "Email can't be blank",
+  blankUsernameErrorHint: "Username can't be blank",
+  blankCaptchaErrorHint: "Can't be blank",
   codeInputPlaceholder: 'your code',
   databaseEnterpriseLoginInstructions: '',
   databaseEnterpriseAlternativeLoginInstructions: 'or',
   databaseSignUpInstructions: '',
   databaseAlternativeSignUpInstructions: 'or',
   emailInputPlaceholder: 'yours@example.com',
+  captchaCodeInputPlaceholder: 'Enter the code shown above',
+  captchaMathInputPlaceholder: 'Solve the formula shown above',
   enterpriseLoginIntructions: 'Login with your corporate credentials.',
   enterpriseActiveLoginInstructions: 'Please enter your corporate credentials at %s.',
   failedLabel: 'Failed!',
@@ -66,12 +77,15 @@ export default {
   forgotPasswordInstructions:
     'Please enter your email address. We will send you an email to reset your password.',
   forgotPasswordSubmitLabel: 'Send email',
-  invalidErrorHint: 'Invalid',
+  invalidErrorHint: '',
+  invalidPasswordErrorHint: 'Password is invalid',
+  invalidEmailErrorHint: 'Email is invalid',
+  invalidUsernameErrorHint: 'Username is invalid',
   lastLoginInstructions: 'Last time you logged in with',
   loginAtLabel: 'Log in at %s',
   loginLabel: 'Log In',
   loginSubmitLabel: 'Log In',
-  loginWithLabel: 'Log in with %s',
+  loginWithLabel: 'Sign in with %s',
   notYourAccountAction: 'Not your account?',
   passwordInputPlaceholder: 'your password',
   passwordStrength: {
@@ -91,7 +105,7 @@ export default {
   passwordlessEmailInstructions: 'Enter your email to sign in<br/>or create an account',
   passwordlessSMSAlternativeInstructions:
     'Otherwise, enter your phone to sign in<br/>or create an account',
-  passwordlessSMSCodeInstructions: 'An SMS with the code has been sent<br/>to %s.',
+  passwordlessSMSCodeInstructions: 'An SMS with the code has been sent to %s.',
   passwordlessSMSInstructions: 'Enter your phone to sign in<br/>or create an account',
   phoneNumberInputPlaceholder: 'your phone number',
   resendCodeAction: 'Did not get the code?',

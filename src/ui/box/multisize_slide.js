@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import CSSCore from 'fbjs/lib/CSSCore';
+import CSSCore from '../../CSSCore';
 
 export default class Slider extends React.Component {
   constructor(props) {
@@ -9,6 +9,7 @@ export default class Slider extends React.Component {
     this.state = { children: { current: props.children } };
   }
 
+  // eslint-disable-next-line react/no-deprecated
   componentWillReceiveProps(nextProps) {
     // TODO: take a prop to identify what are we rendering instead of
     // infering it from children keys so we can accept more than one
@@ -172,7 +173,7 @@ class Child extends React.Component {
   componentWillUnmount() {
     if (this.t) {
       clearInterval(this.t);
-      cb();
+      this.cb();
     }
   }
 

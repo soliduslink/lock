@@ -1,34 +1,40 @@
 import trim from 'trim';
+import _isEmail from 'validator/lib/isEmail';
+
 import { setField } from './index';
-import { endsWith } from '../utils/string_utils';
 import { isHRDEmailValid } from '../connection/enterprise';
 import * as i18n from '../i18n';
 
-const regExp = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-
-export function validateEmail(str) {
-  return isEmail(str);
+export function validateEmail(str, strictValidation = false) {
+  return isEmail(str, strictValidation);
 }
 
-export function isEmail(str) {
-  const result = regExp.exec(trim(str.toLowerCase()));
-  return !!result && result[0] !== null;
+export function isEmail(str, strictValidation = false) {
+  if (typeof str !== 'string') {
+    return false;
+  }
+  const trimmed = trim(str);
+  return strictValidation
+    ? _isEmail(str)
+    : trimmed.indexOf('@') >= 0 && trimmed.indexOf('.') >= 0 && trimmed.indexOf(' ') === -1;
 }
 
-export function setEmail(m, str) {
+export function setEmail(m, str, strictValidation = false) {
   return setField(m, 'email', str, str => {
     const validHRDEMail = isHRDEmailValid(m, str);
 
     return {
-      valid: validateEmail(str) && validHRDEMail,
+      valid: validateEmail(str, strictValidation) && validHRDEMail,
       hint: !validHRDEMail ? i18n.html(m, ['error', 'login', 'hrd.not_matching_email']) : undefined
     };
   });
 }
 
 export function emailDomain(str) {
-  const result = regExp.exec(trim(str.toLowerCase()));
-  return result ? result.slice(-2)[0] : '';
+  if (!isEmail(str)) {
+    return '';
+  }
+  return str.split('@')[1].toLowerCase();
 }
 
 export function emailLocalPart(str) {

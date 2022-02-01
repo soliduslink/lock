@@ -12,7 +12,8 @@ import {
   send,
   setPasswordlessStarted,
   setResendFailed,
-  setResendSuccess
+  setResendSuccess,
+  toggleTermsAcceptance as internalToggleTermsAcceptance
 } from './index';
 import { phoneNumberWithDiallingCode } from '../../field/phone_number';
 import * as i18n from '../../i18n';
@@ -67,8 +68,14 @@ function resendEmailError(id, error) {
 }
 
 function sendEmail(m, successFn, errorFn) {
+  const connections = l.connections(m, 'passwordless', 'email');
+  const connectionName =
+    connections.size > 0 && l.useCustomPasswordlessConnection(m)
+      ? connections.first().get('name')
+      : 'email';
+
   const params = {
-    connection: 'email',
+    connection: connectionName,
     email: c.getFieldValue(m, 'email'),
     send: send(m)
   };
@@ -88,8 +95,14 @@ function sendEmail(m, successFn, errorFn) {
 
 export function sendSMS(id) {
   validateAndSubmit(id, ['phoneNumber'], m => {
+    const connections = l.connections(m, 'passwordless', 'sms');
+    const connectionName =
+      connections.size > 0 && l.useCustomPasswordlessConnection(m)
+        ? connections.first().get('name')
+        : 'sms';
+
     const params = {
-      connection: 'sms',
+      connection: connectionName,
       phoneNumber: phoneNumberWithDiallingCode(m),
       send: send(m)
     };
@@ -114,6 +127,7 @@ function sendSMSSuccess(id) {
 function sendSMSError(id, error) {
   const m = read(getEntity, 'lock', id);
   const errorMessage = getErrorMessage(m, error);
+  l.emitAuthorizationErrorEvent(m, error);
   return swap(updateEntity, 'lock', id, l.setSubmitting, false, errorMessage);
 }
 
@@ -140,6 +154,7 @@ export function logIn(id) {
       if (error.logToConsole) {
         console.error(error.description);
       }
+      l.emitAuthorizationErrorEvent(m, error);
       return swap(updateEntity, 'lock', id, l.setSubmitting, false, errorMessage);
     } else {
       return logInSuccess(id, result);
@@ -149,4 +164,8 @@ export function logIn(id) {
 
 export function restart(id) {
   swap(updateEntity, 'lock', id, restartPasswordless);
+}
+
+export function toggleTermsAcceptance(id) {
+  swap(updateEntity, 'lock', id, internalToggleTermsAcceptance);
 }

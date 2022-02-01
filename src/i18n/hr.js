@@ -33,7 +33,11 @@ export default {
       session_missing:
         'Zahtjev za provjerom autentičnosti nije se mogao završiti. Pokušajte ponovno nakon što zatvorite sve otvorene dijaloške okvire.',
       'hrd.not_matching_email':
-        'Upotrijebite svoju poslovnu adresu elektroničke pošte kako biste se prijavili.'
+        'Upotrijebite svoju poslovnu adresu elektroničke pošte kako biste se prijavili.',
+      too_many_requests:
+        'Žao nam je. Trenutno ima previše zahtjeva. Ponovo učitajte stranicu i pokušajte ponovno. Ako se to nastavi, pokušajte ponovno kasnije.',
+      invalid_captcha: 'Riješite izazovno pitanje kako biste provjerili da niste robot.',
+      invalid_recaptcha: 'Označite potvrdni okvir da biste potvrdili da niste robot.'
     },
     passwordless: {
       'bad.email': 'Neispravna adresa elektroničke pošte',
@@ -47,7 +51,8 @@ export default {
       password_no_user_info_error: 'Lozinka se zasniva na korisničkim podatcima.',
       password_strength_error: 'Lozinka je preslaba.',
       user_exists: 'Korisnik već postoji.',
-      username_exists: 'Korisničko ime već postoji.'
+      username_exists: 'Korisničko ime već postoji.',
+      social_signup_needs_terms_acception: 'Prihvatite niže navedene Uvjete pružanja usluge.'
     }
   },
   success: {
@@ -57,7 +62,11 @@ export default {
     magicLink: 'Poslali smo vam poveznicu za prijavu<br />u %s.',
     signUp: 'Hvala vam na registraciji.'
   },
-  blankErrorHint: 'Ne može biti prazno',
+  blankErrorHint: '',
+  blankPasswordErrorHint: 'Ne može biti prazno',
+  blankEmailErrorHint: 'Ne može biti prazno',
+  blankUsernameErrorHint: 'Ne može biti prazno',
+  blankCaptchaErrorHint: 'Ne može biti prazno',
   codeInputPlaceholder: 'vaš kôd',
   databaseEnterpriseLoginInstructions: '',
   databaseEnterpriseAlternativeLoginInstructions: 'ili',
@@ -73,7 +82,10 @@ export default {
   forgotPasswordInstructions:
     'Upišite svoju adresu elektroničke pošte. Poslat ćemo vam elektroničku poruku kako biste vratili izvornu lozinku.',
   forgotPasswordSubmitLabel: 'Pošalji elektroničku poruku',
-  invalidErrorHint: 'Nevaljano',
+  invalidErrorHint: '',
+  invalidPasswordErrorHint: 'Nevaljano',
+  invalidEmailErrorHint: 'Nevaljano',
+  invalidUsernameErrorHint: 'Nevaljano',
   lastLoginInstructions: 'Vrijeme zadnje prijave s',
   loginAtLabel: 'Prijavite se na mrežnom mjestu %s',
   loginLabel: 'Prijava',
@@ -99,7 +111,7 @@ export default {
     'Upišite svoju adresu elektroničke pošte kako biste se prijavili<br/>ili napravite račun.',
   passwordlessSMSAlternativeInstructions:
     'U protivnom, upišite svoj broj telefona kako biste se prijavili<br/>ili napravite račun.',
-  passwordlessSMSCodeInstructions: 'Tekstualna poruka s kôdom poslana vam je<br/>na %s.',
+  passwordlessSMSCodeInstructions: 'Tekstualna poruka s kôdom poslana vam je na %s.',
   passwordlessSMSInstructions:
     'Upišite svoj broj telefona kako biste se prijavili<br/>ili napravite račun.',
   phoneNumberInputPlaceholder: 'vaš broj telefona',
@@ -132,5 +144,7 @@ export default {
     'Upišite kôd za provjeru autentičnosti koji je stvorila vaša mobilna aplikacija.',
   mfaSubmitLabel: 'Prijava',
   mfaCodeErrorHint: 'Upotrijebi %d brojeve',
-  signUpTerms: 'Prijavljivanjem prihvaćate naše uvjete pružanja usluge i pravila o privatnosti.'
+  signUpTerms: 'Prijavljivanjem prihvaćate naše uvjete pružanja usluge i pravila o privatnosti.',
+  captchaCodeInputPlaceholder: 'Unesite kod prikazan gore',
+  captchaMathInputPlaceholder: 'Riješite gore prikazanu formulu'
 };

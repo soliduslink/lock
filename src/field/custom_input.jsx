@@ -19,10 +19,10 @@ const CustomInput = ({
   name,
   ariaLabel,
   placeholder,
+  placeholderHTML,
   type,
   validator,
-  value,
-  placeholderFromField
+  value
 }) => {
   const props = {
     iconUrl,
@@ -48,6 +48,7 @@ const CustomInput = ({
           lockId={l.id(model)}
           onChange={e => changeField(l.id(model), name, `${e.target.checked}`, validator)}
           checked={getFieldValue(model, name)}
+          placeholderHTML={placeholderHTML}
           {...props}
         />
       );
@@ -63,13 +64,6 @@ const CustomInput = ({
     case 'hidden':
       return <input id={l.id(model)} type="hidden" value={value} name={name} />;
     default:
-      if (placeholderFromField) {
-        props['placeholder'] = getFieldPlaceholder(
-          model,
-          placeholderFromField.get('fieldName'),
-          placeholderFromField.get('propertyName')
-        );
-      }
       return (
         <TextInput
           lockId={l.id(model)}

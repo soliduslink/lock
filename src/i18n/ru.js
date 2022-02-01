@@ -1,3 +1,4 @@
+// This file was automatically translated.
 // Feel free to submit a PR if you find a more accurate translation.
 
 export default {
@@ -34,7 +35,11 @@ export default {
       session_missing:
         'Не удалось выполнить запрос аутентификации. Пожалуйста, попробуйте еще раз после закрытия всех открытых диалоговых окон',
       'hrd.not_matching_email':
-        'Пожалуйста, используйте вашу корпоративную электронную почту для входа.'
+        'Пожалуйста, используйте вашу корпоративную электронную почту для входа.',
+      too_many_requests:
+        'Мы сожалеем. Сейчас слишком много запросов. Пожалуйста, обновите страницу и попробуйте еще раз. Если это не помогло, повторите попытку позже.',
+      invalid_captcha: 'Решите сложный вопрос, чтобы убедиться, что вы не робот.',
+      invalid_recaptcha: 'Установите флажок, чтобы убедиться, что вы не робот.'
     },
     passwordless: {
       'bad.email': 'Недействительный адрес электронной почты',
@@ -49,7 +54,9 @@ export default {
       password_no_user_info_error: 'Пароль содержит информацию о пользователе.',
       password_strength_error: 'Пароль слишком слабый.',
       user_exists: 'Пользователь уже существует.',
-      username_exists: 'Имя пользователя уже существует.'
+      username_exists: 'Имя пользователя уже существует.',
+      social_signup_needs_terms_acception:
+        'Пожалуйста, согласитесь с Условиями обслуживания ниже, чтобы продолжить.'
     }
   },
   success: {
@@ -58,7 +65,11 @@ export default {
     magicLink: 'Мы отправили Вам ссылку для входа<br />в %s.',
     signUp: 'Спасибо, что зарегистрировались.'
   },
-  blankErrorHint: 'Поле не может быть пустым',
+  blankErrorHint: '',
+  blankPasswordErrorHint: 'Поле не может быть пустым',
+  blankEmailErrorHint: 'Поле не может быть пустым',
+  blankUsernameErrorHint: 'Поле не может быть пустым',
+  blankCaptchaErrorHint: 'Поле не может быть пустым',
   codeInputPlaceholder: 'Ваш код',
   databaseEnterpriseLoginInstructions: '',
   databaseEnterpriseAlternativeLoginInstructions: 'или',
@@ -74,7 +85,10 @@ export default {
   forgotPasswordInstructions:
     'Пожалуйста, введите Ваш адрес электронной почты. Мы отправим Вам сообщение для восстановления пароля.',
   forgotPasswordSubmitLabel: 'отправить по электронной почте',
-  invalidErrorHint: 'Недействительные данные',
+  invalidErrorHint: '',
+  invalidPasswordErrorHint: 'Недействительные данные',
+  invalidEmailErrorHint: 'Недействительные данные',
+  invalidUsernameErrorHint: 'Недействительные данные',
   lastLoginInstructions: 'В прошлый раз Вы вошли под',
   loginAtLabel: 'Войдите по ссылке %s',
   loginLabel: 'Вход',
@@ -100,7 +114,7 @@ export default {
     'Введите адрес электронной почты, чтобы войти<br/>или зарегистрироваться',
   passwordlessSMSAlternativeInstructions:
     'Либо введите Ваш номер телефона, чтобы войти<br/>или зарегистрироваться',
-  passwordlessSMSCodeInstructions: 'СМС с кодом было отправлено<br/>на %s.',
+  passwordlessSMSCodeInstructions: 'СМС с кодом было отправлено на %s.',
   passwordlessSMSInstructions: 'Введите Ваш номер телефона, чтобы войти<br/>или зарегистрироваться',
   phoneNumberInputPlaceholder: 'Ваш номер телефона',
   resendCodeAction: 'Не получили код?',
@@ -134,5 +148,7 @@ export default {
   mfaCodeErrorHint: 'Используйте %d номера',
   showPassword: 'Показать пароль',
   signUpTerms:
-    'Зарегистрировавшись, вы соглашаетесь с нашими условиями обслуживания и политикой конфиденциальности.'
+    'Зарегистрировавшись, вы соглашаетесь с нашими условиями обслуживания и политикой конфиденциальности.',
+  captchaCodeInputPlaceholder: 'Введите код, указанный выше',
+  captchaMathInputPlaceholder: 'Решите формулу, показанную выше'
 };

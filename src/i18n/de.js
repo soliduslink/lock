@@ -31,7 +31,13 @@ export default {
       session_missing:
         'Ihre Authentifizierungsanfrage konnte nicht abgeschlossen werden. Bitte versuchen Sie es erneut, nachdem Sie alle geöffneten Dialoge geschlossen haben.',
       'hrd.not_matching_email':
-        'Bitte verwenden Sie Ihre geschäftliche E-Mail-Adresse, um sich anzumelden.'
+        'Bitte verwenden Sie Ihre geschäftliche E-Mail-Adresse, um sich anzumelden.',
+      too_many_requests:
+        'Es tut uns leid. Im Moment gibt es zu viele Anfragen. Bitte laden Sie die Seite neu und versuchen Sie es erneut. Wenn dies weiterhin der Fall ist, versuchen Sie es später erneut.',
+      invalid_captcha:
+        'Lösen Sie die Herausforderungsfrage, um sicherzustellen, dass Sie kein Roboter sind.',
+      invalid_recaptcha:
+        'Aktivieren Sie das Kontrollkästchen, um sicherzustellen, dass Sie kein Roboter sind.'
     },
     passwordless: {
       'bad.email': 'Diese E-Mail-Adresse ist ungültig',
@@ -46,7 +52,9 @@ export default {
       password_no_user_info_error: 'Das Passwort basiert auf Benutzerinformationen.',
       password_strength_error: 'Das Passwort ist zu schwach.',
       user_exists: 'Der Nutzer existiert bereits.',
-      username_exists: 'Der Nutzername wird bereits verwendet.'
+      username_exists: 'Der Nutzername wird bereits verwendet.',
+      social_signup_needs_terms_acception:
+        'Bitte stimmen Sie den untenstehenden Nutzungsbedingungen zu, um fortzufahren.'
     }
   },
   success: {
@@ -55,7 +63,11 @@ export default {
     magicLink: 'Wir haben Ihnen einen Link geschickt, zur Anmeldung<br/>bei %s.',
     signUp: "Vielen Dank für's Registrieren."
   },
-  blankErrorHint: 'Darf nicht leer sein',
+  blankErrorHint: '',
+  blankPasswordErrorHint: 'Darf nicht leer sein',
+  blankEmailErrorHint: 'Darf nicht leer sein',
+  blankUsernameErrorHint: 'Darf nicht leer sein',
+  blankCaptchaErrorHint: 'Darf nicht leer sein',
   codeInputPlaceholder: 'Ihr Code',
   databaseEnterpriseLoginInstructions: '',
   databaseEnterpriseAlternativeLoginInstructions: 'oder',
@@ -70,7 +82,10 @@ export default {
   forgotPasswordInstructions:
     'Geben Sie bitte Ihre E-Mail-Adresse ein. Wir werden Ihnen eine E-Mail senden um Ihr Passwort zurücksetzen zu können.',
   forgotPasswordSubmitLabel: 'E-Mail senden',
-  invalidErrorHint: 'Ungültig!',
+  invalidErrorHint: '',
+  invalidPasswordErrorHint: 'Ungültig!',
+  invalidEmailErrorHint: 'Ungültig!',
+  invalidUsernameErrorHint: 'Ungültig!',
   lastLoginInstructions: 'Letztes Mal waren Sie angemeldet mit',
   loginAtLabel: 'Anmelden bei %s',
   loginLabel: 'Anmelden',
@@ -96,7 +111,7 @@ export default {
     'Geben Sie Ihre E-Mail-Adresse ein, um sich anzumelden<br/>oder ein Konto zu erstellen',
   passwordlessSMSAlternativeInstructions:
     'Andernfalls geben Sie Ihre Telefonnummer ein,<br>um sich anzumelden oder ein Konto zu erstellen',
-  passwordlessSMSCodeInstructions: 'Eine SMS mit dem Code wurde gesendet<br/>an %s.',
+  passwordlessSMSCodeInstructions: 'Eine SMS mit dem Code wurde gesendet an %s.',
   passwordlessSMSInstructions:
     'Geben Sie Ihre Telefonnummer ein,<br>um sich anzumelden oder ein Konto zu erstellen',
   phoneNumberInputPlaceholder: 'Ihre Telefonnummer',
@@ -106,7 +121,7 @@ export default {
   retryLabel: 'Wiederholen',
   sentLabel: 'Gesendet!',
   showPassword: 'Passwort anzeigen',
-  signUpTitle: 'Anmelden',
+  signUpTitle: 'Registrieren',
   signUpLabel: 'Registrieren',
   signUpSubmitLabel: 'Registrieren',
   signUpWithLabel: 'Registrieren mit %s',
@@ -131,5 +146,7 @@ export default {
   mfaSubmitLabel: 'Anmelden',
   mfaCodeErrorHint: 'Verwenden %d Zahlen',
   signUpTerms:
-    'Mit der Anmeldung stimmen Sie unseren Nutzungsbedingungen und Datenschutzbestimmungen zu.'
+    'Mit der Anmeldung stimmen Sie unseren Nutzungsbedingungen und Datenschutzbestimmungen zu.',
+  captchaCodeInputPlaceholder: 'Geben Sie den oben angezeigten Code ein.',
+  captchaMathInputPlaceholder: 'Lösen Sie die oben gezeigte Formel.'
 };

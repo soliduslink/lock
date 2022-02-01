@@ -31,7 +31,11 @@ export default {
       too_many_attempts: 'このアカウントは、短時間での複数回ログイン試行によりブロックされました。',
       session_missing:
         '認証リクエストを完了できませんでした。すべての開いているダイアログを閉じた後にもう一度お試しください。',
-      'hrd.not_matching_email': 'ログインするには、企業のメールアドレスを使用してください。'
+      'hrd.not_matching_email': 'ログインするには、企業のメールアドレスを使用してください。',
+      too_many_requests:
+        '申し訳ございません。今はあまりにも多くの要求があります。ページを再読み込みしてもう一度やり直してください。それでも解決しない場合は、後でもう一度やり直してください。',
+      invalid_captcha: 'チャレンジ質問を解いて、ロボットではないことを確認してください。',
+      invalid_recaptcha: 'チェックボックスを選択して、ロボットでないことを確認します。'
     },
     passwordless: {
       'bad.email': 'メールアドレスが不正です',
@@ -46,7 +50,9 @@ export default {
       password_no_user_info_error: 'ユーザー情報を含むパスワードは避けてください。',
       password_strength_error: 'パスワードが脆弱です。',
       user_exists: 'すでに登録されているユーザーです。',
-      username_exists: 'すでに使用されているユーザー名です。'
+      username_exists: 'すでに使用されているユーザー名です。',
+      social_signup_needs_terms_acception:
+        'サインアップするには以下の利用規約・プライバシーボリシーに同意してください。'
     }
   },
   success: {
@@ -55,7 +61,11 @@ export default {
     magicLink: '%s<br />へログインするためのリンクを送信しました。',
     signUp: 'ユーザー登録が完了しました。'
   },
-  blankErrorHint: 'この項目は必須です。',
+  blankErrorHint: '',
+  blankPasswordErrorHint: 'この項目は必須です。',
+  blankEmailErrorHint: 'この項目は必須です。',
+  blankUsernameErrorHint: 'この項目は必須です。',
+  blankCaptchaErrorHint: 'この項目は必須です。',
   codeInputPlaceholder: 'コードを入力',
   databaseEnterpriseLoginInstructions: '',
   databaseEnterpriseAlternativeLoginInstructions: 'または',
@@ -70,7 +80,10 @@ export default {
   forgotPasswordInstructions:
     'アカウントの登録メールアドレスをご入力ください。パスワード再設定用のリンクをメールします。',
   forgotPasswordSubmitLabel: '再設定用のリンクを送る',
-  invalidErrorHint: 'エラー',
+  invalidErrorHint: '',
+  invalidPasswordErrorHint: 'エラー',
+  invalidEmailErrorHint: 'エラー',
+  invalidUsernameErrorHint: 'エラー',
   lastLoginInstructions: '最終ログイン:',
   loginAtLabel: '%sへのログイン',
   loginLabel: 'ログイン',
@@ -79,7 +92,7 @@ export default {
   notYourAccountAction: 'これはあなたのアカウントではありませんか？',
   passwordInputPlaceholder: 'パスワード',
   passwordStrength: {
-    containsAtLeast: '下記の%dつのうち%dつ以上含んでください:',
+    containsAtLeast: '%dつ以上の条件を満たす必要があります。（条件は以下の%dつ）',
     identicalChars: '連続して同じ文字を%d個以上入力できません（例: "%s" は使用できません）',
     nonEmpty: 'パスワードは必須です',
     numbers: '数字 (0-9)',
@@ -120,7 +133,7 @@ export default {
   usernameInputPlaceholder: 'ユーザー名',
   usernameOrEmailInputPlaceholder: 'ユーザー名/メールアドレス',
   title: 'Auth0',
-  welcome: '%sへようこそ！',
+  welcome: 'ようこそ%sさん',
   windowsAuthInstructions: '企業ネットワークから接続されています;',
   windowsAuthLabel: 'Windows認証',
   mfaInputPlaceholder: 'コード',
@@ -128,5 +141,7 @@ export default {
   mfaLoginInstructions: 'スマートフォンアプリケーションで生成された確認コードを入力してください。',
   mfaSubmitLabel: 'ログイン',
   mfaCodeErrorHint: '%d個の数字を使用してください',
-  signUpTerms: 'サインアップすることで、利用規約とプライバシーポリシーに同意したことになります。'
+  signUpTerms: 'サインアップすることで、利用規約とプライバシーポリシーに同意したことになります。',
+  captchaCodeInputPlaceholder: '上記のコードを入力してください',
+  captchaMathInputPlaceholder: '上記の式を解きます'
 };

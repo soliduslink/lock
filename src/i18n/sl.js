@@ -30,7 +30,11 @@ export default {
       too_many_attempts: 'Po več zaporednih poskusih napačne prijave je bil vaš račun blokiran.',
       session_missing:
         'Zahteve za avtentikacijo ni bilo možno izpolniti. Zaprite vsa pogovorna okna in poskusite ponovno.',
-      'hrd.not_matching_email': 'Za prijavo uporabite svoj službeni e-poštni naslov.'
+      'hrd.not_matching_email': 'Za prijavo uporabite svoj službeni e-poštni naslov.',
+      too_many_requests:
+        'Žal nam je. Trenutno je preveč zahtev. Ponovno naložite stran in poskusite znova. Če se to ponavlja, poskusite znova pozneje.',
+      invalid_captcha: 'Rešite izzivno vprašanje in preverite, ali niste robot.',
+      invalid_recaptcha: 'Izberite potrditveno polje, da preverite, da niste robot.'
     },
     passwordless: {
       'bad.email': 'Napačen e-poštni naslov',
@@ -44,7 +48,8 @@ export default {
       password_no_user_info_error: 'Geslo temelji na informacijah o uporabniku.',
       password_strength_error: 'Geslo je prešibko.',
       user_exists: 'Uporabnik že obstaja.',
-      username_exists: 'Uporabniško ime že obstaja.'
+      username_exists: 'Uporabniško ime že obstaja.',
+      social_signup_needs_terms_acception: 'Za nadaljevanje se strinjajte s pogoji storitve spodaj.'
     }
   },
   success: {
@@ -53,7 +58,11 @@ export default {
     magicLink: 'Poslali smo vam povezavo za prijavo v<br /> %s.',
     signUp: 'Hvala za vpis.'
   },
-  blankErrorHint: 'Ne sme biti prazno',
+  blankErrorHint: '',
+  blankPasswordErrorHint: 'Ne sme biti prazno',
+  blankEmailErrorHint: 'Ne sme biti prazno',
+  blankUsernameErrorHint: 'Ne sme biti prazno',
+  blankCaptchaErrorHint: 'Ne sme biti prazno',
   codeInputPlaceholder: 'vaša koda',
   databaseEnterpriseLoginInstructions: '',
   databaseEnterpriseAlternativeLoginInstructions: 'ali',
@@ -68,7 +77,10 @@ export default {
   forgotPasswordInstructions:
     'Vnesite svoj e-poštni naslov. Poslali vam bomo sporočilo za ponastavitev gesla.',
   forgotPasswordSubmitLabel: 'Pošlji e-pošto',
-  invalidErrorHint: 'Napaka',
+  invalidErrorHint: '',
+  invalidPasswordErrorHint: 'Napaka',
+  invalidEmailErrorHint: 'Napaka',
+  invalidUsernameErrorHint: 'Napaka',
   lastLoginInstructions: 'Nazadnje ste se prijavili z',
   loginAtLabel: 'Prijava v %s',
   loginLabel: 'Prijava',
@@ -94,7 +106,7 @@ export default {
     'Vnesite svoj e-poštni naslov za prijavo<br/>ali ustvarjanje računa',
   passwordlessSMSAlternativeInstructions:
     'Lahko tudi vnesete svojo telefonsko številko za prijavo<br/>ali ustvarjanje računa',
-  passwordlessSMSCodeInstructions: 'Poslali smo SMS s kodo<br/>na številko %s.',
+  passwordlessSMSCodeInstructions: 'Poslali smo SMS s kodo na številko %s.',
   passwordlessSMSInstructions:
     'Vnesite svojo telefonsko številko za prijavo<br/>ali ustvarjanje računa',
   phoneNumberInputPlaceholder: 'vaša telefonska številka',
@@ -126,5 +138,7 @@ export default {
   mfaLoginInstructions: 'Vnesite kodo za preverjanje, ki jo je sestavila vaša mobilna aplikacija.',
   mfaSubmitLabel: 'Prijava',
   mfaCodeErrorHint: 'Uporabite številke %d',
-  signUpTerms: 'S prijavo se strinjate z našimi pogoji uporabe in pravilnikom o zasebnosti.'
+  signUpTerms: 'S prijavo se strinjate z našimi pogoji uporabe in pravilnikom o zasebnosti.',
+  captchaCodeInputPlaceholder: 'Vnesite kodo, prikazano zgoraj',
+  captchaMathInputPlaceholder: 'Rešite zgoraj prikazano formulo'
 };

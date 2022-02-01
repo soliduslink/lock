@@ -31,7 +31,11 @@ export default {
       too_many_attempts: 'Çok fazla giriş denemesi sonucunda hesabınız bloke oldu.',
       session_missing:
         'Kimlik doğrulama isteği tamamlanamadı. Tüm açık diyalogları kapattıktan sonra tekrar deneyiniz',
-      'hrd.not_matching_email': ', Giriş için kurumsal e-posta kullanın.'
+      'hrd.not_matching_email': ', Giriş için kurumsal e-posta kullanın.',
+      too_many_requests:
+        'Üzgünüz. Şu anda çok fazla istek var. Lütfen sayfayı tekrar yükleyin ve tekrar deneyin. Bu devam ederse, lütfen daha sonra tekrar deneyin.',
+      invalid_captcha: 'Robot olmadığınızı doğrulamak için meydan okuma sorusunu çözün.',
+      invalid_recaptcha: 'Robot olmadığınızı doğrulamak için onay kutusunu seçin.'
     },
     passwordless: {
       'bad.email': 'E-posta geçerli değil',
@@ -45,7 +49,9 @@ export default {
       password_no_user_info_error: 'Şifre kullanıcı bilgilerini içeriyor.',
       password_strength_error: 'Şifre çok zayıf.',
       user_exists: 'Bu kullanıcı zaten var.',
-      username_exists: 'Bu kullanıcı adı kullanımda.'
+      username_exists: 'Bu kullanıcı adı kullanımda.',
+      social_signup_needs_terms_acception:
+        "Devam etmek için lütfen aşağıdaki Hizmet Şartları'nı kabul edin."
     }
   },
   success: {
@@ -54,7 +60,11 @@ export default {
     magicLink: 'Giriş yapmanız için size bir link gönderdik<br /> %s.',
     signUp: 'Kaydolduğunuz için teşekkürler.'
   },
-  blankErrorHint: 'Boş kalamaz',
+  blankErrorHint: '',
+  blankPasswordErrorHint: 'Şifre boş kalamaz',
+  blankEmailErrorHint: 'E-posta boş kalamaz',
+  blankUsernameErrorHint: 'Kullanıcı adı boş kalamaz',
+  blankCaptchaErrorHint: 'Boş kalamaz',
   codeInputPlaceholder: 'kodunuz',
   databaseEnterpriseLoginInstructions: '',
   databaseEnterpriseAlternativeLoginInstructions: 'veya',
@@ -68,7 +78,10 @@ export default {
   forgotPasswordInstructions:
     'Lütfen e-posta adresinizi girin. Şifrenizi yenilemek için size e-posta göndereceğiz.',
   forgotPasswordSubmitLabel: 'Email gönder',
-  invalidErrorHint: 'Geçersiz',
+  invalidErrorHint: '',
+  invalidPasswordErrorHint: 'Geçersiz şifre',
+  invalidEmailErrorHint: 'Geçersiz e-posta',
+  invalidUsernameErrorHint: 'Geçersiz kullanıcı adı',
   lastLoginInstructions: 'En son giriş yaptığınız',
   loginAtLabel: '%s ile giriş yap',
   loginLabel: 'Giriş yap',
@@ -95,7 +108,7 @@ export default {
     'Giriş yapmak için e-posta adresinizi girin<br/>veya bir hesap oluşturun',
   passwordlessSMSAlternativeInstructions:
     'Aksi halde, giriş yapmak için telefon numaranızı girin<br/>veya bir hesap oluşturun',
-  passwordlessSMSCodeInstructions: 'Size kod içeren bir SMS gönderdik<br/>%s.',
+  passwordlessSMSCodeInstructions: 'Size kod içeren bir SMS gönderdik %s.',
   passwordlessSMSInstructions:
     'Giriş yapmak için telefon numaranızı girin<br/>veya bir hesap oluşturun',
   phoneNumberInputPlaceholder: 'telefon numaranız',
@@ -128,5 +141,7 @@ export default {
   forgotPasswordTitle: 'Parolanızı sıfırlayın',
   signUpTitle: 'Kaydol',
   showPassword: 'Şifreni göster',
-  signUpTerms: 'Kaydolarak, hizmet şartlarımızı ve gizlilik politikamızı kabul etmiş olursunuz.'
+  signUpTerms: 'Kaydolarak, hizmet şartlarımızı ve gizlilik politikamızı kabul etmiş olursunuz.',
+  captchaCodeInputPlaceholder: 'Yukarıda gösterilen kodu girin',
+  captchaMathInputPlaceholder: 'Yukarıda gösterilen formülü çözün'
 };

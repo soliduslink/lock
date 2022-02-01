@@ -32,7 +32,11 @@ export default {
       'lock.mfa_invalid_code': 'Niepoprawny kod. Proszę spróbuj ponownie.',
       session_missing:
         'Nie udało się zrealizować żądania uwierzytelnienia. Spróbuj ponownie po zamknięciu wszystkich otwartych okien dialogowych',
-      'hrd.not_matching_email': 'Proszę korzystać z firmowego e-mail aby się zalogować.'
+      'hrd.not_matching_email': 'Proszę korzystać z firmowego e-mail aby się zalogować.',
+      too_many_requests:
+        'Przykro nam. W tej chwili jest zbyt wiele żądań. Załaduj ponownie stronę i spróbuj ponownie. Jeśli problem będzie się powtarzał, spróbuj ponownie później.',
+      invalid_captcha: 'Rozwiąż pytanie kontrolne, aby sprawdzić, czy nie jesteś robotem.',
+      invalid_recaptcha: 'Zaznacz pole wyboru, aby potwierdzić, że nie jesteś robotem.'
     },
     passwordless: {
       'bad.email': 'Adres email nie jest poprawny',
@@ -46,7 +50,8 @@ export default {
       password_no_user_info_error: 'Hasło oparte jest na informacjach o użytkowniku.',
       password_strength_error: 'Hasło jest zbyt słabe.',
       user_exists: 'Użytkownik już istnieje.',
-      username_exists: 'Nazwa użytkownika już istnieje.'
+      username_exists: 'Nazwa użytkownika już istnieje.',
+      social_signup_needs_terms_acception: 'Zaakceptuj poniższe Warunki usługi, aby kontynuować.'
     }
   },
   success: {
@@ -55,7 +60,11 @@ export default {
     magicLink: 'Wysłaliśmy do Ciebie link umożliwiający zalogowanie<br />do %s.',
     signUp: 'Rejestracja poprawna, dziękujemy.'
   },
-  blankErrorHint: 'Nie może być puste',
+  blankErrorHint: '',
+  blankPasswordErrorHint: 'Nie może być puste',
+  blankEmailErrorHint: 'Nie może być puste',
+  blankUsernameErrorHint: 'Nie może być puste',
+  blankCaptchaErrorHint: 'Nie może być puste',
   codeInputPlaceholder: 'Twój kod',
   databaseEnterpriseLoginInstructions: '',
   databaseEnterpriseAlternativeLoginInstructions: 'albo',
@@ -69,7 +78,10 @@ export default {
   forgotPasswordInstructions:
     'Wpisz swój adres email. Wyślemy Ci informację o tym, jak zresetować hasło.',
   forgotPasswordSubmitLabel: 'Wyślij email',
-  invalidErrorHint: 'Niepoprawnie',
+  invalidErrorHint: '',
+  invalidPasswordErrorHint: 'Niepoprawnie',
+  invalidEmailErrorHint: 'Niepoprawnie',
+  invalidUsernameErrorHint: 'Niepoprawnie',
   lastLoginInstructions: 'Ostatnie poprawne logowanie z:',
   loginAtLabel: 'Logowanie z: %s',
   loginLabel: 'Logowanie',
@@ -95,7 +107,7 @@ export default {
   passwordlessEmailInstructions: 'Wpisz adres email, by się zalogować<br/>lub stwórz konto',
   passwordlessSMSAlternativeInstructions:
     'W innym przypadku wpisz numer telefonu, by się zalogować<br/>lub stwórz konto',
-  passwordlessSMSCodeInstructions: 'SMS z kodem został wysłany na numer<br/>%s.',
+  passwordlessSMSCodeInstructions: 'SMS z kodem został wysłany na numer %s.',
   passwordlessSMSInstructions: 'Wpisz numer telefonu, by się zalogować<br/>lub stwórz konto',
   phoneNumberInputPlaceholder: 'Twój numer telefonu',
   resendCodeAction: 'Nie otrzymałeś/-aś kodu?',
@@ -128,5 +140,7 @@ export default {
   mfaCodeErrorHint: 'Użyj %d numery',
   showPassword: 'Pokaż hasło',
   signUpTerms:
-    'Rejestrując się, akceptujesz nasze warunki korzystania z usługi i politykę prywatności.'
+    'Rejestrując się, akceptujesz nasze warunki korzystania z usługi i politykę prywatności.',
+  captchaCodeInputPlaceholder: 'Wpisz kod pokazany powyżej',
+  captchaMathInputPlaceholder: 'Rozwiąż powyższy wzór'
 };

@@ -7,7 +7,9 @@ export function observe(key, id, f) {
   subscribe(`${key}-${id}`, (_, oldState, newState) => {
     const m = getEntity(newState, 'lock', id);
     const oldM = getEntity(oldState, 'lock', id);
-    if (m != oldM) f(m);
+    if (m && !m.equals(oldM)) {
+      f(m);
+    }
   });
 }
 
@@ -58,6 +60,6 @@ export function getState() {
 
 // DEV
 // store.addWatch("keepHistory", (key, oldState, newState) => {
-//   if (!global.window.h) global.window.h = []; global.window.h.push(newState);
+//   if (!window.h) window.h = []; window.h.push(newState);
 //   console.debug("something changed", newState.toJS());
 // });

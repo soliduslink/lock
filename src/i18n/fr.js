@@ -35,7 +35,11 @@ export default {
       session_missing:
         "Impossible de terminer votre demande d'authentification. Veuillez essayer de nouveau après la fermeture de tous les dialogues ouverts",
       'hrd.not_matching_email':
-        "Veuillez utiliser votre messagerie d'entreprise pour vous connecter."
+        "Veuillez utiliser votre messagerie d'entreprise pour vous connecter.",
+      too_many_requests:
+        'Nous sommes désolés. Il y a trop de demandes en ce moment. Veuillez recharger la page et réessayer. Si cela persiste, veuillez réessayer ultérieurement.',
+      invalid_captcha: "Résolvez la question du défi pour vérifier que vous n'êtes pas un robot.",
+      invalid_recaptcha: "Cochez la case pour vérifier que vous n'êtes pas un robot."
     },
     passwordless: {
       'bad.email': 'L’adresse de messagerie n’est pas valide',
@@ -50,7 +54,9 @@ export default {
       password_no_user_info_error: 'Le mot de passe est basé sur des informations utilisateur.',
       password_strength_error: 'La force du mot de passe est trop faible.',
       user_exists: 'Cet utilisateur existe déjà.',
-      username_exists: 'Ce nom d’utilisateur existe déjà.'
+      username_exists: 'Ce nom d’utilisateur existe déjà.',
+      social_signup_needs_terms_acception:
+        "Veuillez accepter les conditions d'utilisation ci-dessous pour continuer."
     }
   },
   success: {
@@ -60,7 +66,11 @@ export default {
     magicLink: 'Nous vous avons envoyé un lien pour vous connecter<br />à %s.',
     signUp: 'Merci de vous être inscrit.'
   },
-  blankErrorHint: 'Ne peut être vide',
+  blankErrorHint: '',
+  blankPasswordErrorHint: 'Ne peut être vide',
+  blankEmailErrorHint: 'Ne peut être vide',
+  blankUsernameErrorHint: 'Ne peut être vide',
+  blankCaptchaErrorHint: 'Ne peut être vide',
   codeInputPlaceholder: 'votre code',
   databaseEnterpriseLoginInstructions: '',
   databaseEnterpriseAlternativeLoginInstructions: 'ou',
@@ -75,7 +85,10 @@ export default {
   forgotPasswordInstructions:
     'Veuillez entrer votre adresse de messagerie. Nous vous enverrons un courriel pour réinitialiser votre mot de passe.',
   forgotPasswordSubmitLabel: 'Envoyer le courriel',
-  invalidErrorHint: 'Invalide',
+  invalidErrorHint: '',
+  invalidPasswordErrorHint: 'Invalide',
+  invalidEmailErrorHint: 'Invalide',
+  invalidUsernameErrorHint: 'Invalide',
   lastLoginInstructions: 'Dernière connexion avec',
   loginAtLabel: 'Connexion à %s',
   loginLabel: 'Connexion',
@@ -102,7 +115,7 @@ export default {
     'Entrez votre adresse de messagerie pour vous connecter<br/>ou créez un compte',
   passwordlessSMSAlternativeInstructions:
     'Sinon saisissez votre numéro de téléphone pour vous connecter<br/>ou créez un compte',
-  passwordlessSMSCodeInstructions: 'Un SMS avec le code a été envoyé<br/>à %s.',
+  passwordlessSMSCodeInstructions: 'Un SMS avec le code a été envoyé à %s.',
   passwordlessSMSInstructions:
     'Saisissez votre numéro de téléphone pour vous connecter<br/>ou créez un compte',
   phoneNumberInputPlaceholder: 'votre numéro de téléphone',
@@ -137,5 +150,7 @@ export default {
   mfaCodeErrorHint: 'Utilisez des numéros %d',
   showPassword: 'Montrer le mot de passe',
   signUpTerms:
-    "En vous inscrivant, vous acceptez nos conditions d'utilisation et notre politique de confidentialité."
+    "En vous inscrivant, vous acceptez nos conditions d'utilisation et notre politique de confidentialité.",
+  captchaCodeInputPlaceholder: 'Entrez le code ci-dessus',
+  captchaMathInputPlaceholder: 'Résolvez la formule ci-dessus'
 };

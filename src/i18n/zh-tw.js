@@ -26,7 +26,11 @@ export default {
         '多因素認證是必需的，但沒有登記您的設備。在移動之前，請報名參加吧。',
       'lock.mfa_invalid_code': '錯誤代碼。請再試一次。',
       session_missing: '無法完成身份驗證請求。請關閉所有打開的對話框後，再試一次',
-      'hrd.not_matching_email': '請使用您的公司電子郵件登錄。'
+      'hrd.not_matching_email': '請使用您的公司電子郵件登錄。',
+      too_many_requests:
+        '我們很抱歉。現在請求太多了。請刷新頁面，然後再試一次。如果仍然存在，請稍後再試。',
+      invalid_captcha: '解決挑戰問題以驗證您不是機器人。',
+      invalid_recaptcha: '選中復選框以確認您不是機器人。'
     },
     passwordless: {
       'bad.email': '電子信箱錯誤',
@@ -40,7 +44,8 @@ export default {
       password_no_user_info_error: '密碼中出現帳號訊息。',
       password_strength_error: '密碼太簡單。',
       user_exists: '該使用者已存在。',
-      username_exists: '該帳號已存在。'
+      username_exists: '該帳號已存在。',
+      social_signup_needs_terms_acception: '請同意下面的服務條款以繼續。'
     }
   },
   success: {
@@ -49,7 +54,11 @@ export default {
     magicLink: '已送出超連結以登入到<br /> %s ',
     signUp: '感謝您的註冊。'
   },
-  blankErrorHint: '不能是空白',
+  blankErrorHint: '',
+  blankPasswordErrorHint: '不能是空白',
+  blankEmailErrorHint: '不能是空白',
+  blankUsernameErrorHint: '不能是空白',
+  blankCaptchaErrorHint: '不能是空白',
   codeInputPlaceholder: '您的代碼',
   databaseEnterpriseLoginInstructions: '',
   databaseEnterpriseAlternativeLoginInstructions: '或',
@@ -62,7 +71,10 @@ export default {
   forgotPasswordAction: '忘記密碼？',
   forgotPasswordInstructions: '請輸入電子郵件信箱，我們將送出重設密碼的信件。',
   forgotPasswordSubmitLabel: '送出電子郵件',
-  invalidErrorHint: '錯誤',
+  invalidErrorHint: '',
+  invalidPasswordErrorHint: '錯誤',
+  invalidEmailErrorHint: '錯誤',
+  invalidUsernameErrorHint: '錯誤',
   lastLoginInstructions: '上次登入帳號為',
   loginAtLabel: '登入 %s',
   loginLabel: '登入',
@@ -85,7 +97,7 @@ export default {
   passwordlessEmailCodeInstructions: '代碼已透過電子郵件送到 %s 。',
   passwordlessEmailInstructions: '輸入電子郵件信箱登入<br>或是建立帳號。',
   passwordlessSMSAlternativeInstructions: '您還可以使用手機號碼登入<br>或是建立帳號。',
-  passwordlessSMSCodeInstructions: '代碼已透過簡訊發送到<br> %s 。',
+  passwordlessSMSCodeInstructions: '代碼已透過簡訊發送到 %s 。',
   passwordlessSMSInstructions: '輸入手機號碼登入<br>或是建立帳號',
   phoneNumberInputPlaceholder: '您的手機號碼',
   resendCodeAction: '沒有收到代碼？',
@@ -108,7 +120,7 @@ export default {
   welcome: '歡迎 %s ！',
   windowsAuthInstructions: '您已連接到公司網路&hellip;',
   windowsAuthLabel: 'Windows 認證',
-  forgotPasswordTitle: '重置你的密碼',
+  forgotPasswordTitle: '重置您的密碼',
   signUpTitle: '註冊',
   mfaInputPlaceholder: '碼',
   mfaLoginTitle: '兩步驟驗證',
@@ -116,5 +128,7 @@ export default {
   mfaSubmitLabel: '登錄',
   mfaCodeErrorHint: '使用%d編號',
   showPassword: '顯示密碼',
-  signUpTerms: '註冊即表示您同意我們的服務條款和隱私政策。'
+  signUpTerms: '註冊即表示您同意我們的服務條款和隱私政策。',
+  captchaCodeInputPlaceholder: '輸入上面顯示的代碼',
+  captchaMathInputPlaceholder: '解決上面顯示的公式'
 };

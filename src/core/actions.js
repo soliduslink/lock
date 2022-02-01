@@ -15,8 +15,8 @@ import { img as preload } from '../utils/preload_utils';
 import { defaultProps } from '../ui/box/container';
 import { isFieldValid, showInvalidField, hideInvalidFields, clearFields } from '../field/index';
 
-export function setupLock(id, clientID, domain, options, hookRunner, emitEventFn) {
-  let m = l.setup(id, clientID, domain, options, hookRunner, emitEventFn);
+export function setupLock(id, clientID, domain, options, hookRunner, emitEventFn, handleEventFn) {
+  let m = l.setup(id, clientID, domain, options, hookRunner, emitEventFn, handleEventFn);
 
   m = syncRemoteData(m);
 
@@ -42,14 +42,14 @@ export function setupLock(id, clientID, domain, options, hookRunner, emitEventFn
 export function handleAuthCallback() {
   const ms = read(getCollection, 'lock');
   const keepHash = ms.filter(m => !l.hashCleanup(m)).size > 0;
-  const urlWithoutHash = global.location.href.split('#')[0];
+  const urlWithoutHash = window.location.href.split('#')[0];
   const callback = (error, authResult) => {
     const parsed = !!(error || authResult);
     if (parsed && !keepHash) {
-      global.history.replaceState(null, '', urlWithoutHash);
+      window.history.replaceState(null, '', urlWithoutHash);
     }
   };
-  resumeAuth(global.location.hash, callback);
+  resumeAuth(window.location.hash, callback);
 }
 
 export function resumeAuth(hash, callback) {
@@ -171,8 +171,8 @@ export function validateAndSubmit(id, fields = [], f) {
       ? l.setSubmitting(m, true)
       : fields.reduce((r, x) => showInvalidField(r, x), m);
   });
-
   const m = read(getEntity, 'lock', id);
+
   if (l.submitting(m)) {
     f(m);
   }
@@ -185,13 +185,23 @@ export function logIn(
   logInErrorHandler = (_id, error, _fields, next) => next()
 ) {
   validateAndSubmit(id, fields, m => {
-    webApi.logIn(id, params, l.auth.params(m).toJS(), (error, result) => {
-      if (error) {
-        setTimeout(() => logInError(id, fields, error, logInErrorHandler), 250);
-      } else {
-        logInSuccess(id, result);
-      }
-    });
+    try {
+      // For now, always pass 'null' for the context as we don't need it yet.
+      // If we need it later, it'll save a breaking change in hooks already in use.
+      const context = null;
+
+      l.runHook(m, 'loggingIn', context, function() {
+        webApi.logIn(id, params, l.auth.params(m).toJS(), (error, result) => {
+          if (error) {
+            setTimeout(() => logInError(id, fields, error, logInErrorHandler), 250);
+          } else {
+            logInSuccess(id, result);
+          }
+        });
+      });
+    } catch (e) {
+      setTimeout(() => logInError(id, fields, e, logInErrorHandler), 250);
+    }
   });
 }
 
@@ -222,6 +232,7 @@ export function logInSuccess(id, result) {
 
 function logInError(id, fields, error, localHandler = (_id, _error, _fields, next) => next()) {
   const errorCode = error.error || error.code;
+
   localHandler(id, error, fields, () =>
     setTimeout(() => {
       const m = read(getEntity, 'lock', id);
@@ -230,7 +241,8 @@ function logInError(id, fields, error, localHandler = (_id, _error, _fields, nex
         'blocked_user',
         'rule_error',
         'lock.unauthorized',
-        'invalid_user_password'
+        'invalid_user_password',
+        'login_required'
       ];
 
       if (errorCodesThatEmitAuthorizationErrorEvent.indexOf(errorCode) > -1) {

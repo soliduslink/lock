@@ -3,33 +3,35 @@ import Screen from '../../core/screen';
 import EmailPane from '../../field/email/email_pane';
 import SocialButtonsPane from '../../field/social/social_buttons_pane';
 import PaneSeparator from '../../core/pane_separator';
+import { mustAcceptTerms, termsAccepted, showTerms } from '../../connection/passwordless/index';
+import { toggleTermsAcceptance } from '../../connection/passwordless/actions';
 import { requestPasswordlessEmail } from '../../connection/passwordless/actions';
 import { renderEmailSentConfirmation } from '../../connection/passwordless/email_sent_confirmation';
 import { renderSignedInConfirmation } from '../../core/signed_in_confirmation';
-import { useBigButtons } from '../../connection/social/index';
 import * as l from '../../core/index';
 
-const useSocialBigButtons = m => {
-  const limit = l.connections(m, 'passwordless', 'email').count() === 0 ? 5 : 3;
-  return useBigButtons(m, limit);
-};
+import SignUpTerms from '../../connection/database/sign_up_terms';
 
 const Component = ({ i18n, model }) => {
   const social = l.hasSomeConnections(model, 'social') ? (
     <SocialButtonsPane
-      bigButtons={useSocialBigButtons(model)}
       instructions={i18n.html('socialLoginInstructions')}
       labelFn={i18n.str}
       lock={model}
-      signUp={false}
+      signUp={true}
     />
   ) : null;
 
   const email = l.hasSomeConnections(model, 'passwordless', 'email') ? (
-    <EmailPane i18n={i18n} lock={model} placeholder={i18n.str('emailInputPlaceholder')} />
+    <EmailPane
+      i18n={i18n}
+      lock={model}
+      placeholder={i18n.str('emailInputPlaceholder')}
+      strictValidation={false}
+    />
   ) : null;
 
-  // TODO: instructions can't be on EmailPane beacuse it breaks the CSS,
+  // TODO: instructions can't be on EmailPane because it breaks the CSS,
   // all input fields needs to share a parent so the last one doesn't have
   // a bottom margin.
   //
@@ -68,5 +70,21 @@ export default class SocialOrEmailLoginScreen extends Screen {
 
   render() {
     return Component;
+  }
+  isSubmitDisabled(m) {
+    return !termsAccepted(m);
+  }
+
+  renderTerms(m, terms) {
+    const checkHandler = mustAcceptTerms(m) ? () => toggleTermsAcceptance(l.id(m)) : undefined;
+    return terms && showTerms(m) ? (
+      <SignUpTerms
+        showCheckbox={mustAcceptTerms(m)}
+        checkHandler={checkHandler}
+        checked={termsAccepted(m)}
+      >
+        {terms}
+      </SignUpTerms>
+    ) : null;
   }
 }

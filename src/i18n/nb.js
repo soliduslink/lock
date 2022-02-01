@@ -30,7 +30,11 @@ export default {
       too_many_attempts: 'Din konto er blokkert på grunn av for mange påloggingsforsøk.',
       session_missing:
         'Kunne ikke fullføre godkjennings forespørsel. Vennligst prøv igjen etter å lukke alle åpne dialogbokser',
-      'hrd.not_matching_email': 'Vennligst bruk bedriftens e-post å logge inn.'
+      'hrd.not_matching_email': 'Vennligst bruk bedriftens e-post å logge inn.',
+      too_many_requests:
+        'Vi er lei oss. Det er for mange forespørsler akkurat nå. Vennligst last siden og prøv igjen. Hvis dette vedvarer, vennligst prøv igjen senere.',
+      invalid_captcha: 'Løs utfordringsspørsmålet for å bekrefte at du ikke er en robot.',
+      invalid_recaptcha: 'Merk av i avmerkingsboksen for å bekrefte at du ikke er en robot.'
     },
     passwordless: {
       'bad.email': 'E-postadressen er ugyldig',
@@ -44,7 +48,8 @@ export default {
       password_no_user_info_error: 'Passordet er basert på kjent bruksdata.',
       password_strength_error: 'Passordet er for svakt.',
       user_exists: 'Brukeren finnes fra før.',
-      username_exists: 'Brukernavnet finnes fra før.'
+      username_exists: 'Brukernavnet finnes fra før.',
+      social_signup_needs_terms_acception: 'Vennligst godta vilkårene nedenfor for å fortsette.'
     }
   },
   success: {
@@ -53,7 +58,11 @@ export default {
     magicLink: 'Vi har sendt deg en lenke for å logge inn på<br> %s.',
     signUp: 'Takk for at du registrerte deg.'
   },
-  blankErrorHint: 'Kan ikke være tom',
+  blankErrorHint: '',
+  blankPasswordErrorHint: 'Kan ikke være tom',
+  blankEmailErrorHint: 'Kan ikke være tom',
+  blankUsernameErrorHint: 'Kan ikke være tom',
+  blankCaptchaErrorHint: 'Kan ikke være tom',
   codeInputPlaceholder: 'din kode',
   databaseEnterpriseLoginInstructions: '',
   databaseEnterpriseAlternativeLoginInstructions: 'eller',
@@ -67,7 +76,10 @@ export default {
   forgotPasswordInstructions:
     'Skriv inn e-postadressen din. Vi sender deg en e-post for å nullstille passordet.',
   forgotPasswordSubmitLabel: 'Send e-post',
-  invalidErrorHint: 'Ugyldig',
+  invalidErrorHint: '',
+  invalidPasswordErrorHint: 'Ugyldig',
+  invalidEmailErrorHint: 'Ugyldig',
+  invalidUsernameErrorHint: 'Ugyldig',
   lastLoginInstructions: 'Forrige gang logget du inn med',
   loginAtLabel: 'Logg inn på %s',
   loginLabel: 'Logg inn',
@@ -93,7 +105,7 @@ export default {
     'Skriv inn din e-postadresse for å logge inn<br>eller opprett en konto',
   passwordlessSMSAlternativeInstructions:
     'Alternativt, skriv inn ditt telefonnummer for å logge inn<br>eller opprett en konto',
-  passwordlessSMSCodeInstructions: 'En SMS med koden har blitt sendt<br/>til %s.',
+  passwordlessSMSCodeInstructions: 'En SMS med koden har blitt sendt til %s.',
   passwordlessSMSInstructions:
     'Skriv inn ditt telefonnummer for å logge inn<br>eller opprett en konto',
   phoneNumberInputPlaceholder: 'ditt telefonnummer',
@@ -125,5 +137,7 @@ export default {
   forgotPasswordTitle: 'Tilbakestille passordet ditt',
   signUpTitle: 'Logg inn',
   showPassword: 'Vis passord',
-  signUpTerms: 'Ved å registrere deg, godtar du våre vilkår for bruk og personvern.'
+  signUpTerms: 'Ved å registrere deg, godtar du våre vilkår for bruk og personvern.',
+  captchaCodeInputPlaceholder: 'Tast inn koden vist over',
+  captchaMathInputPlaceholder: 'Løs formelen vist ovenfor'
 };

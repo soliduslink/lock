@@ -5,24 +5,20 @@ import PhoneNumberPane from '../../field/phone-number/phone_number_pane';
 import SocialButtonsPane from '../../field/social/social_buttons_pane';
 import { renderSignedInConfirmation } from '../../core/signed_in_confirmation';
 import PaneSeparator from '../../core/pane_separator';
-import { useBigButtons } from '../../connection/social/index';
 import * as l from '../../core/index';
 
 import { renderOptionSelection } from '../../field/index';
-
-const useSocialBigButtons = m => {
-  const limit = l.connections(m, 'passwordless', 'sms').count() === 0 ? 5 : 3;
-  return useBigButtons(m, limit);
-};
+import { mustAcceptTerms, termsAccepted, showTerms } from '../../connection/passwordless/index';
+import { toggleTermsAcceptance } from '../../connection/passwordless/actions';
+import SignUpTerms from '../../connection/database/sign_up_terms';
 
 const Component = ({ i18n, model }) => {
   const social = l.hasSomeConnections(model, 'social') ? (
     <SocialButtonsPane
-      bigButtons={useSocialBigButtons(model)}
       instructions={i18n.html('socialLoginInstructions')}
       labelFn={i18n.str}
       lock={model}
-      signUp={false}
+      signUp={true}
     />
   ) : null;
 
@@ -35,6 +31,7 @@ const Component = ({ i18n, model }) => {
       instructions={i18n.html(phoneNumberInstructionsI18nKey)}
       lock={model}
       placeholder={i18n.str('phoneNumberInputPlaceholder')}
+      invalidHint={i18n.str('phoneNumberInputInvalidHint')}
     />
   ) : null;
 
@@ -64,5 +61,21 @@ export default class AskSocialNetworkOrPhoneNumber extends Screen {
 
   render() {
     return Component;
+  }
+  isSubmitDisabled(m) {
+    return !termsAccepted(m);
+  }
+
+  renderTerms(m, terms) {
+    const checkHandler = mustAcceptTerms(m) ? () => toggleTermsAcceptance(l.id(m)) : undefined;
+    return terms && showTerms(m) ? (
+      <SignUpTerms
+        showCheckbox={mustAcceptTerms(m)}
+        checkHandler={checkHandler}
+        checked={termsAccepted(m)}
+      >
+        {terms}
+      </SignUpTerms>
+    ) : null;
   }
 }

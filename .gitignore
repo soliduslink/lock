@@ -1,6 +1,5 @@
 .DS_Store
 coverage/
-build/
 css/index.css
 lib/
 node_modules/
@@ -9,3 +8,5 @@ npm-debug.log
 .css.map
 .idea/
 .env
+local.log
+yarn-error.log

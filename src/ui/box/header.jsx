@@ -1,10 +1,13 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import ReactDOM from 'react-dom';
 import { BackButton } from './button';
 
-// TODO: simplify this mess :)
-
 export default class Header extends React.Component {
+  getDOMNode() {
+    return ReactDOM.findDOMNode(this);
+  }
+
   render() {
     const { backHandler, backgroundColor, backgroundUrl, logoUrl, name, title } = this.props;
 
@@ -25,10 +28,15 @@ Header.propTypes = {
 };
 
 class Welcome extends React.Component {
+  // Cause a reflow when the image is loaded to fix an issue with the Lock content sometimes
+  // not rendering in a popup on first load.
+  // https://github.com/auth0/lock/issues/1942
+  onImageLoad = () => (document.querySelector('.auth0-lock').style.fontSize = '1rem');
+
   render() {
     const { name, imageUrl, title } = this.props;
     const imgClassName = !!title ? 'auth0-lock-header-logo' : 'auth0-lock-header-logo centered';
-    const img = <img alt="" className={imgClassName} src={imageUrl} />;
+    const img = <img alt="" className={imgClassName} src={imageUrl} onLoad={this.onImageLoad} />;
     const welcome = title ? <WelcomeMessage title={title} name={name} /> : null;
 
     return (
@@ -70,16 +78,21 @@ WelcomeMessage.propTypes = {
   name: PropTypes.string
 };
 
-const cssBlurSupport = (function() {
-  // Check stolen from Modernizr, see https://github.com/Modernizr/Modernizr/blob/29eab707f7a2fb261c8a9c538370e97eb1f86e25/feature-detects/css/filters.js
-  const isEdge = global.navigator && !!global.navigator.userAgent.match(/Edge/i);
-  if (typeof global.document === 'undefined' || isEdge) return false;
+const cssBlurSupport = (function () {
+  if (typeof window === 'undefined') {
+    return;
+  }
 
-  const el = global.document.createElement('div');
+  // Check stolen from Modernizr, see https://github.com/Modernizr/Modernizr/blob/29eab707f7a2fb261c8a9c538370e97eb1f86e25/feature-detects/css/filters.js
+  const isEdge = window.navigator && !!window.navigator.userAgent.match(/Edge/i);
+  if (typeof window.document === 'undefined' || isEdge) return false;
+
+  const el = window.document.createElement('div');
   el.style.cssText = 'filter: blur(2px); -webkit-filter: blur(2px)';
+
   return (
     !!el.style.length &&
-    (global.document.documentMode === undefined || global.document.documentMode > 9)
+    (window.document.documentMode === undefined || window.document.documentMode > 9)
   );
 })();
 

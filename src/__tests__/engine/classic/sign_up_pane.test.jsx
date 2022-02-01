@@ -1,12 +1,23 @@
 import React from 'react';
-import { mount } from 'enzyme';
-
-import { expectComponent, extractPropsFromWrapper, mockComponent } from 'testUtils';
+import { expectComponent, mockComponent } from 'testUtils';
+import { expectShallowComponent } from '../../testUtils';
 
 jest.mock('field/email/email_pane', () => mockComponent('email_pane'));
 jest.mock('field/password/password_pane', () => mockComponent('password_pane'));
 jest.mock('field/username/username_pane', () => mockComponent('username_pane'));
 jest.mock('field/custom_input', () => mockComponent('custom_input'));
+
+jest.mock('core/index', () => ({
+  captcha: jest.fn()
+}));
+
+jest.mock('engine/classic', () => ({
+  isSSOEnabled: jest.fn()
+}));
+
+jest.mock('connection/enterprise', () => ({
+  isHRDDomain: jest.fn()
+}));
 
 const getComponent = () => require('engine/classic/sign_up_pane').default;
 
@@ -17,7 +28,9 @@ describe('SignUpPane', () => {
     jest.mock('connection/database/index', () => ({
       additionalSignUpFields: () => [],
       databaseConnectionRequiresUsername: () => false,
-      passwordStrengthPolicy: () => 'passwordStrengthPolicy'
+      passwordStrengthPolicy: () => 'passwordStrengthPolicy',
+      signUpFieldsStrictValidation: () => true,
+      databaseUsernameValue: () => null
     }));
   });
   const defaultProps = {
@@ -30,7 +43,8 @@ describe('SignUpPane', () => {
     onlyEmail: true,
     passwordInputPlaceholder: 'passwordInputPlaceholder',
     passwordStrengthMessages: 'passwordStrengthMessages',
-    usernameInputPlaceholder: 'usernameInputPlaceholder'
+    usernameInputPlaceholder: 'usernameInputPlaceholder',
+    strictValidation: false
   };
   it('renders only email by default', () => {
     const Component = getComponent();
@@ -42,6 +56,50 @@ describe('SignUpPane', () => {
 
     expectComponent(<Component {...defaultProps} instructions="instructions" />).toMatchSnapshot();
   });
+
+  it('shows the Captcha pane', () => {
+    require('core/index').captcha.mockReturnValue({
+      get() {
+        return true;
+      }
+    });
+
+    require('engine/classic').isSSOEnabled.mockReturnValue(false);
+
+    const Component = getComponent();
+
+    expectShallowComponent(<Component {...defaultProps} />).toMatchSnapshot();
+  });
+
+  it('hides the Captcha pane for SSO connections', () => {
+    require('core/index').captcha.mockReturnValue({
+      get() {
+        return true;
+      }
+    });
+
+    require('engine/classic').isSSOEnabled.mockReturnValue(true);
+
+    const Component = getComponent();
+
+    expectShallowComponent(<Component {...defaultProps} />).toMatchSnapshot();
+  });
+
+  it('shows the Captcha pane for SSO (ADFS) connections', () => {
+    require('core/index').captcha.mockReturnValue({
+      get() {
+        return true;
+      }
+    });
+
+    require('engine/classic').isSSOEnabled.mockReturnValue(true);
+    require('connection/enterprise').isHRDDomain.mockReturnValue(true);
+
+    const Component = getComponent();
+
+    expectShallowComponent(<Component {...defaultProps} />).toMatchSnapshot();
+  });
+
   describe('onlyEmail is false', () => {
     it('shows PasswordPane', () => {
       const Component = getComponent();
@@ -57,11 +115,19 @@ describe('SignUpPane', () => {
 
       expectComponent(<Component {...defaultProps} onlyEmail={false} />).toMatchSnapshot();
     });
-    it('shows UsernamePane when databaseConnectionRequiresUsername is true', () => {
+    it('shows UsernamePane when databaseConnectionRequiresUsername is true and signUpHideUsernameField is false', () => {
       require('connection/database/index').databaseConnectionRequiresUsername = () => true;
+      require('connection/database/index').signUpHideUsernameField = () => false;
       const Component = getComponent();
 
       expectComponent(<Component {...defaultProps} onlyEmail={false} />).toMatchSnapshot();
+    });
+    it('hide UsernamePane when databaseConnectionRequiresUsername is true and signUpHideUsernameField is true', () => {
+      require('connection/database/index').databaseConnectionRequiresUsername = () => true;
+      require('connection/database/index').signUpHideUsernameField = () => true;
+      const Component = getComponent();
+
+      expectComponent(<Component {...defaultProps} />).toMatchSnapshot();
     });
   });
 });

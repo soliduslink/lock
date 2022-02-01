@@ -9,19 +9,21 @@ import { debouncedRequestAvatar, requestAvatar } from '../../avatar';
 
 export default class EmailPane extends React.Component {
   componentDidMount() {
-    const { lock } = this.props;
+    const { lock, strictValidation } = this.props;
     if (l.ui.avatar(lock) && c.email(lock)) {
       requestAvatar(l.id(lock), c.email(lock));
     }
+
+    swap(updateEntity, 'lock', l.id(lock), setEmail, c.email(lock), strictValidation);
   }
 
   handleChange(e) {
-    const { lock } = this.props;
+    const { lock, strictValidation } = this.props;
     if (l.ui.avatar(lock)) {
       debouncedRequestAvatar(l.id(lock), e.target.value);
     }
 
-    swap(updateEntity, 'lock', l.id(lock), setEmail, e.target.value);
+    swap(updateEntity, 'lock', l.id(lock), setEmail, e.target.value, strictValidation);
   }
 
   render() {
@@ -31,10 +33,18 @@ export default class EmailPane extends React.Component {
     const field = c.getField(lock, 'email');
     const value = field.get('value', '');
     const valid = field.get('valid', true);
-    const invalidHint =
-      field.get('invalidHint') || i18n.str(value ? 'invalidErrorHint' : 'blankErrorHint');
 
-    const isValid = (!forceInvalidVisibility || valid) && !c.isFieldVisiblyInvalid(lock, 'email');
+    // TODO: invalidErrorHint and blankErrorHint are deprecated.
+    // They are kept for backwards compatibiliy in the code for the customers overwriting
+    // them with languageDictionary. They can be removed in the next major release.
+    const errMessage = value
+      ? i18n.str('invalidErrorHint') || i18n.str('invalidEmailErrorHint')
+      : i18n.str('blankErrorHint') || i18n.str('blankEmailErrorHint');
+    const invalidHint = field.get('invalidHint') || errMessage;
+
+    let isValid = (!forceInvalidVisibility || valid) && !c.isFieldVisiblyInvalid(lock, 'email');
+    // Hide the error message for the blank email in Enterprise HRD only mode when the password field is hidden.
+    isValid = forceInvalidVisibility && value === '' ? true : isValid;
 
     return (
       <EmailInput
@@ -45,6 +55,7 @@ export default class EmailPane extends React.Component {
         onChange={::this.handleChange}
         placeholder={placeholder}
         autoComplete={allowAutocomplete}
+        disabled={l.submitting(lock)}
       />
     );
   }
@@ -53,5 +64,6 @@ export default class EmailPane extends React.Component {
 EmailPane.propTypes = {
   i18n: PropTypes.object.isRequired,
   lock: PropTypes.object.isRequired,
-  placeholder: PropTypes.string.isRequired
+  placeholder: PropTypes.string.isRequired,
+  strictValidation: PropTypes.bool.isRequired
 };

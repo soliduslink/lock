@@ -2,6 +2,8 @@ import { EventEmitter } from 'events';
 import { getEntity, observe, read } from './store/index';
 import { remove, render } from './ui/box';
 import webAPI from './core/web_api';
+import { initSanitizer } from './sanitizer';
+
 import {
   closeLock,
   resumeAuth,
@@ -50,21 +52,28 @@ export default class Base extends EventEmitter {
       'forgot_password submit',
       'signin submit',
       'signup submit',
+      'signup success',
       'signup error',
       'socialOrPhoneNumber submit',
       'socialOrEmail submit',
       'vcode submit',
-      'federated login'
+      'federated login',
+      'ssodata fetched',
+      'sso login'
     ];
 
     this.id = idu.incremental();
     this.engine = engine;
+
     const hookRunner = ::this.runHook;
     const emitEventFn = this.emit.bind(this);
+    const handleEventFn = this.on.bind(this);
 
     go(this.id);
+    initSanitizer();
 
-    let m = setupLock(this.id, clientID, domain, options, hookRunner, emitEventFn);
+    let m = setupLock(this.id, clientID, domain, options, hookRunner, emitEventFn, handleEventFn);
+
     this.on('newListener', type => {
       if (this.validEvents.indexOf(type) === -1) {
         l.emitUnrecoverableErrorEvent(m, `Invalid event "${type}".`);
@@ -131,11 +140,11 @@ export default class Base extends EventEmitter {
           terms: screen.renderTerms(m, i18nProp.html('signUpTerms')),
           title: getScreenTitle(m),
           classNames: screen.name === 'loading' ? 'fade' : 'horizontal-fade',
-          scrollGlobalMessagesIntoView: l.ui.scrollGlobalMessagesIntoView(m)
+          scrollGlobalMessagesIntoView: l.ui.scrollGlobalMessagesIntoView(m),
+          suppressSubmitOverlay: l.suppressSubmitOverlay(m) || false
         };
         render(l.ui.containerID(m), props);
 
-        // TODO: hack so we can start testing the beta
         if (!this.oldScreenName || this.oldScreenName != screen.name) {
           if (screen.name === 'main.login') {
             l.emitEvent(m, 'signin ready');
@@ -199,6 +208,24 @@ export default class Base extends EventEmitter {
   }
 
   runHook(str, m, ...args) {
+    const publicHooks = l.hooks(m).toJS();
+
+    if (l.validPublicHooks.indexOf(str) !== -1) {
+      // If the SDK has been configured with a hook handler, run it.
+      if (typeof publicHooks[str] === 'function') {
+        publicHooks[str](...args);
+        return m;
+      }
+
+      // Ensure the hook callback function is executed in the absence of a hook handler,
+      // so that execution may continue.
+      if (typeof args[1] === 'function') {
+        args[1]();
+      }
+
+      return m;
+    }
+
     if (typeof this.engine[str] != 'function') return m;
     return this.engine[str](m, ...args);
   }
@@ -221,4 +248,16 @@ export function injectStyles() {
   } else {
     style.innerHTML = css;
   }
+}
+
+/**
+ * Calculates the window innerHeight and sets the --vh style property on :root,
+ * which is then taken advantage of by the CSS.
+ * This important as `innerHeight` will take into account any UI chrome on mobile devices, fixing
+ * an issue where the login button is cut off towards the bottom of the screen.
+ * Values are in pixels multiplied by 1% to convert them to vh.
+ */
+export function setWindowHeightStyle() {
+  const vh = window.innerHeight * 0.01;
+  document.documentElement.style.setProperty('--vh', `${vh}px`);
 }
