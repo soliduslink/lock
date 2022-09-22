@@ -2,7 +2,7 @@
  * lock v11.32.0
  * 
  * Author: Auth0 <support@auth0.com> (http://auth0.com)
- * Date: 22.09.2022, 15:58:04
+ * Date: 22.09.2022, 16:50:40
  * License: MIT
  * 
  *//******/ (function(modules) { // webpackBootstrap
@@ -31673,6 +31673,7 @@ var TelInput = function (_React$Component) {
         autoFormat: false,
         countryCodeEditable: false,
         enableSearch: true,
+        enableLongNumbers: true,
         enableTerritories: true,
         searchPlaceholder: '',
         onChange: this.handleOnChange,

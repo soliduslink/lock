@@ -64,6 +64,7 @@ export default class TelInput extends React.Component {
           autoFormat={false}
           countryCodeEditable={false}
           enableSearch
+          enableLongNumbers
           enableTerritories
           searchPlaceholder=''
           onChange={this.handleOnChange}
