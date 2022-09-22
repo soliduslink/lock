@@ -118,6 +118,7 @@
     "qs": "^6.10.2",
     "react": "^15.6.2",
     "react-dom": "^15.6.2",
+    "react-phone-input-2": "^2.15.1",
     "react-transition-group": "^2.2.1",
     "trim": "^1.0.1",
     "url-join": "^1.1.0",
