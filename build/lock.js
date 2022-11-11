@@ -2,7 +2,7 @@
  * lock v11.32.0
  * 
  * Author: Auth0 <support@auth0.com> (http://auth0.com)
- * Date: 22.09.2022, 16:50:40
+ * Date: 10.11.2022, 14:06:03
  * License: MIT
  * 
  *//******/ (function(modules) { // webpackBootstrap
@@ -31627,7 +31627,8 @@ var TelInput = function (_React$Component) {
 
     _this.handleOnChange = function (value, country, e, formattedValue) {
       if (_this.props.onChange) {
-        _this.props.onChange(formattedValue);
+        console.log(value, country, formattedValue);
+        _this.props.onChange('+' + value);
       }
     };
 
@@ -31657,6 +31658,7 @@ var TelInput = function (_React$Component) {
 
     var focused = this.state.focused;
 
+    console.log('value', value);
 
     return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
       __WEBPACK_IMPORTED_MODULE_1__input_wrap__["a" /* default */],
@@ -31670,12 +31672,14 @@ var TelInput = function (_React$Component) {
       __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2_react_phone_input_2___default.a, {
         country: 'us',
         value: value,
-        autoFormat: false,
+        autoFormat: true,
         countryCodeEditable: false,
         enableSearch: true,
         enableLongNumbers: true,
         enableTerritories: true,
         searchPlaceholder: '',
+        defaultMask: '...',
+        alwaysDefaultMask: true,
         onChange: this.handleOnChange,
         inputProps: _extends({
           name: name,

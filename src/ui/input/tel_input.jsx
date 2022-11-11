@@ -61,12 +61,14 @@ export default class TelInput extends React.Component {
         <PhoneInput
           country="us"
           value={value}
-          autoFormat={false}
+          autoFormat
           countryCodeEditable={false}
           enableSearch
           enableLongNumbers
           enableTerritories
           searchPlaceholder=''
+          defaultMask="..."
+          alwaysDefaultMask
           onChange={this.handleOnChange}
           inputProps={{
             name,
@@ -90,7 +92,7 @@ export default class TelInput extends React.Component {
 
   handleOnChange = (value, country, e, formattedValue) => {
     if (this.props.onChange) {
-      this.props.onChange(formattedValue);
+      this.props.onChange(`+${value}`);
     }
   }
 
