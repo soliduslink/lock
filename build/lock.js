@@ -2,7 +2,7 @@
  * lock v11.32.0
  * 
  * Author: Auth0 <support@auth0.com> (http://auth0.com)
- * Date: 10.11.2022, 14:06:03
+ * Date: 11.11.2022, 14:22:58
  * License: MIT
  * 
  *//******/ (function(modules) { // webpackBootstrap
@@ -31627,7 +31627,6 @@ var TelInput = function (_React$Component) {
 
     _this.handleOnChange = function (value, country, e, formattedValue) {
       if (_this.props.onChange) {
-        console.log(value, country, formattedValue);
         _this.props.onChange('+' + value);
       }
     };
@@ -31658,7 +31657,6 @@ var TelInput = function (_React$Component) {
 
     var focused = this.state.focused;
 
-    console.log('value', value);
 
     return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
       __WEBPACK_IMPORTED_MODULE_1__input_wrap__["a" /* default */],
