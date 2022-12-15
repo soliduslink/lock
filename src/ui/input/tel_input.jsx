@@ -32,10 +32,6 @@ export default class TelInput extends React.Component {
     this.state = {};
   }
 
-  hasFocus = () => {
-    return this.state.focused;
-  }
-
   render() {
     const {
       lockId,

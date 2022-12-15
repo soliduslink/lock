@@ -174,7 +174,7 @@ function processDatabaseOptions(opts) {
         prefill = undefined;
       }
 
-      const types = ['select', 'text', 'checkbox', 'hidden', 'textinfo', 'tel'];
+      const types = ['select', 'text', 'checkbox', 'hidden', 'textinfo', 'tel', 'radio_group'];
       if (type != undefined && (typeof type != 'string' || types.indexOf(type) === -1)) {
         l.warn(
           opts,
@@ -229,20 +229,20 @@ function processDatabaseOptions(opts) {
 
       return filter
         ? r.concat([
-            {
-              icon,
-              name,
-              options,
-              placeholder,
-              placeholderHTML,
-              prefill,
-              type,
-              validator,
-              value,
-              isExtra,
-              storage
-            }
-          ])
+          {
+            icon,
+            name,
+            options,
+            placeholder,
+            placeholderHTML,
+            prefill,
+            type,
+            validator,
+            value,
+            isExtra,
+            storage
+          }
+        ])
         : r;
     }, []);
 

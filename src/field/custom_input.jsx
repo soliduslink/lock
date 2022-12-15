@@ -12,6 +12,7 @@ import TextInfo from '../ui/input/text_info';
 import SelectInput from '../ui/input/select_input';
 import CheckboxInput from '../ui/input/checkbox_input';
 import TelInput from '../ui/input/tel_input';
+import RadioGroup from '../ui/input/radio_group';
 import * as l from '../core/index';
 
 const CustomInput = ({
@@ -68,6 +69,16 @@ const CustomInput = ({
           lockId={l.id(model)}
           invalidHint={getFieldInvalidHint(model, name)}
           onChange={value => changeField(l.id(model), name, value, validator)}
+          value={getFieldValue(model, name)}
+          {...props}
+        />
+      );
+    case 'radio_group':
+      return (
+        <RadioGroup
+          lockId={l.id(model)}
+          invalidHint={getFieldInvalidHint(model, name)}
+          onChange={e => changeField(l.id(model), name, e.target.value, validator)}
           value={getFieldValue(model, name)}
           {...props}
         />
