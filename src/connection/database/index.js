@@ -174,7 +174,7 @@ function processDatabaseOptions(opts) {
         prefill = undefined;
       }
 
-      const types = ['select', 'text', 'checkbox', 'hidden', 'textinfo', 'radio_group'];
+      const types = ['select', 'text', 'checkbox', 'hidden', 'textinfo', 'radiogroup'];
       if (type != undefined && (typeof type != 'string' || types.indexOf(type) === -1)) {
         l.warn(
           opts,

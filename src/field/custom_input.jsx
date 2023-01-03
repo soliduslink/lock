@@ -62,7 +62,7 @@ const CustomInput = ({
           {...props}
         />
       );
-    case 'radio_group':
+    case 'radiogroup':
       return (
         <RadioGroup
           lockId={l.id(model)}
