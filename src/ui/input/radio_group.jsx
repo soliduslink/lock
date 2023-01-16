@@ -12,7 +12,7 @@ export default class RadioGroup extends React.Component {
     const { name } = this.props;
     // for options need create a global variable like a:
     // window.{name}_options = [value: 'test', label:'test']
-    // where {name} its  name of field
+    // where {name} its name of field
     let isInvalidOptions = false;
     const options = window[`${name}_options`];
     // resolve options
@@ -48,7 +48,7 @@ export default class RadioGroup extends React.Component {
           <p className="auth0-lock-radio_group_title">{placeholder}</p>
         )}
         <div className="auth0-lock-radio_group_options">
-          {this.state.options.map(({ value: optionValue, label }) => (
+          {options.map(({ value: optionValue, label }) => (
             <label key={optionValue}>
               <input
                 type="radio"
