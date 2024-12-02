@@ -2,7 +2,7 @@
  * lock v11.32.0
  * 
  * Author: Auth0 <support@auth0.com> (http://auth0.com)
- * Date: 03.01.2023, 13:07:22
+ * Date: 02.12.2024, 17:18:55
  * License: MIT
  * 
  *//******/ (function(modules) { // webpackBootstrap
@@ -1861,6 +1861,8 @@ module.exports = ReactDOMComponentTree;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_trim___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_trim__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__core_tenant__ = __webpack_require__(66);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__connection_enterprise__ = __webpack_require__(13);
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
 
 
 
@@ -1970,7 +1972,8 @@ function processDatabaseOptions(opts) {
           validator = x.validator,
           value = x.value,
           isExtra = x.isExtra,
-          storage = x.storage;
+          storage = x.storage,
+          dependencies = x.dependencies;
 
       var filter = true;
 
@@ -2015,13 +2018,28 @@ function processDatabaseOptions(opts) {
         validator = undefined;
       }
 
-      if (options != undefined && type != 'select') {
-        __WEBPACK_IMPORTED_MODULE_1__core_index__["warn"](opts, 'The `options` property can only by provided for an element of `additionalSignUpFields` when its `type` equals to "select"');
+      if (options != undefined && type !== 'select' && type !== 'radiogroup') {
+        console.log(type);
+        __WEBPACK_IMPORTED_MODULE_1__core_index__["warn"](opts, 'The `options` property can only by provided for an element of `additionalSignUpFields` when its `type` equals to "select" or "radiogroup"');
         options = undefined;
       }
 
+      if (type === 'radiogroup') {
+        if (options != undefined && (!window.Array.isArray(options) || options.length < 1)) {
+          __WEBPACK_IMPORTED_MODULE_1__core_index__["warn"](opts, 'Ignoring an element of `additionalSignUpFields` (' + name + ') because it has a "radiogroup" `type` but does not specify an `options` property that is an Array, which should contain only objects with keys: value, label');
+          options = undefined;
+        }
+
+        if (options != undefined && !options.every(function (i) {
+          return (typeof i === 'undefined' ? 'undefined' : _typeof(i)) === 'object' && i.hasOwnProperty('value') && i.hasOwnProperty('label');
+        })) {
+          __WEBPACK_IMPORTED_MODULE_1__core_index__["warn"](opts, 'Ignoring an element of `additionalSignUpFields` (' + name + ') because it has a "radiogroup" `type` but does not specify an `options` property that is an Array, which should contain only objects with keys: value, label');
+          options = undefined;
+        }
+      }
+
       if (options != undefined && !window.Array.isArray(options) && typeof options != 'function' || type === 'select' && options === undefined) {
-        __WEBPACK_IMPORTED_MODULE_1__core_index__["warn"](opts, 'Ignoring an element of `additionalSignUpFields` (' + name + ') because it has a "select" `type` but does not specify an `options` property that is an Array or a function.');
+        __WEBPACK_IMPORTED_MODULE_1__core_index__["warn"](opts, 'Ignoring an element of `additionalSignUpFields` (' + name + ') because it has a "select" or "radiogroup" `type` but does not specify an `options` property that is an Array or a function.');
         filter = false;
       }
       if (type === 'hidden' && !value) {
@@ -2040,7 +2058,8 @@ function processDatabaseOptions(opts) {
         validator: validator,
         value: value,
         isExtra: isExtra,
-        storage: storage
+        storage: storage,
+        dependencies: dependencies
       }]) : r;
     }, []);
 
@@ -27862,10 +27881,15 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var SignUpPane = function (_React$Component) {
   _inherits(SignUpPane, _React$Component);
 
-  function SignUpPane() {
+  function SignUpPane(props) {
     _classCallCheck(this, SignUpPane);
 
-    return _possibleConstructorReturn(this, _React$Component.apply(this, arguments));
+    var _this = _possibleConstructorReturn(this, _React$Component.call(this, props));
+
+    _this.state = {
+      depValues: {}
+    };
+    return _this;
   }
 
   SignUpPane.prototype.render = function render() {
@@ -27897,6 +27921,8 @@ var SignUpPane = function (_React$Component) {
     }) : null;
 
     var fields = !onlyEmail && __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_5__connection_database_index__["p" /* additionalSignUpFields */])(model).map(function (x) {
+      console.log(x.get('dependencies') ? x.get('dependencies').toJS() : null);
+
       return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_4__field_custom_input__["a" /* default */], {
         iconUrl: x.get('icon'),
         key: x.get('name'),
@@ -27908,7 +27934,8 @@ var SignUpPane = function (_React$Component) {
         placeholderHTML: x.get('placeholderHTML'),
         type: x.get('type'),
         validator: x.get('validator'),
-        value: x.get('value')
+        value: x.get('value'),
+        dependencies: x.get('dependencies')
       });
     });
 
@@ -28694,7 +28721,10 @@ ReCAPTCHA.defaultProps = {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__ui_input_checkbox_input__ = __webpack_require__(210);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__ui_input_radio_group__ = __webpack_require__(215);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__core_index__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9_immutable__ = __webpack_require__(11);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9_immutable___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_9_immutable__);
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 
 
 
@@ -28715,7 +28745,8 @@ var CustomInput = function CustomInput(_ref) {
       placeholderHTML = _ref.placeholderHTML,
       type = _ref.type,
       validator = _ref.validator,
-      value = _ref.value;
+      value = _ref.value,
+      options = _ref.options;
 
   var props = {
     iconUrl: iconUrl,
@@ -28724,6 +28755,10 @@ var CustomInput = function CustomInput(_ref) {
     ariaLabel: ariaLabel,
     placeholder: placeholder
   };
+
+  if (type === 'hidden') {
+    console.log(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__index__["c" /* getFieldValue */])(model, name));
+  }
 
   switch (type) {
     case 'select':
@@ -28758,7 +28793,8 @@ var CustomInput = function CustomInput(_ref) {
         onChange: function onChange(e) {
           return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__actions__["d" /* changeField */])(__WEBPACK_IMPORTED_MODULE_8__core_index__["id"](model), name, e.target.value, validator);
         },
-        value: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__index__["c" /* getFieldValue */])(model, name)
+        value: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__index__["c" /* getFieldValue */])(model, name),
+        options: __WEBPACK_IMPORTED_MODULE_9_immutable__["List"].isList(options) ? options.toJS() : []
       }, props));
     case 'hidden':
       return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { id: __WEBPACK_IMPORTED_MODULE_8__core_index__["id"](model), type: 'hidden', value: value, name: name });
@@ -31564,8 +31600,6 @@ var PhoneNumberInput = function (_React$Component) {
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -31577,45 +31611,21 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var RadioGroup = function (_React$Component) {
   _inherits(RadioGroup, _React$Component);
 
-  function RadioGroup(props) {
+  function RadioGroup() {
+    var _temp, _this, _ret;
+
     _classCallCheck(this, RadioGroup);
 
-    var _this = _possibleConstructorReturn(this, _React$Component.call(this, props));
+    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
 
-    _this.handleOnChange = function (e) {
+    return _ret = (_temp = (_this = _possibleConstructorReturn(this, _React$Component.call.apply(_React$Component, [this].concat(args))), _this), _this.handleOnChange = function (e) {
       if (_this.props.onChange) {
         _this.props.onChange(e);
       }
-    };
-
-    _this.state = {
-      options: []
-    };
-    return _this;
+    }, _temp), _possibleConstructorReturn(_this, _ret);
   }
-
-  RadioGroup.prototype.componentDidMount = function componentDidMount() {
-    var name = this.props.name;
-    // for options need create a global variable like a:
-    // window.{name}_options = [value: 'test', label:'test']
-    // where {name} its name of field
-
-    var isInvalidOptions = false;
-    var options = window[name + '_options'];
-    // resolve options
-    var result = Array.isArray(options) ? options : [];
-    result.forEach(function (item) {
-      if ((typeof item === 'undefined' ? 'undefined' : _typeof(item)) === 'object' && item.hasOwnProperty('value') && item.hasOwnProperty('label') && typeof item.value === 'string' && typeof item.label === 'string') {
-        isInvalidOptions = isInvalidOptions || false;
-      } else {
-        isInvalidOptions = true;
-      }
-    });
-    if (isInvalidOptions) {
-      console.warn('Invalid options for ' + name + ' field');
-    }
-    this.setState({ options: !isInvalidOptions ? result : [] });
-  };
 
   RadioGroup.prototype.render = function render() {
     var _this2 = this;
@@ -31627,46 +31637,46 @@ var RadioGroup = function (_React$Component) {
         placeholder = _props.placeholder,
         value = _props.value,
         isValid = _props.isValid,
-        invalidHint = _props.invalidHint;
-    var options = this.state.options;
+        invalidHint = _props.invalidHint,
+        options = _props.options;
 
 
     var errorTooltip = !isValid && invalidHint ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-      'div',
-      { role: 'alert', id: 'auth0-lock-error-msg-' + name, className: 'auth0-lock-error-msg' },
+      "div",
+      { role: "alert", id: "auth0-lock-error-msg-" + name, className: "auth0-lock-error-msg" },
       __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-        'div',
-        { className: 'auth0-lock-error-invalid-hint' },
+        "div",
+        { className: "auth0-lock-error-invalid-hint" },
         invalidHint
       )
     ) : null;
 
     return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-      'div',
-      { className: 'auth0-lock-radio_group', id: lockId + '-' + name, 'aria-label': ariaLabel || name },
+      "div",
+      { className: "auth0-lock-radio_group", id: lockId + "-" + name, "aria-label": ariaLabel || name },
       placeholder && __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-        'p',
-        { className: 'auth0-lock-radio_group_title' },
+        "p",
+        { className: "auth0-lock-radio_group_title" },
         placeholder
       ),
       __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-        'div',
-        { className: 'auth0-lock-radio_group_options' },
+        "div",
+        { className: "auth0-lock-radio_group_options" },
         options.map(function (_ref) {
           var optionValue = _ref.value,
               label = _ref.label;
           return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-            'label',
+            "label",
             { key: optionValue },
-            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', {
-              type: 'radio',
+            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("input", {
+              type: "radio",
               name: name,
               value: optionValue,
               checked: value === optionValue,
               onChange: _this2.handleOnChange
             }),
             __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-              'span',
+              "span",
               null,
               label
             )

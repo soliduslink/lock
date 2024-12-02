@@ -201,21 +201,41 @@ function processDatabaseOptions(opts) {
         validator = undefined;
       }
 
-      if (options != undefined && type != 'select') {
+      if (options != undefined && type !== 'select' && type !== 'radiogroup') {
+        console.log(type)
         l.warn(
           opts,
-          'The `options` property can only by provided for an element of `additionalSignUpFields` when its `type` equals to "select"'
+          'The `options` property can only by provided for an element of `additionalSignUpFields` when its `type` equals to "select" or "radiogroup"'
         );
         options = undefined;
       }
 
+      if (type === 'radiogroup') {
+        if (options != undefined && (!window.Array.isArray(options) || options.length < 1)) {
+          l.warn(
+            opts,
+            `Ignoring an element of \`additionalSignUpFields\` (${name}) because it has a "radiogroup" \`type\` but does not specify an \`options\` property that is an Array, which should contain only objects with keys: value, label`
+          );
+          options = undefined;
+        }
+
+        if (options != undefined && !options.every(i => typeof i === 'object' && i.hasOwnProperty('value') && i.hasOwnProperty('label'))) {
+          l.warn(
+            opts,
+            `Ignoring an element of \`additionalSignUpFields\` (${name}) because it has a "radiogroup" \`type\` but does not specify an \`options\` property that is an Array, which should contain only objects with keys: value, label`
+          );
+          options = undefined;
+        }
+      }
+
       if (
         (options != undefined && !window.Array.isArray(options) && typeof options != 'function') ||
-        (type === 'select' && options === undefined)
+        (type === 'select' && options === undefined) ||
+        (type === 'radiogroup' && options === undefined)
       ) {
         l.warn(
           opts,
-          `Ignoring an element of \`additionalSignUpFields\` (${name}) because it has a "select" \`type\` but does not specify an \`options\` property that is an Array or a function.`
+          `Ignoring an element of \`additionalSignUpFields\` (${name}) because it has a "select" or "radiogroup" \`type\` but does not specify an \`options\` property that is an Array or a function.`
         );
         filter = false;
       }

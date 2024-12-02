@@ -1,4 +1,5 @@
 import React from 'react';
+import { List } from 'immutable';
 import { changeField, startOptionSelection } from './actions';
 import {
   getFieldInvalidHint,
@@ -23,7 +24,8 @@ const CustomInput = ({
   placeholderHTML,
   type,
   validator,
-  value
+  value,
+  options,
 }) => {
   const props = {
     iconUrl,
@@ -69,6 +71,7 @@ const CustomInput = ({
           invalidHint={getFieldInvalidHint(model, name)}
           onChange={e => changeField(l.id(model), name, e.target.value, validator)}
           value={getFieldValue(model, name)}
+          options={List.isList(options) ? options.toJS() : []}
           {...props}
         />
       );

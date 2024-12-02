@@ -1,39 +1,8 @@
 import React from 'react';
 
 export default class RadioGroup extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      options: [],
-    };
-  }
-
-  componentDidMount() {
-    const { name } = this.props;
-    // for options need create a global variable like a:
-    // window.{name}_options = [value: 'test', label:'test']
-    // where {name} its name of field
-    let isInvalidOptions = false;
-    const options = window[`${name}_options`];
-    // resolve options
-    const result = Array.isArray(options) ? options : [];
-    result.forEach((item) => {
-      if (typeof item === 'object' && item.hasOwnProperty('value') && item.hasOwnProperty('label')
-      && typeof item.value === 'string' && typeof item.label === 'string') {
-        isInvalidOptions = isInvalidOptions || false
-      } else {
-        isInvalidOptions = true;
-      }
-    })
-    if (isInvalidOptions) {
-      console.warn(`Invalid options for ${name} field`)
-    }
-    this.setState({ options: !isInvalidOptions ? result : [] });
-  }
-
   render() {
-    const { lockId, name, ariaLabel, placeholder, value, isValid, invalidHint } = this.props;
-    const { options } = this.state;
+    const { lockId, name, ariaLabel, placeholder, value, isValid, invalidHint, options } = this.props;
 
     const errorTooltip =
       !isValid && invalidHint ? (
