@@ -2,7 +2,7 @@
  * lock v11.32.0
  * 
  * Author: Auth0 <support@auth0.com> (http://auth0.com)
- * Date: 02.12.2024, 17:18:55
+ * Date: 03.12.2024, 12:02:43
  * License: MIT
  * 
  *//******/ (function(modules) { // webpackBootstrap
@@ -1972,8 +1972,7 @@ function processDatabaseOptions(opts) {
           validator = x.validator,
           value = x.value,
           isExtra = x.isExtra,
-          storage = x.storage,
-          dependencies = x.dependencies;
+          storage = x.storage;
 
       var filter = true;
 
@@ -2019,7 +2018,6 @@ function processDatabaseOptions(opts) {
       }
 
       if (options != undefined && type !== 'select' && type !== 'radiogroup') {
-        console.log(type);
         __WEBPACK_IMPORTED_MODULE_1__core_index__["warn"](opts, 'The `options` property can only by provided for an element of `additionalSignUpFields` when its `type` equals to "select" or "radiogroup"');
         options = undefined;
       }
@@ -2038,7 +2036,7 @@ function processDatabaseOptions(opts) {
         }
       }
 
-      if (options != undefined && !window.Array.isArray(options) && typeof options != 'function' || type === 'select' && options === undefined) {
+      if (options != undefined && !window.Array.isArray(options) && typeof options != 'function' || type === 'select' && options === undefined || type === 'radiogroup' && options === undefined) {
         __WEBPACK_IMPORTED_MODULE_1__core_index__["warn"](opts, 'Ignoring an element of `additionalSignUpFields` (' + name + ') because it has a "select" or "radiogroup" `type` but does not specify an `options` property that is an Array or a function.');
         filter = false;
       }
@@ -2058,8 +2056,7 @@ function processDatabaseOptions(opts) {
         validator: validator,
         value: value,
         isExtra: isExtra,
-        storage: storage,
-        dependencies: dependencies
+        storage: storage
       }]) : r;
     }, []);
 
@@ -27881,15 +27878,10 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var SignUpPane = function (_React$Component) {
   _inherits(SignUpPane, _React$Component);
 
-  function SignUpPane(props) {
+  function SignUpPane() {
     _classCallCheck(this, SignUpPane);
 
-    var _this = _possibleConstructorReturn(this, _React$Component.call(this, props));
-
-    _this.state = {
-      depValues: {}
-    };
-    return _this;
+    return _possibleConstructorReturn(this, _React$Component.apply(this, arguments));
   }
 
   SignUpPane.prototype.render = function render() {
@@ -27921,8 +27913,6 @@ var SignUpPane = function (_React$Component) {
     }) : null;
 
     var fields = !onlyEmail && __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_5__connection_database_index__["p" /* additionalSignUpFields */])(model).map(function (x) {
-      console.log(x.get('dependencies') ? x.get('dependencies').toJS() : null);
-
       return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_4__field_custom_input__["a" /* default */], {
         iconUrl: x.get('icon'),
         key: x.get('name'),
@@ -27934,8 +27924,7 @@ var SignUpPane = function (_React$Component) {
         placeholderHTML: x.get('placeholderHTML'),
         type: x.get('type'),
         validator: x.get('validator'),
-        value: x.get('value'),
-        dependencies: x.get('dependencies')
+        value: x.get('value')
       });
     });
 
@@ -28713,16 +28702,16 @@ ReCAPTCHA.defaultProps = {
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__actions__ = __webpack_require__(67);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__index__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ui_input_text_input__ = __webpack_require__(118);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ui_input_text_info__ = __webpack_require__(216);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ui_input_select_input__ = __webpack_require__(117);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__ui_input_checkbox_input__ = __webpack_require__(210);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__ui_input_radio_group__ = __webpack_require__(215);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__core_index__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9_immutable__ = __webpack_require__(11);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9_immutable___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_9_immutable__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_immutable__ = __webpack_require__(11);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_immutable___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_immutable__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__actions__ = __webpack_require__(67);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__index__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ui_input_text_input__ = __webpack_require__(118);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ui_input_text_info__ = __webpack_require__(216);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__ui_input_select_input__ = __webpack_require__(117);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__ui_input_checkbox_input__ = __webpack_require__(210);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__ui_input_radio_group__ = __webpack_require__(215);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__core_index__ = __webpack_require__(1);
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 
@@ -28750,62 +28739,58 @@ var CustomInput = function CustomInput(_ref) {
 
   var props = {
     iconUrl: iconUrl,
-    isValid: !__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__index__["k" /* isFieldVisiblyInvalid */])(model, name),
+    isValid: !__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3__index__["k" /* isFieldVisiblyInvalid */])(model, name),
     name: name,
     ariaLabel: ariaLabel,
     placeholder: placeholder
   };
 
-  if (type === 'hidden') {
-    console.log(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__index__["c" /* getFieldValue */])(model, name));
-  }
-
   switch (type) {
     case 'select':
-      return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_5__ui_input_select_input__["a" /* default */], _extends({}, props, {
-        lockId: __WEBPACK_IMPORTED_MODULE_8__core_index__["id"](model),
-        label: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__index__["o" /* getFieldLabel */])(model, name),
+      return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_6__ui_input_select_input__["a" /* default */], _extends({}, props, {
+        lockId: __WEBPACK_IMPORTED_MODULE_9__core_index__["id"](model),
+        label: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3__index__["o" /* getFieldLabel */])(model, name),
         onClick: function onClick() {
-          return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__actions__["c" /* startOptionSelection */])(__WEBPACK_IMPORTED_MODULE_8__core_index__["id"](model), name, iconUrl);
+          return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__actions__["c" /* startOptionSelection */])(__WEBPACK_IMPORTED_MODULE_9__core_index__["id"](model), name, iconUrl);
         }
       }));
     case 'checkbox':
-      return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_6__ui_input_checkbox_input__["a" /* default */], _extends({
-        lockId: __WEBPACK_IMPORTED_MODULE_8__core_index__["id"](model),
+      return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_7__ui_input_checkbox_input__["a" /* default */], _extends({
+        lockId: __WEBPACK_IMPORTED_MODULE_9__core_index__["id"](model),
         onChange: function onChange(e) {
-          return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__actions__["d" /* changeField */])(__WEBPACK_IMPORTED_MODULE_8__core_index__["id"](model), name, '' + e.target.checked, validator);
+          return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__actions__["d" /* changeField */])(__WEBPACK_IMPORTED_MODULE_9__core_index__["id"](model), name, '' + e.target.checked, validator);
         },
-        checked: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__index__["c" /* getFieldValue */])(model, name),
+        checked: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3__index__["c" /* getFieldValue */])(model, name),
         placeholderHTML: placeholderHTML
       }, props));
     case 'textinfo':
-      return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_4__ui_input_text_info__["a" /* default */], _extends({
-        invalidHint: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__index__["p" /* getFieldInvalidHint */])(model, name),
+      return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_5__ui_input_text_info__["a" /* default */], _extends({
+        invalidHint: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3__index__["p" /* getFieldInvalidHint */])(model, name),
         onChange: function onChange(e) {
-          return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__actions__["d" /* changeField */])(__WEBPACK_IMPORTED_MODULE_8__core_index__["id"](model), name, e.target.value, validator);
+          return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__actions__["d" /* changeField */])(__WEBPACK_IMPORTED_MODULE_9__core_index__["id"](model), name, e.target.value, validator);
         },
         value: placeholder
       }, props));
     case 'radiogroup':
-      return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_7__ui_input_radio_group__["a" /* default */], _extends({
-        lockId: __WEBPACK_IMPORTED_MODULE_8__core_index__["id"](model),
-        invalidHint: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__index__["p" /* getFieldInvalidHint */])(model, name),
+      return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_8__ui_input_radio_group__["a" /* default */], _extends({
+        lockId: __WEBPACK_IMPORTED_MODULE_9__core_index__["id"](model),
+        invalidHint: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3__index__["p" /* getFieldInvalidHint */])(model, name),
         onChange: function onChange(e) {
-          return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__actions__["d" /* changeField */])(__WEBPACK_IMPORTED_MODULE_8__core_index__["id"](model), name, e.target.value, validator);
+          return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__actions__["d" /* changeField */])(__WEBPACK_IMPORTED_MODULE_9__core_index__["id"](model), name, e.target.value, validator);
         },
-        value: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__index__["c" /* getFieldValue */])(model, name),
-        options: __WEBPACK_IMPORTED_MODULE_9_immutable__["List"].isList(options) ? options.toJS() : []
+        value: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3__index__["c" /* getFieldValue */])(model, name),
+        options: __WEBPACK_IMPORTED_MODULE_1_immutable__["List"].isList(options) ? options.toJS() : []
       }, props));
     case 'hidden':
-      return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { id: __WEBPACK_IMPORTED_MODULE_8__core_index__["id"](model), type: 'hidden', value: value, name: name });
+      return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { id: __WEBPACK_IMPORTED_MODULE_9__core_index__["id"](model), type: 'hidden', value: value, name: name });
     default:
-      return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_3__ui_input_text_input__["a" /* default */], _extends({
-        lockId: __WEBPACK_IMPORTED_MODULE_8__core_index__["id"](model),
-        invalidHint: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__index__["p" /* getFieldInvalidHint */])(model, name),
+      return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_4__ui_input_text_input__["a" /* default */], _extends({
+        lockId: __WEBPACK_IMPORTED_MODULE_9__core_index__["id"](model),
+        invalidHint: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3__index__["p" /* getFieldInvalidHint */])(model, name),
         onChange: function onChange(e) {
-          return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__actions__["d" /* changeField */])(__WEBPACK_IMPORTED_MODULE_8__core_index__["id"](model), name, e.target.value, validator);
+          return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__actions__["d" /* changeField */])(__WEBPACK_IMPORTED_MODULE_9__core_index__["id"](model), name, e.target.value, validator);
         },
-        value: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__index__["c" /* getFieldValue */])(model, name)
+        value: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3__index__["c" /* getFieldValue */])(model, name)
       }, props));
   }
 };

@@ -202,7 +202,6 @@ function processDatabaseOptions(opts) {
       }
 
       if (options != undefined && type !== 'select' && type !== 'radiogroup') {
-        console.log(type)
         l.warn(
           opts,
           'The `options` property can only by provided for an element of `additionalSignUpFields` when its `type` equals to "select" or "radiogroup"'
